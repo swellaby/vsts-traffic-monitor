@@ -1,0 +1,7 @@
+build.sh 
+build/* 
+gulpfile.js  
+node_modules/* 
+tsconfig.json  
+tslint.json
+*.ts
