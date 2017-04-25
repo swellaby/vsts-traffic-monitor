@@ -38,10 +38,10 @@ module.exports = {
         'linebreak-style': [
             'off'
         ],
-        quotes: [
-            'error',
-            'single'
-        ],
+        // quotes: [
+        //     'error',
+        //     'single'
+        // ],
         semi: [
             'error',
             'always'

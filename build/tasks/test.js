@@ -1,3 +1,5 @@
+/*eslint quotes: ["error", "single"]*/
+// Related to: https://github.com/Microsoft/TypeScript/issues/13270
 'use strict';
 
 var gulp = require('gulp');
@@ -94,7 +96,7 @@ gulp.task('run-component-integration-tests', ['pre-component-integration-tests',
         .on('end', cb);
 });
 
-gulp.task('enforce-component-integration-testcode-coverage', ['run-component-integration-tests'], function() {
+gulp.task('enforce-component-integration-test-code-coverage', ['run-component-integration-tests'], function() {
     return gulp.src(gulpConfig.appTranspiledJavaScript)
         .pipe(istanbul.enforceThresholds({
             thresholds: {
