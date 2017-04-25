@@ -75,7 +75,7 @@
     "member-ordering": [
       false
     ],
-    "missing-jsdoc": true,
+    "missing-jsdoc": false,
     "missing-optional-annotation": true,
     "mocha-avoid-only": true,
     "mocha-no-side-effect-code": true,
