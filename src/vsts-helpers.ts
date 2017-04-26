@@ -12,7 +12,7 @@ export const convertPatToApiHeader = (accessToken: string) => {
     if (!accessToken) {
         throw new Error('Invalid access token.');
     }
-    return new Buffer(accessToken).toString('base64');
+    return new Buffer('' + ':' + accessToken).toString('base64');
 };
 
 /**
@@ -56,6 +56,8 @@ export const buildGraphApiUrl = (accountName: string) => {
 /**
  * Builds the full URL of the VSTS Graph User API.
  * @param accountName
+ * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
+ * or does not match the VSTS account naming standards.
  */
 export const buildGraphApiUsersUrl = (accountName: string) => {
     return buildGraphApiUrl(accountName) + 'users';

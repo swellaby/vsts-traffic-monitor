@@ -27,7 +27,7 @@ suite('VSTS Helpers Suite:', () => {
         });
 
         test('Should return correct base64 string when access token is valid', () => {
-            const expectedBase64 = 'SGVsbG8gV29ybGQ=';
+            const expectedBase64 = 'OkhlbGxvIFdvcmxk';
             const actualBase64 = vstsHelpers.convertPatToApiHeader('Hello World');
             assert.deepEqual(actualBase64, expectedBase64);
         });
