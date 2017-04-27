@@ -39,7 +39,7 @@
     "@types/mocha": "^2.2.41",
     "@types/nconf": "0.0.34",
     "@types/node": "^7.0.13",
-    "@types/request": "^0.0.40",
+    "@types/request": "0.0.40",
     "@types/sinon": "^1.16.36",
     "chai": "^3.5.0",
     "del": "^2.2.2",
@@ -67,6 +67,7 @@
   "dependencies": {
     "express": "^4.15.2",
     "nconf": "^0.8.4",
-    "range_check": "^1.4.0"
+    "range_check": "^1.4.0",
+    "request": "^2.81.0"
   }
 }
