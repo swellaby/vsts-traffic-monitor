@@ -56,8 +56,11 @@ class VstsGraphApiUserService implements IVstsUserService {
                 const options = this.buildApiRequestOptions(vstsAccountName, accessToken);
                 // tslint:disable-next-line:no-any
                 request.get(options, (err: any, response: any, data: string) => {
-                    const apiResponse: IVstsGraphApiUserResponse = JSON.parse(data);
-                    resolve(apiResponse.value);
+                    if (!err && response.statusCode === 200) {
+                        const apiResponse: IVstsGraphApiUserResponse = JSON.parse(data);
+                        resolve(apiResponse.value);
+                    }
+                    reject(new Error('foo'));
                 });
             } catch (err) {
                 let errorMessage = 'Encountered an error while retrieving VSTS users. Error details: ';
