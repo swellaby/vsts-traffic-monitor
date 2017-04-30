@@ -7,6 +7,8 @@ var srcRoot = './src';
 var testRoot = './test';
 var typescriptDefinitions = './node_modules/@types/*/index.d.ts';
 var tsconfig = './tsconfig.json';
+var notServer = '!' + srcRoot + '/server.js';
+var notInterfaces = '!' + srcRoot + '/interfaces/**/*.js';
 
 module.exports = {
     packageJSON: path.resolve('package.json'),
@@ -21,6 +23,11 @@ module.exports = {
     ],
     appTranspiledJavaScript: [
         srcRoot + '/**/*.js',          
+    ],
+    istanbulCoverageJavaScript: [
+        srcRoot + '/**/*.js',
+        notInterfaces,
+        notServer,
     ],
     javascriptUnitTests: testRoot + '/unit/**/*.js',
     javascriptComponentIntegrationTests: testRoot + '/component-integration/**/*.js',

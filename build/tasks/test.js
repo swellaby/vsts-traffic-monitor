@@ -17,7 +17,7 @@ gulp.task('check-security', function(cb) {
 });
 
 gulp.task('pre-unit-tests', ['transpile'], function() {
-    return gulp.src(gulpConfig.appTranspiledJavaScript)
+    return gulp.src(gulpConfig.istanbulCoverageJavaScript)
         .pipe(istanbul({
             includeUntested: istanbulConfig.includeUntested,
         }))
@@ -44,7 +44,7 @@ gulp.task('run-unit-tests', ['pre-unit-tests', 'eslint'], function(cb) {
 });
 
 gulp.task('enforce-code-coverage', ['run-unit-tests'], function() {
-    return gulp.src(gulpConfig.appTranspiledJavaScript)
+    return gulp.src(gulpConfig.istanbulCoverageJavaScript)
         .pipe(istanbul.enforceThresholds({
             thresholds: {
                 global: {

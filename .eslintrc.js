@@ -55,7 +55,7 @@ module.exports = {
                 'max': 10
             },
             {
-                'ignoreTopLevelFunctions': false
+                'ignoreTopLevelFunctions': true
             }
         ],
         "require-yield": [

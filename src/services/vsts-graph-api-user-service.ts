@@ -1,6 +1,7 @@
 'use strict';
 
 import request = require('request');
+import helpers = require('./../helpers');
 import IVstsGraphApiUserResponse = require('./../interfaces/vsts-graph-api-user-response');
 import VstsHelpers = require('./../vsts-helpers');
 import VstsUser = require('./../models/vsts-user');
@@ -30,13 +31,13 @@ class VstsGraphApiUserService implements IVstsUserService {
         return new Promise<VstsUser[]>(async (resolve, reject) => {
             try {
                 const allUsers = await this.getAllUsers(vstsAccountName, accessToken);
+                if (!allUsers) {
+                    reject(new Error('Encountered an error retrieving user information from VSTS.'));
+                }
                 resolve(allUsers.filter(u => u.origin.toLowerCase() === 'aad'));
             } catch (err) {
-                let errorMessage = 'Encountered an error while retrieving VSTS users from AAD. Error details: ';
-                if (err) {
-                    errorMessage += err.message;
-                }
-                reject(new Error(errorMessage));
+                const errorMessage = 'Encountered an error while retrieving VSTS users from AAD. Error details: ';
+                reject(helpers.buildError(errorMessage, err));
             }
         });
     }
@@ -57,23 +58,24 @@ class VstsGraphApiUserService implements IVstsUserService {
                 // tslint:disable-next-line:no-any
                 request.get(options, (err: any, response: any, data: string) => {
                     if (!err && response.statusCode === 200) {
-                        const apiResponse: IVstsGraphApiUserResponse = JSON.parse(data);
-                        resolve(apiResponse.value);
+                        try {
+                            const apiResponse: IVstsGraphApiUserResponse = JSON.parse(data);
+                            resolve(apiResponse.value);
+                        } catch (err) {
+                            reject(new Error('Invalid or unexpected JSON encountered. Unable to determine VSTS Users.'));
+                        }
                     }
-                    reject(new Error('foo'));
+                    reject(new Error('VSTS User API Call Failed.'));
                 });
             } catch (err) {
-                let errorMessage = 'Encountered an error while retrieving VSTS users. Error details: ';
-                if (err) {
-                    errorMessage += err.message;
-                }
-                reject(new Error(errorMessage));
+                const errorMessage = 'Encountered an error while retrieving VSTS users. Error details: ';
+                reject(helpers.buildError(errorMessage, err));
             }
         });
     }
 
     /**
-     * Builds the request option for the VSTS Graph Users API.
+     * Builds the request option for the VSTS Graph Users API
      *
      * @private
      * @param {string} vstsAccountName

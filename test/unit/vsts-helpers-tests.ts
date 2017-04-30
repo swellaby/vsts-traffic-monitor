@@ -6,7 +6,7 @@ import vstsHelpers = require('./../../src/vsts-helpers');
 const assert = Chai.assert;
 
 /**
- * Contains unit tests for the functions defined in ./src/vsts-helpers.ts
+ * Contains unit tests for the functions defined in {@link ./src/vsts-helpers.ts}
  */
 suite('VSTS Helpers Suite:', () => {
     const invalidAccountNameErrorMessage = 'Invalid account name.';
@@ -15,7 +15,7 @@ suite('VSTS Helpers Suite:', () => {
     const accountName = 'swellaby';
     const expectedGraphApiUrl = graphApiUrlPrefix + accountName + graphApiUrlSegment;
 
-    suite('convertPatToApiHeader Tests:', () => {
+    suite('convertPatToApiHeader Suite:', () => {
         const invalidParamErrorMessage = 'Invalid access token.';
 
         test('Should throw an error when access token is null', () => {
@@ -34,7 +34,7 @@ suite('VSTS Helpers Suite:', () => {
     });
 
     // eslint-disable-next-line max-statements
-    suite('validateAccountName Tests:', () => {
+    suite('validateAccountName Suite:', () => {
         test('Should throw an error when account name is null', () => {
             assert.throws(() => vstsHelpers.validateAccountName(null), invalidAccountNameErrorMessage);
         });
@@ -80,7 +80,7 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
-    suite('buildGraphApiUrl Tests:', () => {
+    suite('buildGraphApiUrl Suite:', () => {
         test('Should throw an error when account name is null', () => {
             assert.throws(() => vstsHelpers.buildGraphApiUrl(null), invalidAccountNameErrorMessage);
         });
@@ -100,7 +100,7 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
-    suite('buildGraphApiUsersUrl Tests:', () => {
+    suite('buildGraphApiUsersUrl Suite:', () => {
         test('Should throw an error when account name is null', () => {
             assert.throws(() => vstsHelpers.buildGraphApiUsersUrl(null), invalidAccountNameErrorMessage);
         });
