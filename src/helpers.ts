@@ -8,7 +8,7 @@
  * be applied to the created Error object.
  * @param {any} error - The object from a Catch block.
  *
- * @returns {Error} - An explicit Error object with an aggeegated error message.
+ * @returns {Error} - An explicit Error object with an aggregated error message.
  */
 // tslint:disable-next-line:no-any
 export const buildError = (baseErrorMessage: string, error: any): Error => {
