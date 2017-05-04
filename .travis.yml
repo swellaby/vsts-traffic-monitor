@@ -16,9 +16,9 @@ addons:
 # notifications:
 #   slack: swellaby:$SLACK_TOKEN
 
-cache:
-  directories:
-    - '$HOME/.sonar/cache'
+# cache:
+#   directories:
+#     - '$HOME/.sonar/cache'
 
 before_script:
     - export PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
