@@ -19,18 +19,16 @@ suite('VSTS Graph API User Service Suite:', () => {
     const sandbox: Sinon.SinonSandbox = Sinon.sandbox.create();
     let requestGetStub: Sinon.SinonStub;
     let vstsGraphApiUserService: VstsGraphApiUserService;
-    let vstsHelpersValidateAccountNameStub: Sinon.SinonStub;
-    let vstsHelpersConvertPatToApiHeaderStub: Sinon.SinonStub;
     let vstsHelpersBuildGraphApiUsersUrlStub: Sinon.SinonStub;
+    let vstsHelpersBuildRestApiBasicAuthRequestOptions: Sinon.SinonStub;
     const accountName = 'awesomeness';
     const pat = '1234567890abcdefghijklmnop';
 
     setup(() => {
         requestGetStub = sandbox.stub(request, 'get');
         vstsGraphApiUserService = new VstsGraphApiUserService();
-        vstsHelpersValidateAccountNameStub = sandbox.stub(VstsHelpers, 'validateAccountName');
-        vstsHelpersConvertPatToApiHeaderStub = sandbox.stub(VstsHelpers, 'convertPatToApiHeader');
         vstsHelpersBuildGraphApiUsersUrlStub = sandbox.stub(VstsHelpers, 'buildGraphApiUsersUrl');
+        vstsHelpersBuildRestApiBasicAuthRequestOptions = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions');
     });
 
     teardown(() => {
@@ -151,18 +149,18 @@ suite('VSTS Graph API User Service Suite:', () => {
         const apiCallFailedErrorMessage = 'VSTS User API Call Failed.';
         const jsonParseErrorMessage = 'Invalid or unexpected JSON encountered. Unable to determine VSTS Users.';
 
-        test('Should reject the promise with the correct error message when the VSTS Helpers Account Validation throws an exception',
+        test('Should reject the promise with the correct error message when the VSTS Helpers URL Helper throws an exception',
             (done: () => void) => {
-                vstsHelpersValidateAccountNameStub.throws(new Error(vstsHelpersErrorMessageDetails));
+                vstsHelpersBuildGraphApiUsersUrlStub.throws(new Error(vstsHelpersErrorMessageDetails));
                 vstsGraphApiUserService.getAllUsers(accountName, pat).catch((err: Error) => {
                     assert.deepEqual(err.message, vstsHelpersErrorMessage);
                     done();
                 });
         });
 
-        test('Should throw an error when awaited with the correct error message when the VSTS Helpers Account Validation throws an exception',
+        test('Should throw an error when awaited with the correct error message when the VSTS Helpers URL Helper throws an exception',
             async () => {
-                    vstsHelpersValidateAccountNameStub.throws(new Error(vstsHelpersErrorMessageDetails));
+                    vstsHelpersBuildGraphApiUsersUrlStub.throws(new Error(vstsHelpersErrorMessageDetails));
                     try {
                         await vstsGraphApiUserService.getAllUsers(accountName, pat);
                     } catch (err) {
@@ -171,24 +169,25 @@ suite('VSTS Graph API User Service Suite:', () => {
             }
         );
 
-        test('Should reject the promise with the correct error message when the VSTS Helpers PAT Builder throws an exception',
+        test('Should reject the promise with the correct error message when the VSTS Helpers Request Options Helper throws an exception',
             (done: () => void) => {
-                vstsHelpersConvertPatToApiHeaderStub.throws(new Error(vstsHelpersErrorMessageDetails));
+                vstsHelpersBuildRestApiBasicAuthRequestOptions.throws(new Error(vstsHelpersErrorMessageDetails));
                 vstsGraphApiUserService.getAllUsers(accountName, pat).catch((err: Error) => {
                     assert.deepEqual(err.message, vstsHelpersErrorMessage);
                     done();
                 });
         });
 
-        test('Should throw an error when awaited with the correct error message when the VSTS Helpers PAT Builder throws an exception',
-           async () => {
-                vstsHelpersConvertPatToApiHeaderStub.throws(new Error(vstsHelpersErrorMessageDetails));
-                try {
-                    await vstsGraphApiUserService.getAllUsers(accountName, pat);
-                } catch (err) {
-                    assert.deepEqual(err.message, vstsHelpersErrorMessage);
-                }
-        });
+        test('Should throw an error when awaited with the correct error message when the VSTS Helpers Request Options Helper throws an exception',
+            async () => {
+                    vstsHelpersBuildRestApiBasicAuthRequestOptions.throws(new Error(vstsHelpersErrorMessageDetails));
+                    try {
+                        await vstsGraphApiUserService.getAllUsers(accountName, pat);
+                    } catch (err) {
+                        assert.deepEqual(err.message, vstsHelpersErrorMessage);
+                    }
+            }
+        );
 
         test('Should reject the promise with the correct error message when the VSTS Helpers URL Builder throws an exception',
             (done: () => void) => {

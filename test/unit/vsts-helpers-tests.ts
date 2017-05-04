@@ -10,26 +10,28 @@ const assert = Chai.assert;
  */
 suite('VSTS Helpers Suite:', () => {
     const invalidAccountNameErrorMessage = 'Invalid account name.';
-    const graphApiUrlSegment = '.vssps.visualstudio.com/_apis/graph/';
-    const graphApiUrlPrefix = 'https://';
+    const invalidAccessTokenErrorMessage = 'Invalid access token.';
+    const protocol = 'https://';
     const accountName = 'swellaby';
-    const expectedGraphApiUrl = graphApiUrlPrefix + accountName + graphApiUrlSegment;
+    const graphApiUrlSegment = '.vssps.visualstudio.com/_apis/graph/';
+    const expectedGraphApiUrl = protocol + accountName + graphApiUrlSegment;
+    const utilizationApiUrlSgement = '.visualstudio.com/_apis/utilization/';
+    const expectedUtilizationApiUrl = protocol + accountName + utilizationApiUrlSgement;
+    const accessToken = 'Hello World';
+    const expectedBase64AccessToken = 'OkhlbGxvIFdvcmxk';
 
     suite('convertPatToApiHeader Suite:', () => {
-        const invalidParamErrorMessage = 'Invalid access token.';
-
         test('Should throw an error when access token is null', () => {
-            assert.throws(() => vstsHelpers.convertPatToApiHeader(null), invalidParamErrorMessage);
+            assert.throws(() => vstsHelpers.convertPatToApiHeader(null), invalidAccessTokenErrorMessage);
         });
 
         test('Should throw an error when access token is undefined', () => {
-            assert.throws(() => vstsHelpers.convertPatToApiHeader(undefined), invalidParamErrorMessage);
+            assert.throws(() => vstsHelpers.convertPatToApiHeader(undefined), invalidAccessTokenErrorMessage);
         });
 
         test('Should return correct base64 string when access token is valid', () => {
-            const expectedBase64 = 'OkhlbGxvIFdvcmxk';
-            const actualBase64 = vstsHelpers.convertPatToApiHeader('Hello World');
-            assert.deepEqual(actualBase64, expectedBase64);
+            const actualBase64 = vstsHelpers.convertPatToApiHeader(accessToken);
+            assert.deepEqual(actualBase64, expectedBase64AccessToken);
         });
     });
 
@@ -90,13 +92,13 @@ suite('VSTS Helpers Suite:', () => {
         });
 
         test('Should return correct url string when account name is valid', () => {
-            const expectedUrl = 'https://' + accountName + graphApiUrlSegment;
+            const expectedUrl = protocol + accountName + graphApiUrlSegment;
             const actualUrl = vstsHelpers.buildGraphApiUrl(accountName);
             assert.deepEqual(expectedUrl, actualUrl);
         });
 
         test('Should have correct value for exported Graph API Url segment', () => {
-            assert.deepEqual(vstsHelpers.graphApiUrlSegment, graphApiUrlSegment);
+            assert.deepEqual(vstsHelpers.vstsGraphApiUrlSegment, graphApiUrlSegment);
         });
     });
 
@@ -113,6 +115,102 @@ suite('VSTS Helpers Suite:', () => {
             const actualUrl = vstsHelpers.buildGraphApiUsersUrl(accountName);
             const expectedUrl = expectedGraphApiUrl + 'users';
             assert.deepEqual(expectedUrl, actualUrl);
+        });
+    });
+
+    suite('buildUtilizationApiUrl Suite:', () => {
+        test('Should throw an error when account name is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationApiUrl(null), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationApiUrl(undefined), invalidAccountNameErrorMessage);
+        });
+
+        test('Should return correct url string when account name is valid', () => {
+            const expectedUrl = protocol + accountName + utilizationApiUrlSgement;
+            const actualUrl = vstsHelpers.buildUtilizationApiUrl(accountName);
+            assert.deepEqual(expectedUrl, actualUrl);
+        });
+
+        test('Should have correct value for exported Graph API Url segment', () => {
+            assert.deepEqual(vstsHelpers.vstsUtilizationApiUrlSegment, utilizationApiUrlSgement);
+        });
+    });
+
+    suite('buildUtilizationUsageSummaryApiUrl Suite:', () => {
+        test('Should throw an error when account name is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined), invalidAccountNameErrorMessage);
+        });
+
+        test('Should return correct url string when account name is valid', () => {
+            const actualUrl = vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName);
+            const expectedUrl = expectedUtilizationApiUrl + 'usagesummary';
+            assert.deepEqual(expectedUrl, actualUrl);
+        });
+    });
+
+    // eslint-disable-next-line max-statements
+    suite('buildRestApiBasicAuthRequestOptions Suite:', () => {
+        const url = expectedUtilizationApiUrl + 'notimportant';
+        const expectedAuthValue = 'basic ' + expectedBase64AccessToken;
+
+        test('Should throw an error when account name is null and access token is null', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(null, null), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should throw an error when account name is null and access token is undefined', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(null, undefined), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should return the options when account name is null and access token is an empty string', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(null, ''), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should return the options when account name is null and access token is valid', () => {
+            const options = vstsHelpers.buildRestApiBasicAuthRequestOptions(null, accessToken);
+            assert.deepEqual(options.url, null);
+            assert.deepEqual(options.headers.Authorization, expectedAuthValue);
+        });
+
+        test('Should throw an error when url is undefined and access token is null', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(undefined, null), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should throw an error when url is undefined and access token is undefined', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(undefined, undefined), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should return the options when url is undefined and access token is an empty string', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(undefined, ''), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should return the options when url is undefined and access token is valid', () => {
+            const options = vstsHelpers.buildRestApiBasicAuthRequestOptions(undefined, accessToken);
+            assert.deepEqual(options.url, undefined);
+            assert.deepEqual(options.headers.Authorization, expectedAuthValue);
+        });
+
+        test('Should throw an error when url is valid and access token is null', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(url, null), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should throw an error when url is valid and access token is undefined', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(url, undefined), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should return the options when url is valid and access token is an empty string', () => {
+            assert.throws(() => vstsHelpers.buildRestApiBasicAuthRequestOptions(url, ''), invalidAccessTokenErrorMessage);
+        });
+
+        test('Should return the options when url is valid and access token is valid', () => {
+            const options = vstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
+            assert.deepEqual(options.url, url);
+            assert.deepEqual(options.headers.Authorization, expectedAuthValue);
         });
     });
 });

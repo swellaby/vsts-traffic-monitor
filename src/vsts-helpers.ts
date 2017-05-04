@@ -37,28 +37,97 @@ export const validateAccountName = (accountName: string) => {
     }
 }
 
+const protocol = 'https://';
+
 /**
- * The core URL segmant of the VSTS Graph API's
+ * The core URL segment of VSTS REST APIs.
  */
-export const graphApiUrlSegment = '.vssps.visualstudio.com/_apis/graph/';
+export const vstsCoreApiUrlSegment = '.visualstudio.com/_apis/';
+
+/**
+ * The core URL segment of the VSTS Graph APIs
+ */
+export const vstsGraphApiUrlSegment = '.vssps' + vstsCoreApiUrlSegment + 'graph/';
+
+/**
+ * The core URL segement of the VSTS Utilization APIs.
+ */
+export const vstsUtilizationApiUrlSegment = vstsCoreApiUrlSegment + 'utilization/';
+
+/**
+ * Helper for forming REST API Urls.
+ *
+ * @param accountName
+ * @param urlSegment
+ *
+ * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
+ * or does not match the VSTS account naming standards.
+ */
+const buildVstsApiUrl = (accountName: string, urlSegment: string) => {
+    validateAccountName(accountName);
+    return protocol + accountName + urlSegment;
+}
 
 /**
  * Builds the full URL of the VSTS Graph API.
+ *
  * @param accountName
  * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
  * or does not match the VSTS account naming standards.
  */
 export const buildGraphApiUrl = (accountName: string) => {
-    validateAccountName(accountName);
-    return 'https://' +  accountName + graphApiUrlSegment;
+    return buildVstsApiUrl(accountName, vstsGraphApiUrlSegment);
 };
 
 /**
  * Builds the full URL of the VSTS Graph User API.
+ *
  * @param accountName
  * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
  * or does not match the VSTS account naming standards.
  */
 export const buildGraphApiUsersUrl = (accountName: string) => {
     return buildGraphApiUrl(accountName) + 'users';
+};
+
+/**
+ * Builds the Url for the Utilization domain of the VSTS Rest APIs.
+ *
+ * @param accountName
+ * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
+ * or does not match the VSTS account naming standards.
+ */
+export const buildUtilizationApiUrl = (accountName: string) => {
+    return buildVstsApiUrl(accountName, vstsUtilizationApiUrlSegment);
+}
+
+/**
+ * Builds the full url for the UsageSummary VSTS Rest API.
+ *
+ * @param accountName
+ * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
+ * or does not match the VSTS account naming standards.
+ */
+export const buildUtilizationUsageSummaryApiUrl = (accountName: string) => {
+    return buildUtilizationApiUrl(accountName) + 'usagesummary';
+}
+
+/**
+ * Builds the Request options object with basic authentication to make VSTS REST API calls.
+ *
+ * @param {string} apiUrl - The url of the targeted VSTS API.
+ * @param {string} accessToken - The Personal Access Token to authenticate with.
+ *
+ * @throws {InvalidArgumentException} Will throw an error if the accessToken is null or undefined.
+ *
+ */
+export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken: string) => {
+    const auth = convertPatToApiHeader(accessToken);
+
+    return {
+        url: apiUrl,
+        headers: {
+            'Authorization': 'basic ' + auth
+        }
+    }
 };

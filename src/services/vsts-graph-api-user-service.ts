@@ -21,8 +21,8 @@ class VstsGraphApiUserService implements IVstsUserService {
      * Retrieves all users from a VSTS account that are sourced from
      * an Azure Active Directory (AAD) Tenant.
      *
-     * @param {string} vstsAccountName
-     * @param {string} accessToken
+     * @param {string} vstsAccountName - The name of the VSTS Account.
+     * @param {string} accessToken - The Personal Access Token to authenticate with.
      *
      * @returns {Promise<VstsUser[]>}
      * @memberOf VstsGraphApiUserService
@@ -45,8 +45,8 @@ class VstsGraphApiUserService implements IVstsUserService {
     /**
      * Retrieves all users from a VSTS account.
      *
-     * @param {string} vstsAccountName
-     * @param {string} accessToken
+     * @param {string} vstsAccountName - The name of the VSTS Account.
+     * @param {string} accessToken - The Personal Access Token to authenticate with.
      *
      * @returns {Promise<VstsUser[]>}
      * @memberOf VstsGraphApiUserService
@@ -54,7 +54,9 @@ class VstsGraphApiUserService implements IVstsUserService {
     public async getAllUsers(vstsAccountName: string, accessToken: string): Promise<VstsUser[]> {
         return new Promise<VstsUser[]>((resolve, reject) => {
             try {
-                const options = this.buildApiRequestOptions(vstsAccountName, accessToken);
+                const url = VstsHelpers.buildGraphApiUsersUrl(vstsAccountName);
+                const options = VstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
+
                 // tslint:disable-next-line:no-any
                 request.get(options, (err: any, response: any, data: string) => {
                     if (!err && response.statusCode === 200) {
@@ -72,34 +74,6 @@ class VstsGraphApiUserService implements IVstsUserService {
                 reject(helpers.buildError(errorMessage, err));
             }
         });
-    }
-
-    /**
-     * Builds the request option for the VSTS Graph Users API
-     *
-     * @private
-     * @param {string} vstsAccountName
-     * @param {string} accessToken
-     *
-     * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
-     * or does not match the VSTS account naming standards.
-     * @throws {InvalidArgumentException} Will throw an error if the accessToken is null or undefined.
-     *
-     * @returns {}
-     * @memberOf VstsGraphApiUserService
-     */
-    // tslint:disable-next-line:no-any
-    private buildApiRequestOptions(vstsAccountName: string, accessToken: string): any {
-        VstsHelpers.validateAccountName(vstsAccountName);
-        const auth = VstsHelpers.convertPatToApiHeader(accessToken);
-        const url = VstsHelpers.buildGraphApiUsersUrl(vstsAccountName);
-
-        return {
-            url: url,
-            headers: {
-                'Authorization': 'basic ' + auth
-            }
-        }
     }
 }
 
