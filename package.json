@@ -38,6 +38,7 @@
     "@types/chai": "^3.5.1",
     "@types/express": "^4.0.35",
     "@types/mocha": "^2.2.41",
+    "@types/moment": "^2.13.0",
     "@types/nconf": "0.0.34",
     "@types/node": "^7.0.13",
     "@types/request": "0.0.40",
@@ -68,6 +69,7 @@
   },
   "dependencies": {
     "express": "^4.15.2",
+    "moment": "^2.18.1",
     "nconf": "^0.8.4",
     "range_check": "^1.4.0",
     "request": "^2.81.0"
