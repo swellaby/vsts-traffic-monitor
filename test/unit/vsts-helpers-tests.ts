@@ -1,6 +1,10 @@
 'use strict';
 
 import Chai = require('chai');
+import Sinon = require('sinon');
+
+import helpers = require('./../../src/helpers');
+import testHelpers = require('./test-helpers');
 import vstsHelpers = require('./../../src/vsts-helpers');
 
 const assert = Chai.assert;
@@ -211,6 +215,37 @@ suite('VSTS Helpers Suite:', () => {
             const options = vstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
             assert.deepEqual(options.url, url);
             assert.deepEqual(options.headers.Authorization, expectedAuthValue);
+        });
+    });
+
+    suite('validateUserIdFormat Suite:', () => {
+        const invalidUserIdErrorMessage = 'Invalid User Id. User Id must be a valid GUID.';
+        let helpersIsValidGuidStub: Sinon.SinonStub;
+        const sandbox = Sinon.sandbox.create();
+
+        setup(() => {
+            helpersIsValidGuidStub = sandbox.stub(helpers, 'isValidGuid').callsFake(() => { throw new Error(invalidUserIdErrorMessage); });
+        });
+
+        teardown(() => {
+            sandbox.restore();
+        });
+
+        test('Should throw an error when userId is null', () => {
+            assert.throws(() => vstsHelpers.validateUserIdFormat(null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when userId is undefined', () => {
+            assert.throws(() => vstsHelpers.validateUserIdFormat(undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when userId is invalid', () => {
+            assert.throws(() => vstsHelpers.validateUserIdFormat('abc'), invalidUserIdErrorMessage);
+        });
+
+        test('Should not throw an error when userId is valid', () => {
+            helpersIsValidGuidStub.callsFake(() => { return true; });
+            assert.doesNotThrow(() => vstsHelpers.validateUserIdFormat(testHelpers.sampleGuid), invalidUserIdErrorMessage);
         });
     });
 });

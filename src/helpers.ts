@@ -19,3 +19,14 @@ export const buildError = (baseErrorMessage: string, error: any): Error => {
 
     return new Error(message);
 }
+
+/**
+ * Determines whether or not the specified input string is a valid GUID format.
+ */
+export const isValidGuid = (input: string): boolean => {
+    if (!input) {
+        return false;
+    }
+
+    return new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$').test(input);
+};

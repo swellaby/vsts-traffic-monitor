@@ -52,3 +52,4 @@ export const http403Response = buildResponseObject(403);
 export const http404Response = buildResponseObject(404);
 export const http409Response = buildResponseObject(409);
 
+export const sampleGuid = '626c88e3-1e13-4663-abdc-5658b0757b80';

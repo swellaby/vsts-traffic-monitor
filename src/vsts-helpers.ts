@@ -1,5 +1,7 @@
 'use strict';
 
+import helpers = require('./helpers');
+
 /**
  * Converts a VSTS Personal Access Token (PAT) into the necessary format
  * for usage in the headers of a call to the VSTS Rest APIs.
@@ -131,3 +133,14 @@ export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken:
         }
     }
 };
+
+/**
+ * Validates the specified VSTS User Id is the correct format for VSTS.
+ *
+ * @param {string} userId - The Id of a VSTS user to validate.
+ * @throws {Error} Will throw an error if the specified User Id is invalid.
+ */
+export const validateUserIdFormat = (userId: string) => {
+    if (!helpers.isValidGuid(userId)) {
+        throw new Error('Invalid User Id. User Id must be a valid GUID.');
+    }}
