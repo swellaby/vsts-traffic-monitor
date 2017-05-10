@@ -224,7 +224,7 @@ suite('VSTS Helpers Suite:', () => {
         const sandbox = Sinon.sandbox.create();
 
         setup(() => {
-            helpersIsValidGuidStub = sandbox.stub(helpers, 'isValidGuid').callsFake(() => { throw new Error(invalidUserIdErrorMessage); });
+            helpersIsValidGuidStub = sandbox.stub(helpers, 'isValidGuid').callsFake(() => { return false; });
         });
 
         teardown(() => {
