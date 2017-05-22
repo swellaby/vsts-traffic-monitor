@@ -38,6 +38,38 @@ export const isValidGuid = (input: string): boolean => {
 };
 
 /**
+ * Returns a @see {@link IsoDateRange} instance with start and end times
+ * that represent the specified day.
+ *
+ * @param {moment.Moment} day - The target day to use for the ISO range.
+ * @returns {IsoDateRange} - The UTC date range of the specified day.
+ */
+const getFullDayIsoDateRange = (day: moment.Moment): IsoDateRange => {
+    const startTime = day.startOf(momentDay).format();
+    const endTime = day.endOf(momentDay).format();
+
+    return new IsoDateRange(startTime, endTime);
+};
+
+/**
+ * Returns a UTC based @see {@link IsoDateRange} instance with ISO formatted
+ * start and end times that cover the specified target date.
+ *
+ * @param {Date} targetDate - The target date to build a UTC based ISO Date Range.
+ * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
+ * or does not match the VSTS account naming standards.
+ * @returns {IsoDateRange} - The UTC date range of the target day.
+ */
+export const buildUtcIsoDateRange = (targetDate: Date): IsoDateRange => {
+    if (!targetDate) {
+        throw new Error('Invalid date specified.');
+    }
+
+    const utcDate = moment(targetDate).utc();
+    return getFullDayIsoDateRange(utcDate);
+}
+
+/**
  * Returns a @see {@link IsoDateRange} object with ISO date formatted strings
  * that encompass the 24 hour range of the preceding day in UTC.
  *
@@ -46,10 +78,7 @@ export const isValidGuid = (input: string): boolean => {
 export const getYesterdayUtcDateRange = (): IsoDateRange => {
     const utcNow = moment.utc();
     const yesterday = utcNow.subtract(1, momentDay);
-    const startTime = yesterday.startOf(momentDay).format();
-    const endTime = yesterday.endOf(momentDay).format();
-
-    return new IsoDateRange(startTime, endTime);
+    return getFullDayIsoDateRange(yesterday);
 }
 
 /**

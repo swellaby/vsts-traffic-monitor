@@ -1,5 +1,6 @@
 'use strict';
 
+import IsoDateRange = require('./../../src/models/iso-date-range');
 import IVstsGraphUsersApiResponse = require('./../../src/interfaces/vsts-graph-api-user-response');
 import VstsUser = require('./../../src/models/vsts-user');
 
@@ -53,6 +54,7 @@ export const http404Response = buildResponseObject(404);
 export const http409Response = buildResponseObject(409);
 
 export const sampleGuid = '626c88e3-1e13-4663-abdc-5658b0757b80';
+export const invalidIsoFormat = 'nope';
 export const isoFormatStartTime = '2017-05-17T17:31:43Z';
 export const isoFormatEndTime = '2017-05-18T17:31:43Z';
 export const isoFormatNoDecimalString = '2017-04-18T17:31:43Z';
@@ -61,3 +63,5 @@ export const isoFormatOneDecimalString = '2017-05-18T17:31:43.1Z';
 export const isoFormatTwoDecimalsString = '2017-05-12T17:31:43.03Z';
 export const isoFormatThreeDecimalsString = '2016-10-31T10:31:43.123Z';
 export const isoFormatFourDecimalsString = '2017-08-15T22:31:43.1234Z';
+
+export const validIsoDateRange = new IsoDateRange(isoFormatStartTime, isoFormatEndTime);

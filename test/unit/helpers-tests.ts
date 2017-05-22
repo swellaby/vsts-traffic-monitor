@@ -17,7 +17,9 @@ suite('Helpers Suite:', () => {
     let momentUtcStub: Sinon.SinonStub;
     const momentStub = {
         subtract: () => { return { }; },
-        format: () => { return { }; }
+        format: () => { return { }; },
+        startOf: () => { return { }; },
+        endOf: () => { return { }; }
     };
     let momentSubtractStub: Sinon.SinonStub;
     const momentDays = 'day';
@@ -80,6 +82,62 @@ suite('Helpers Suite:', () => {
     });
 
     // eslint-disable-next-line max-statements
+    suite('buildUtcIsoDateRange Suite:', () => {
+        const errorMessage = 'Invalid date specified.';
+        const startOfStub = {
+            format: () => { return testHelpers.isoFormatStartTime; }
+        };
+        const endOfStub = {
+            format: () => { return testHelpers.isoFormatEndTime; }
+        };
+        let dateStartOfStub: Sinon.SinonStub;
+        let dateEndOfStub: Sinon.SinonStub;
+        let helpersIsValidIsoFormatStub: Sinon.SinonStub;
+
+        setup(() => {
+            dateStartOfStub = sandbox.stub(momentStub, 'startOf').callsFake(() => {
+                return startOfStub;
+            });
+            dateEndOfStub = sandbox.stub(momentStub, 'endOf').callsFake(() => {
+                return endOfStub;
+            });
+            helpersIsValidIsoFormatStub = sandbox.stub(helpers, 'isValidIsoFormat').callsFake(() => {
+                return true;
+            });
+        });
+
+        test('Should throw an error when targetDate is null', () => {
+            assert.throws(() => { helpers.buildUtcIsoDateRange(null); }, errorMessage);
+        });
+
+        test('Should throw an error when targetDate is undefined', () => {
+            assert.throws(() => { helpers.buildUtcIsoDateRange(undefined); }, errorMessage);
+        });
+
+        test('Should use UTC offset', () => {
+            helpers.buildUtcIsoDateRange(new Date());
+            assert.isTrue(momentUtcStub.called);
+        });
+
+        test('Should set start time to beginning of target day', () => {
+            helpers.buildUtcIsoDateRange(new Date());
+            assert.isTrue(dateStartOfStub.calledWith(momentDays));
+        });
+
+        test('Should set end time to end of target day', () => {
+            helpers.buildUtcIsoDateRange(new Date());
+            assert.isTrue(dateEndOfStub.calledWith(momentDays));
+        });
+
+        test('Should provide the correct IsoDateRange object', () => {
+            const isoDateRange = helpers.buildUtcIsoDateRange(new Date());
+            assert.deepEqual(isoDateRange.isoStartTime, testHelpers.isoFormatStartTime);
+            assert.deepEqual(isoDateRange.isoEndTime, testHelpers.isoFormatEndTime);
+            assert.isTrue(helpersIsValidIsoFormatStub.called);
+        });
+    });
+
+    // eslint-disable-next-line max-statements
     suite('getYesterdayUtcDateRange Suite:', () => {
         const yesterdayStub = {
             startOf: () => { return { }; },
@@ -93,8 +151,7 @@ suite('Helpers Suite:', () => {
         };
         let yesterdayStartOfStub: Sinon.SinonStub;
         let yesterdayEndOfStub: Sinon.SinonStub;
-        // eslint-disable-next-line no-unused-vars
-        let helpersIsValidIsoFormatStub: Sinon.SinonStub; // This stub is used to control flow.
+        let helpersIsValidIsoFormatStub: Sinon.SinonStub;
 
         setup(() => {
             momentSubtractStub.callsFake(() => {
@@ -135,6 +192,7 @@ suite('Helpers Suite:', () => {
             const isoDateRange = helpers.getYesterdayUtcDateRange();
             assert.deepEqual(isoDateRange.isoStartTime, testHelpers.isoFormatStartTime);
             assert.deepEqual(isoDateRange.isoEndTime, testHelpers.isoFormatEndTime);
+            assert.isTrue(helpersIsValidIsoFormatStub.called);
         });
     });
 

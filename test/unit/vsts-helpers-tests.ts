@@ -15,14 +15,21 @@ const assert = Chai.assert;
 suite('VSTS Helpers Suite:', () => {
     const invalidAccountNameErrorMessage = 'Invalid account name.';
     const invalidAccessTokenErrorMessage = 'Invalid access token.';
+    const invalidUserIdErrorMessage = 'Invalid User Id. User Id must be a valid GUID.';
     const protocol = 'https://';
     const accountName = 'swellaby';
+    const invalidAccountName = '+86sdf- &&%1!';
     const graphApiUrlSegment = '.vssps.visualstudio.com/_apis/graph/';
     const expectedGraphApiUrl = protocol + accountName + graphApiUrlSegment;
     const utilizationApiUrlSgement = '.visualstudio.com/_apis/utilization/';
     const expectedUtilizationApiUrl = protocol + accountName + utilizationApiUrlSgement;
     const accessToken = 'Hello World';
     const expectedBase64AccessToken = 'OkhlbGxvIFdvcmxk';
+    const sandbox = Sinon.sandbox.create();
+
+    teardown(() => {
+        sandbox.restore();
+    });
 
     suite('convertPatToApiHeader Suite:', () => {
         test('Should throw an error when access token is null', () => {
@@ -86,6 +93,31 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
+    suite('validateUserIdFormat Suite:', () => {
+        let helpersIsValidGuidStub: Sinon.SinonStub;
+
+        setup(() => {
+            helpersIsValidGuidStub = sandbox.stub(helpers, 'isValidGuid').callsFake(() => { return false; });
+        });
+
+        test('Should throw an error when userId is null', () => {
+            assert.throws(() => vstsHelpers.validateUserIdFormat(null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when userId is undefined', () => {
+            assert.throws(() => vstsHelpers.validateUserIdFormat(undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when userId is invalid', () => {
+            assert.throws(() => vstsHelpers.validateUserIdFormat('abc'), invalidUserIdErrorMessage);
+        });
+
+        test('Should not throw an error when userId is valid', () => {
+            helpersIsValidGuidStub.callsFake(() => { return true; });
+            assert.doesNotThrow(() => vstsHelpers.validateUserIdFormat(testHelpers.sampleGuid), invalidUserIdErrorMessage);
+        });
+    });
+
     suite('buildGraphApiUrl Suite:', () => {
         test('Should throw an error when account name is null', () => {
             assert.throws(() => vstsHelpers.buildGraphApiUrl(null), invalidAccountNameErrorMessage);
@@ -142,19 +174,303 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
+    // eslint-disable-next-line max-statements
     suite('buildUtilizationUsageSummaryApiUrl Suite:', () => {
-        test('Should throw an error when account name is null', () => {
-            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null), invalidAccountNameErrorMessage);
+        const dateRangeErrorMessage = 'Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.';
+        const invalidUserId = '!@%FGHF#$f';
+
+        test('Should throw an error when account name is null, user id is null, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, null, null), invalidUserIdErrorMessage);
         });
 
-        test('Should throw an error when account name is undefined', () => {
-            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined), invalidAccountNameErrorMessage);
+        test('Should throw an error when account name is null, user id is null, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, null, undefined), invalidUserIdErrorMessage);
         });
 
-        test('Should return correct url string when account name is valid', () => {
-            const actualUrl = vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName);
-            const expectedUrl = expectedUtilizationApiUrl + 'usagesummary';
-            assert.deepEqual(expectedUrl, actualUrl);
+        test('Should throw an error when account name is null, user id is null, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, null, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is undefined, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, undefined, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is undefined, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, undefined, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error url string when account name is null, user id is undefined, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, undefined, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is an empty string, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, '', null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is an empty string, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, '', undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is an empty string, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, '', testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is invalid, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, invalidUserId, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is invalid, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, invalidUserId, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is invalid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, invalidUserId, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is valid, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, testHelpers.sampleGuid, null), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is valid, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, testHelpers.sampleGuid, undefined), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, user id is valid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(null, testHelpers.sampleGuid, testHelpers.validIsoDateRange),
+                invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is null, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, null, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is null, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, null, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is null, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, null, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is undefined, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, undefined, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is undefined, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, undefined, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error url string when account name is undefined, user id is undefined, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, undefined, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is an empty string, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, '', null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is an empty string, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, '', undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is an empty string, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, '', testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is invalid, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, invalidUserId, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is invalid, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, invalidUserId, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is invalid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, invalidUserId, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is valid, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, testHelpers.sampleGuid, null), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is valid, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, testHelpers.sampleGuid, undefined), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, user id is valid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(undefined, testHelpers.sampleGuid, testHelpers.validIsoDateRange),
+                invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is null, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, null, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is null, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, null, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is null, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, null, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is undefined, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, undefined, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is undefined, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, undefined, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error url string when account name is invalid, user id is undefined, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, undefined, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is an empty string, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, '', null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is an empty string, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, '', undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is an empty string, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, '', testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is invalid, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, invalidUserId, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is invalid, and dateRange is undefined', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, invalidUserId, undefined),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is invalid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, invalidUserId, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is valid, and dateRange is null', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, testHelpers.sampleGuid, null),
+                dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is valid, and dateRange is undefined', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, testHelpers.sampleGuid, undefined),
+                dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, user id is valid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, testHelpers.sampleGuid, testHelpers.validIsoDateRange),
+                invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is null, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, null, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is null, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, null, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is null, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, null, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is undefined, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, undefined, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is undefined, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, undefined, undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error url string when account name is valid, user id is undefined, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, undefined, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is an empty string, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, '', null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is an empty string, and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, '', undefined), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is an empty string, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, '', testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is invalid, and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, invalidUserId, null), invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is invalid, and dateRange is undefined', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, invalidUserId, undefined),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is invalid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, invalidUserId, testHelpers.validIsoDateRange),
+                invalidUserIdErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is valid, and dateRange is null', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, testHelpers.sampleGuid, null),
+                dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid, user id is valid, and dateRange is undefined', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, testHelpers.sampleGuid, undefined),
+                dateRangeErrorMessage);
+        });
+
+        test('Should return correct URL when account name is valid, user id is valid, and dateRange is valid', () => {
+            const dateRange = testHelpers.validIsoDateRange;
+            const baseUrl = 'https://' + accountName + '.visualstudio.com/_apis/utilization/usagesummary?userId=';
+            const expectedUrl = baseUrl + testHelpers.sampleGuid + '&startTime=' + dateRange.isoStartTime + '&endTime=' + dateRange.isoEndTime;
+            const actualUrl = vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, testHelpers.sampleGuid, testHelpers.validIsoDateRange);
+            assert.deepEqual(actualUrl, expectedUrl);
         });
     });
 
@@ -215,37 +531,6 @@ suite('VSTS Helpers Suite:', () => {
             const options = vstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
             assert.deepEqual(options.url, url);
             assert.deepEqual(options.headers.Authorization, expectedAuthValue);
-        });
-    });
-
-    suite('validateUserIdFormat Suite:', () => {
-        const invalidUserIdErrorMessage = 'Invalid User Id. User Id must be a valid GUID.';
-        let helpersIsValidGuidStub: Sinon.SinonStub;
-        const sandbox = Sinon.sandbox.create();
-
-        setup(() => {
-            helpersIsValidGuidStub = sandbox.stub(helpers, 'isValidGuid').callsFake(() => { return false; });
-        });
-
-        teardown(() => {
-            sandbox.restore();
-        });
-
-        test('Should throw an error when userId is null', () => {
-            assert.throws(() => vstsHelpers.validateUserIdFormat(null), invalidUserIdErrorMessage);
-        });
-
-        test('Should throw an error when userId is undefined', () => {
-            assert.throws(() => vstsHelpers.validateUserIdFormat(undefined), invalidUserIdErrorMessage);
-        });
-
-        test('Should throw an error when userId is invalid', () => {
-            assert.throws(() => vstsHelpers.validateUserIdFormat('abc'), invalidUserIdErrorMessage);
-        });
-
-        test('Should not throw an error when userId is valid', () => {
-            helpersIsValidGuidStub.callsFake(() => { return true; });
-            assert.doesNotThrow(() => vstsHelpers.validateUserIdFormat(testHelpers.sampleGuid), invalidUserIdErrorMessage);
         });
     });
 });

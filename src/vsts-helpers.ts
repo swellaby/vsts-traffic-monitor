@@ -1,6 +1,7 @@
 'use strict';
 
 import helpers = require('./helpers');
+import IsoDateRange = require('./models/iso-date-range');
 
 /**
  * Converts a VSTS Personal Access Token (PAT) into the necessary format
@@ -38,6 +39,18 @@ export const validateAccountName = (accountName: string) => {
         throw new Error(errMessage);
     }
 }
+
+/**
+ * Validates the specified VSTS User Id is the correct format for VSTS.
+ *
+ * @param {string} userId - The Id of a VSTS user to validate.
+ * @throws {Error} Will throw an error if the specified User Id is invalid.
+ */
+export const validateUserIdFormat = (userId: string) => {
+    if (!helpers.isValidGuid(userId)) {
+        throw new Error('Invalid User Id. User Id must be a valid GUID.');
+    }
+};
 
 const protocol = 'https://';
 
@@ -108,10 +121,17 @@ export const buildUtilizationApiUrl = (accountName: string) => {
  *
  * @param accountName
  * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
- * or does not match the VSTS account naming standards.
+ * or does not match the VSTS account naming standards, if the user identifier is null, undefined or invalid,
+ * or if the dateRange is not a valid instance of the IsoDateRange class.
  */
-export const buildUtilizationUsageSummaryApiUrl = (accountName: string) => {
-    return buildUtilizationApiUrl(accountName) + 'usagesummary';
+export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: string, dateRange: IsoDateRange) => {
+    validateUserIdFormat(userId);
+    if (!dateRange) {
+        throw new Error('Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.');
+    }
+
+    const url = buildUtilizationApiUrl(accountName) + 'usagesummary';
+    return url + '?userId=' + userId + '&startTime=' + dateRange.isoStartTime + '&endTime=' + dateRange.isoEndTime;
 }
 
 /**
@@ -133,14 +153,3 @@ export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken:
         }
     }
 };
-
-/**
- * Validates the specified VSTS User Id is the correct format for VSTS.
- *
- * @param {string} userId - The Id of a VSTS user to validate.
- * @throws {Error} Will throw an error if the specified User Id is invalid.
- */
-export const validateUserIdFormat = (userId: string) => {
-    if (!helpers.isValidGuid(userId)) {
-        throw new Error('Invalid User Id. User Id must be a valid GUID.');
-    }}
