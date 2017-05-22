@@ -467,7 +467,7 @@ suite('VSTS Helpers Suite:', () => {
 
         test('Should return correct URL when account name is valid, user id is valid, and dateRange is valid', () => {
             const dateRange = testHelpers.validIsoDateRange;
-            const baseUrl = 'https://' + accountName + '.visualstudio.com/_apis/utilization/usagesummary?userId=';
+            const baseUrl = expectedUtilizationApiUrl + 'usagesummary?userId=';
             const expectedUrl = baseUrl + testHelpers.sampleGuid + '&startTime=' + dateRange.isoStartTime + '&endTime=' + dateRange.isoEndTime;
             const actualUrl = vstsHelpers.buildUtilizationUsageSummaryApiUrl(accountName, testHelpers.sampleGuid, testHelpers.validIsoDateRange);
             assert.deepEqual(actualUrl, expectedUrl);

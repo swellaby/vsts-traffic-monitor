@@ -3,6 +3,7 @@
 import request = require('request');
 
 import helpers = require('./../helpers');
+import IsoDateRange = require('./../models/iso-date-range');
 import IVstsUsageService = require('./../interfaces/vsts-usage-service');
 import IVstsUsageSummaryApiResponse = require('./../interfaces/vsts-usage-summary-api-response');
 import VstsHelpers = require('./../vsts-helpers');
@@ -10,7 +11,7 @@ import VstsUsageRecord = require('./../models/vsts-usage-record');
 
 /**
  * Implementation of the @see { @link IVstsUsageService } interface that uses
- * the VSTS Utilization APIs to provide access to usage related operations.
+ * the VSTS Utilization APIs to provide access to Usage related operations.
  *
  * @class VstsUtilizationApiUsageService
  * @implements {IVstsUsageService}
@@ -30,9 +31,33 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
      * @memberof IVstsUsageService
      */
     public getUserActivityOnDate(userId: string, date: Date, vstsAccountName: string, accessToken: string): Promise<VstsUsageRecord[]> {
+        try {
+            const dateRange = helpers.buildUtcIsoDateRange(date);
+            return this.getUserActivityInRange(userId, dateRange, vstsAccountName, accessToken);
+        } catch (err) {
+            const baseErrorMessage = 'Encountered an error while attempting to retrieve VSTS User Activity on the specified date. Error details: ';
+            return Promise.reject(helpers.buildError(baseErrorMessage, err));
+        }
+    }
+
+    /**
+     * Retrieves the VSTS usage records for the specified user on the specified account.
+     *
+     * @param {string} userId - The Id of the user in VSTS.
+     * @param {string} vstsAccountName - The VSTS account name.
+     * @param {string} accessToken - The PAT with access to the specified VSTS account.
+     * @param {Date} date - The date (UTC) of user activity to retrieve.
+     *
+     * @private
+     * @memberof VstsUtilizationApiUsageService
+     *
+     * @returns {Promise<VstsUsageRecord[]>}
+     */
+    private getUserActivityInRange(userId: string, isoDateRange: IsoDateRange, vstsAccountName: string, accessToken: string)
+        : Promise<VstsUsageRecord[]> {
         return new Promise<VstsUsageRecord[]>((resolve, reject) => {
             try {
-                const url = this.buildApiQueryString(vstsAccountName, userId, date);
+                const url = VstsHelpers.buildUtilizationUsageSummaryApiUrl(vstsAccountName, userId, isoDateRange);
                 const options = VstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
 
                 // tslint:disable-next-line:no-any
@@ -52,23 +77,6 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
                 reject(helpers.buildError(errorMessage, err));
             }
         });
-    }
-
-    /**
-     *
-     * @param vstsAccountName
-     * @param userId
-     * @param date
-     */
-    private buildApiQueryString(vstsAccountName: string, userId: string, date: Date): string {
-        if (!date) {
-            throw new Error();
-        }
-        const url = VstsHelpers.buildUtilizationUsageSummaryApiUrl(vstsAccountName);
-        const targetDate = date.toISOString().split('T')[0];
-        const startTimeSuffix = 'T00:00:00.001Z';
-        const endTimeSuffix = 'T23:59:59.999Z';
-        return url + '?userId=' + userId + '&startTime=' + targetDate + startTimeSuffix + '&endTime=' + targetDate + endTimeSuffix;
     }
 }
 
