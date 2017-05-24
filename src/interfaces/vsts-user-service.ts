@@ -19,7 +19,7 @@ interface IVstsUserService {
      *
      * @memberOf IVstsUserService
      */
-    getAADUsers(vstsAccountName: string, accessToken: string): Promise<VstsUser[]>
+    getAADUsers(vstsAccountName: string, accessToken: string): Promise<VstsUser[]>;
 
     /**
      * Retrieves all users from a VSTS account.
@@ -30,7 +30,7 @@ interface IVstsUserService {
      *
      * @memberOf IVstsUserService
      */
-    getAllUsers(vstsAccountName: string, accessToken: string): Promise<VstsUser[]>,
+    getAllUsers(vstsAccountName: string, accessToken: string): Promise<VstsUser[]>;
 }
 
 export = IVstsUserService;
