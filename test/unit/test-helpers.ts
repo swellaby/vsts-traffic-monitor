@@ -4,6 +4,8 @@ import IsoDateRange = require('./../../src/models/iso-date-range');
 import IVstsGraphUsersApiResponse = require('./../../src/interfaces/vsts-graph-api-user-response');
 import VstsUser = require('./../../src/models/vsts-user');
 
+export const emptyString = '';
+
 /**
  * Helper function that performs a discrete Fourier transform... just kidding.
  * @param displayName
