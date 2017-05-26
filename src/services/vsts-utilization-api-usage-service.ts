@@ -57,7 +57,8 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
             const dateRange = helpers.buildUtcIsoDateRange(date);
             return this.getUserActivityInRange(userId, dateRange, vstsAccountName, accessToken);
         } catch (err) {
-            const baseErrorMessage = 'Encountered an error while attempting to retrieve VSTS User Activity on the specified date. Error details: ';
+            const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve VSTS User Activity ' +
+                'on the specified date. Error details: ';
             return Promise.reject(helpers.buildError(baseErrorMessage, err));
         }
     }
@@ -77,7 +78,8 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
             const dateRange = helpers.getLast24HoursUtcDateRange();
             return this.getUserActivityInRange(userId, dateRange, vstsAccountName, accessToken);
         } catch (err) {
-            const baseErrorMessage = 'Encountered an error while attempting to retrieve VSTS User Activity over the last 24 hours. Error details: ';
+            const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve VSTS User Activity ' +
+                'over the last 24 hours. Error details: ';
             return Promise.reject(helpers.buildError(baseErrorMessage, err));
         }
     }

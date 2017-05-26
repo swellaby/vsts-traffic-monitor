@@ -2,6 +2,7 @@
 
 import IsoDateRange = require('./../../src/models/iso-date-range');
 import IVstsGraphUsersApiResponse = require('./../../src/interfaces/vsts-graph-api-user-response');
+import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
 import VstsUser = require('./../../src/models/vsts-user');
 
 export const emptyString = '';
@@ -68,3 +69,33 @@ export const isoFormatThreeDecimalsString = '2016-10-31T10:31:43.123Z';
 export const isoFormatFourDecimalsString = '2017-08-15T22:31:43.1234Z';
 
 export const validIsoDateRange = new IsoDateRange(isoFormatStartTime, isoFormatEndTime);
+
+const firstUsageRecord: VstsUsageRecord = {
+    application: 'Web Access',
+    command: 'Account.Home',
+    count: 2,
+    delay: 0,
+    endTime: isoFormatEndTime,
+    ipAddress: '72.123.58.1',
+    startTime: isoFormatStartTime,
+    usage: 1,
+    userAgent: 'Mozilla something'
+};
+
+const secondUsageRecord: VstsUsageRecord = {
+    application: 'Framework',
+    command: 'Projects.GetProjects',
+    count: 3,
+    delay: 0,
+    endTime: isoFormatEndTime,
+    ipAddress: '125.19.23.17',
+    startTime: isoFormatStartTime,
+    usage: 1,
+    userAgent: 'Mozilla/5.0'
+};
+
+export const usageRecords: VstsUsageRecord[] = [ firstUsageRecord, secondUsageRecord ];
+export const usageRecordsJson = JSON.stringify({
+  count: usageRecords.length,
+  value: usageRecords
+});
