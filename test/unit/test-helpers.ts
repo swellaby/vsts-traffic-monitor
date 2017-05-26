@@ -56,6 +56,7 @@ export const http404Response = buildResponseObject(404);
 export const http409Response = buildResponseObject(409);
 
 export const sampleGuid = '626c88e3-1e13-4663-abdc-5658b0757b80';
+export const invalidGuid = 'NOgood';
 export const invalidIsoFormat = 'nope';
 export const isoFormatStartTime = '2017-05-17T17:31:43Z';
 export const isoFormatEndTime = '2017-05-18T17:31:43Z';
