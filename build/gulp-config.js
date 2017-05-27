@@ -4,15 +4,23 @@
 
 var path = require('path');
 var srcRoot = './src';
+var vstsPublishRoot = './vsts-publish';
 var testRoot = './test';
-var typescriptDefinitions = './node_modules/@types/*/index.d.ts';
 var tsconfig = './tsconfig.json';
 var notServer = '!' + srcRoot + '/server.js';
+var notTask = '!' + srcRoot + '/task.js';
 var notInterfaces = '!' + srcRoot + '/interfaces/**/*.js';
 
 module.exports = {
     packageJSON: path.resolve('package.json'),
     root: srcRoot,
+    vstsPublishRoot: vstsPublishRoot,
+    vstsTaskContent: [
+        appTranspiledJavaScript,
+        './task.json',
+        './package.json',
+        './icon.png'
+    ],
     allJavascript: [
         './**/*.js',
         '!node_modules/**',
@@ -28,13 +36,14 @@ module.exports = {
         srcRoot + '/**/*.js',
         notInterfaces,
         notServer,
+        notTask,
     ],
     javascriptUnitTests: testRoot + '/unit/**/*.js',
     javascriptComponentIntegrationTests: testRoot + '/component-integration/**/*.js',
     allTypescript: [
         srcRoot + '/**/*.ts',
         testRoot + '/**/*.ts',
-        typescriptDefinitions,
+        '/node_modules/vsts-task-lib/**.d.ts'
     ],
     appTypescript: [
         srcRoot + '/**/*.ts',

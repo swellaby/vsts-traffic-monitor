@@ -1,0 +1,69 @@
+{
+  "id": "a29184ce-186c-428f-be0f-10bec26a9329",
+  "name": "ScanIPAddreses",
+  "friendlyName": "Scan Traffic IP Addresses",
+  "description": "Checks to see if any user has accessed the VSTS account from an IP Address outside of the allowed IP range specified.",
+  "author": "Swellaby",
+  "helpMarkDown": "Replace with markdown to show in help",
+  "category": "Utility",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "demands": [],
+  "version": {
+    "Major": "0",
+    "Minor": "0",
+    "Patch": "1"
+  },
+  "minimumAgentVersion": "1.95.0",
+  "instanceNameFormat": "This is how the task displays",
+  "inputs": [
+    {
+      "name": "accountName",
+      "type": "string",
+      "label": "VSTS Account Name",
+      "defaultValue": "myaccount",
+      "required": true,
+      "helpMarkDown": "The name of your account (the part that comes before the '.visualstudio.com' in the URL."
+    },
+    {
+      "name": "pat",
+      "type": "string",
+      "label": "Personal Access Token",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "A personal Access Token (PAT) that has access to make REST API calls to the specified VSTS Account"
+    },
+    {
+      "name": "ipRange",
+      "type": "multiLine",
+      "label": "Valid IP Range/CIDR Blocks (IPV4)",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The valid ranges or blocks of IP Addresses. Enter each block on its own line.",
+      "properties": {
+        "rows": "3",
+        "maxLength": "30"
+      }
+    },
+    {
+      "name": "timePeriod",
+      "type": "picklist",
+      "label": "Time Period",
+      "defaultValue": "Yesterday",
+      "required": true,
+      "helpMarkDown": "Controls which time period of activity will be scanned (UTC Standard).",
+      "options": {
+          "Yesterday": "the previous before",
+          "Last24": "the last 24 hours"
+      }
+    }
+  ],
+  "execution": {
+    "Node": {
+      "target": "src/task.js",
+      "argumentFormat": ""
+    }
+  }
+}

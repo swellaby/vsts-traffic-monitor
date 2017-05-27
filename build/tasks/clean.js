@@ -9,3 +9,7 @@ var gulpConfig = require('./../gulp-config');
 gulp.task('clean', function () {
     return del(gulpConfig.allTranspiledJavascript);
 });
+
+gulp.task('clean-vsts-task-publish', function () {
+    return del(gulpConfig.vstsPublishRoot);
+});
