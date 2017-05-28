@@ -23,3 +23,6 @@ tsd-debug.log
 /dist/
 
 **/testresults/
+
+/vsts-publish
+.taskkey

@@ -5,12 +5,17 @@
 var gulp = require('gulp');
 var gulpConfig = require('./../gulp-config');
 
-gulp.task('copy-dependencies', ['clean-output'], function() {
+gulp.task('copy-dependencies', ['transpile', 'clean-vsts-task-publish'], function() {
     return gulp.src('./node_modules/**/*')
         .pipe(gulp.dest(gulpConfig.vstsPublishRoot + '/node_modules/'));
 });
 
-gulp.task('package-vsts-task', ['transpile', 'clean-output'], function () {
+gulp.task('package-vsts-task-src', ['transpile', 'clean-vsts-task-publish', 'copy-dependencies'], function () {
+    return gulp.src(gulpConfig.appTranspiledJavaScript)
+        .pipe(gulp.dest(gulpConfig.vstsPublishSrc));
+});
+
+gulp.task('package-vsts-task-files', ['clean-vsts-task-publish', 'copy-dependencies'], function () {
     return gulp.src(gulpConfig.vstsTaskContent)
         .pipe(gulp.dest(gulpConfig.vstsPublishRoot));
 });

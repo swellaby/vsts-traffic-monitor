@@ -11,5 +11,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('clean-vsts-task-publish', function () {
-    return del(gulpConfig.vstsPublishRoot);
+    return del(gulpConfig.vstsPublishRoot + '/**/*');
 });

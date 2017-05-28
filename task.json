@@ -13,8 +13,8 @@
   "demands": [],
   "version": {
     "Major": "0",
-    "Minor": "0",
-    "Patch": "1"
+    "Minor": "1",
+    "Patch": "2"
   },
   "minimumAgentVersion": "1.95.0",
   "instanceNameFormat": "This is how the task displays",
@@ -28,7 +28,7 @@
       "helpMarkDown": "The name of your account (the part that comes before the '.visualstudio.com' in the URL."
     },
     {
-      "name": "pat",
+      "name": "accessToken",
       "type": "string",
       "label": "Personal Access Token",
       "defaultValue": "",
@@ -44,7 +44,7 @@
       "helpMarkDown": "The valid ranges or blocks of IP Addresses. Enter each block on its own line.",
       "properties": {
         "rows": "3",
-        "maxLength": "30"
+        "maxLength": "500"
       }
     },
     {
@@ -55,8 +55,8 @@
       "required": true,
       "helpMarkDown": "Controls which time period of activity will be scanned (UTC Standard).",
       "options": {
-          "Yesterday": "the previous before",
-          "Last24": "the last 24 hours"
+          "yesterday": "Yesterday",
+          "latest24Hours": "The most recent 24 hour period"
       }
     }
   ],

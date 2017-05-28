@@ -15,41 +15,48 @@ let pat: string;
 let validIpRange: string[];
 let timePeriod: string;
 let utilizationService: VstsUtilizationApiUsageService;
+let containsFlaggedRecords = false;
 
 /**
- *
+ * Performs task setup operations.
  */
 const initialize = () => {
     vstsAccountName = tl.getInput('accountName', true);
-    pat = tl.getInput('pat', true);
-    validIpRange = tl.getDelimitedInput('ipRange', '\n', true);  //= ['76.187.101.174'];
+    pat = tl.getInput('accessToken', true);
+    validIpRange = tl.getDelimitedInput('ipRange', '\n', true);
     timePeriod = tl.getInput('timePeriod', true);
     utilizationService = new VstsUtilizationApiUsageService();
-    // vstsAccountName = 'swellaby';
-    // pat = '';
-    // validIpRange = ['76.187.101.175'];
-    // timePeriod = 'Yesterday';
-}
+};
 
 /**
+ * Reviews each of the activity records and checks the origin IP of the request
+ * against the specified ranges/blocks of valid IP address.
  *
- * @param usageRecords
- * @param user
+ * @param {VstsUsageRecord[]} usageRecords - The activity records of the user.
+ * @param {VstsUser} user - The VSTS user
+ * @private
  */
 const scanRecords = (usageRecords: VstsUsageRecord[], user: VstsUser) => {
     usageRecords.forEach(record => {
         const userName = user.displayName;
         const ipAddress = record.ipAddress;
         if (ipAddress && !ipRangeHelper.inRange(ipAddress, validIpRange)) {
-            console.log('LOLIYOYUOSIDFYITGW#RKGJWEFHLSDKUFHSDFHSDF');
-            console.log('User: ' + userName + ' made illegal access from IP: ' + ipAddress + ' on around: ' + record.startTime + ' (UTC)');
+            if (record.userAgent.indexOf('VSServices') !== 0) {
+                containsFlaggedRecords = true;
+                tl.error('******************************************************************************************************************');
+                tl.error('User: ' + userName + ' - made illegal access from IP: ' + ipAddress + ' on around: ' + record.startTime + ' (UTC)');
+            }
         }
     });
-}
+};
 
 /**
+ * Scans the previous day's activity for the specified user.
  *
- * @param user
+ * @param {VstsUser} user - The VSTS user
+ * @private
+ *
+ * @returns {Promise<VstsUsageRecord[]>}
  */
 const scanYesterday = async (user: VstsUser): Promise<VstsUsageRecord[]> => {
     try {
@@ -57,14 +64,18 @@ const scanYesterday = async (user: VstsUser): Promise<VstsUsageRecord[]> => {
         scanRecords(usageRecords, user);
         return usageRecords;
     } catch (err) {
-        console.log(helpers.buildError('Error while attempting to review: ', err).message);
+        tl.error(helpers.buildError('Error while attempting to review yesterday\'s activity records: ', err).message);
         return null;
     }
-}
+};
 
 /**
+ * Scans the latest 24 hours of activity for the specified user.
  *
- * @param user
+ * @param {VstsUser} user - The VSTS user
+ * @private
+ *
+ * @returns {Promise<VstsUsageRecord[]>}
  */
 const scanLast24Hours = async (user: VstsUser): Promise<VstsUsageRecord[]> => {
     try {
@@ -72,28 +83,53 @@ const scanLast24Hours = async (user: VstsUser): Promise<VstsUsageRecord[]> => {
         scanRecords(usageRecords, user);
         return usageRecords;
     } catch (err) {
-        console.log(helpers.buildError('Scan Error: ', err).message);
+        console.log(helpers.buildError('Error while attempting to review latest activity records: ', err).message);
         return null;
+    }
+};
+
+/**
+ * Sets the final result of the task and exits.
+ * @private
+ */
+const setTaskResult = () => {
+    if (containsFlaggedRecords) {
+        tl.setResult(tl.TaskResult.Failed, 'Invalid records found. The user and traffic details are in the output.');
+    } else {
+        tl.setResult(tl.TaskResult.Succeeded, 'All activity originated from within the specified range(s) of IP Addresses.');
+    }
+};
+
+/**
+ * Sets up an array of promises, each of which scans the activity for each respective user.
+ *
+ * @param {VstsUser[]} users - The users of the VSTS account.
+ * @private
+ *
+ * @returns {Promise<VstsUsageRecord[]>[]}
+ */
+const createTrafficScanPromises = (users: VstsUser[]): Promise<VstsUsageRecord[]>[] => {
+    if (timePeriod === 'yesterday') {
+        return users.map(async user => { return await scanYesterday(user); });
+    } else {
+        return users.map(async user => { return await scanLast24Hours(user); });
     }
 }
 
 /**
- *
+ * Entry point for VSTS task execution.
  */
 export const run = async () => {
     initialize();
-    const userService = new VstsGraphApiUserService();
-    let users: VstsUser[];
 
     try {
-        users = await userService.getAADUsers(vstsAccountName, pat);
-        if (timePeriod === 'Yesterday') {
-            users.forEach(async user => { await scanYesterday(user); });
-        } else {
-            users.forEach(async user => { await scanLast24Hours(user); });
-        }
+        const userService = new VstsGraphApiUserService();
+        const users: VstsUser[] = await userService.getAADUsers(vstsAccountName, pat);
+        await Promise.all(createTrafficScanPromises(users));
+        setTaskResult();
     } catch (err) {
-        console.log(helpers.buildError('Run error', err).message);
+        tl.error(helpers.buildError('Run error: ', err).message);
+        tl.setResult(tl.TaskResult.Failed, 'Error encountered.');
     }
 };
 

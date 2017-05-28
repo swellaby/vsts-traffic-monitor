@@ -29,7 +29,8 @@
     "test-offline": "gulp enforce-code-coverage",
     "transpile": "gulp transpile",
     "docker-build": "bash build.sh",
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "package-vsts-task": "gulp package-vsts-task-src package-vsts-task-files && cd vsts-publish && npm prune --production"
   },
   "pre-commit": [
     "build"
@@ -61,8 +62,7 @@
     "path": "^0.12.7",
     "pre-commit": "^1.2.2",
     "require-dir": "^0.3.1",
-    "sinon": "^2.0.0",
-    "tslib": "^1.7.1",
+    "sinon": "^2.0.0",    
     "tslint": "^4.5.1",
     "tslint-microsoft-contrib": "^4.0.1",
     "typescript": "^2.3.3"
@@ -73,6 +73,7 @@
     "nconf": "^0.8.4",
     "range_check": "^1.4.0",
     "request": "^2.81.0",
+    "tslib": "^1.7.1",
     "vsts-task-lib": "^2.0.5"
   }
 }

@@ -10,13 +10,14 @@ var tsconfig = './tsconfig.json';
 var notServer = '!' + srcRoot + '/server.js';
 var notTask = '!' + srcRoot + '/task.js';
 var notInterfaces = '!' + srcRoot + '/interfaces/**/*.js';
+var appTranspiledJavaScript = srcRoot + '/**/*.js';
 
 module.exports = {
     packageJSON: path.resolve('package.json'),
     root: srcRoot,
     vstsPublishRoot: vstsPublishRoot,
+    vstsPublishSrc: vstsPublishRoot + '/src',
     vstsTaskContent: [
-        appTranspiledJavaScript,
         './task.json',
         './package.json',
         './icon.png'
@@ -30,7 +31,7 @@ module.exports = {
         testRoot + '/**/*.js*',
     ],
     appTranspiledJavaScript: [
-        srcRoot + '/**/*.js',          
+        appTranspiledJavaScript,          
     ],
     istanbulCoverageJavaScript: [
         srcRoot + '/**/*.js',
