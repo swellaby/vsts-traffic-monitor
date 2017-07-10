@@ -1,6 +1,7 @@
 {
     "files.exclude": {
         "**/*.js": { "when": "$(basename).ts" },
-        "**/*.map": { "when": "$(basename).map" }
+        "**/*.map": { "when": "$(basename).map" },
+        "npm-debug.log": true
     }
 }
