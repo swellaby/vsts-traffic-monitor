@@ -2,15 +2,15 @@
 // Related to: https://github.com/Microsoft/TypeScript/issues/13270
 'use strict';
 
-var path = require('path');
-var srcRoot = './src';
-var vstsPublishRoot = './vsts-publish';
-var testRoot = './test';
-var tsconfig = './tsconfig.json';
-var notServer = '!' + srcRoot + '/server.js';
-var notTask = '!' + srcRoot + '/task.js';
-var notInterfaces = '!' + srcRoot + '/interfaces/**/*.js';
-var appTranspiledJavaScript = srcRoot + '/**/*.js';
+const path = require('path');
+const srcRoot = './src';
+const vstsPublishRoot = './.vsts-publish';
+const testRoot = './test';
+const tsconfig = './tsconfig.json';
+const excludedExpressServerFile = '!' + srcRoot + '/server.js';
+const excludedVstsTaskFile = '!' + srcRoot + '/task.js';
+const excludedInterfaceFiles = '!' + srcRoot + '/interfaces/**/*.js';
+const appTranspiledJavaScript = srcRoot + '/**/*.js';
 
 module.exports = {
     packageJSON: path.resolve('package.json'),
@@ -35,9 +35,9 @@ module.exports = {
     ],
     istanbulCoverageJavaScript: [
         srcRoot + '/**/*.js',
-        notInterfaces,
-        notServer,
-        notTask,
+        excludedInterfaceFiles,
+        excludedExpressServerFile,
+        excludedVstsTaskFile,
     ],
     javascriptUnitTests: testRoot + '/unit/**/*.js',
     javascriptComponentIntegrationTests: testRoot + '/component-integration/**/*.js',
