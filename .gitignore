@@ -6,6 +6,7 @@ npm-debug*
 # Istanbul
 **/coverage/
 coverage
+.coverage/
 # IDE - Note that VS Code content [.vscode/**] is intentionally left out
 /.idea/
 /.settings
@@ -23,6 +24,8 @@ tsd-debug.log
 /dist/
 
 **/testresults/
+.testresults/
 
 /vsts-publish
+.vsts-publish
 .taskkey

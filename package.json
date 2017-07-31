@@ -30,6 +30,7 @@
     "transpile": "gulp transpile",
     "docker-build": "bash build.sh",
     "start": "node src/app.js",
+    "inline": "node -e \"require('./src/task.js').run()\" ",
     "package-vsts-task": "gulp package-vsts-task-src package-vsts-task-files && cd vsts-publish && npm prune --production"
   },
   "pre-commit": [

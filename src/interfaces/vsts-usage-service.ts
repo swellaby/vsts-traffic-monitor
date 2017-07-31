@@ -10,7 +10,7 @@ import VstsUsageRecord = require('./../models/vsts-usage-record');
  */
 interface IVstsUsageService {
     /**
-     * Retrieves the VSTS usage records for the specified user from the previous day (UTC standard).
+     * Retrieves the usage records from the specified VSTS account for the specified user from the previous day (UTC standard).
      *
      * @param {string} userId - The Id of the user in VSTS.
      * @param {string} vstsAccountName - The VSTS account name.

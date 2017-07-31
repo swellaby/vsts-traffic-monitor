@@ -70,7 +70,7 @@ export const isoFormatFourDecimalsString = '2017-08-15T22:31:43.1234Z';
 
 export const validIsoDateRange = new IsoDateRange(isoFormatStartTime, isoFormatEndTime);
 
-const firstUsageRecord: VstsUsageRecord = {
+export const firstUsageRecord: VstsUsageRecord = {
     application: 'Web Access',
     command: 'Account.Home',
     count: 2,
@@ -82,7 +82,7 @@ const firstUsageRecord: VstsUsageRecord = {
     userAgent: 'Mozilla something'
 };
 
-const secondUsageRecord: VstsUsageRecord = {
+export const secondUsageRecord: VstsUsageRecord = {
     application: 'Framework',
     command: 'Projects.GetProjects',
     count: 3,
@@ -99,3 +99,27 @@ export const usageRecordsJson = JSON.stringify({
   count: usageRecords.length,
   value: usageRecords
 });
+
+export const nullIpUsageRecord: VstsUsageRecord = {
+    application: 'Web Access',
+    command: 'Account.Foo',
+    count: 1,
+    delay: 0,
+    endTime: isoFormatEndTime,
+    ipAddress: null,
+    startTime: isoFormatStartTime,
+    usage: 1,
+    userAgent: 'Mozilla clouds'
+};
+
+export const internalVstsServiceUsageRecord: VstsUsageRecord = {
+    application: 'Framework',
+    command: 'Projects.GetProjects',
+    count: 3,
+    delay: 0,
+    endTime: isoFormatEndTime,
+    ipAddress: '65.52.55.39',
+    startTime: isoFormatStartTime,
+    usage: 1,
+    userAgent: 'VSServices/15.119.26629.2 (w3wp.exe) (Service=vsspsextprodch1su1)'
+};
