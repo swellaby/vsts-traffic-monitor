@@ -1,7 +1,7 @@
-language: java
-jdk:
-  - oraclejdk8
-
+# language: java
+# jdk:
+#   - oraclejdk8
+dist: trusty
 os:
   - linux
 
@@ -9,16 +9,19 @@ addons:
   srcclr: true
   # codeclimate:
   #   repo_token: $CODECLIMATE_REPO_TOKEN
-  # sonarqube:
-  #   token:
-  #     secure: $SONAR_TOKEN
+  sonarcloud:
+    organization: "swellaby"
+    token:
+      secure: $SONAR_TOKEN
+    # github_token:
+    #   secure: 
 
 # notifications:
 #   slack: swellaby:$SLACK_TOKEN
 
-# cache:
-#   directories:
-#     - '$HOME/.sonar/cache'
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
 
 before_script:
     - export PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
@@ -28,24 +31,14 @@ install:
     - npm install
     - npm install -g codeclimate-test-reporter coveralls
     - nvm install 6
-    - nvm install 5
-    - nvm install 4
 
 script:
-    - nvm use 4
-    - npm run lint
-    - npm run enforce-code-coverage
-    - nvm use 5
-    - npm run lint
-    - npm run enforce-code-coverage
     - nvm use 6
-    - npm run lint
-    - npm run enforce-code-coverage
+    - npm run build
     - nvm use node
-    - npm run lint
-    - npm run enforce-code-coverage
-    # - if [ "$SONARQUBE_SKIPPED" != true ]; then sonar-scanner -D sonar.projectVersion=$PROJECT_VERSION; fi
+    - npm run build
+    - if [ "$SONARQUBE_SKIPPED" != true ]; then sonar-scanner -D sonar.projectVersion=$PROJECT_VERSION; fi
 
-# after_success:
-#     - codeclimate-test-reporter < coverage/unit/lcov.info
-#     - coveralls < coverage/unit/lcov.info
+after_success:
+    # - codeclimate-test-reporter < coverage/unit/lcov.info
+    - coveralls < .coverage/unit/lcov.info
