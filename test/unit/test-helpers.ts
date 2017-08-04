@@ -70,13 +70,21 @@ export const isoFormatFourDecimalsString = '2017-08-15T22:31:43.1234Z';
 
 export const validIsoDateRange = new IsoDateRange(isoFormatStartTime, isoFormatEndTime);
 
+export const firstValidIpAddress = '72.123.58.1';
+export const secondValidIpAddress = '125.19.23.17';
+export const thirdValidIpAddress = '65.52.55.39';
+export const fourthValidIpAddress = '192.168.2.0';
+export const fifthValidIpAddress = '255.255.255.249';
+export const validIpRange = '255.255.255.248/29';
+export const validIpRanges = [ validIpRange, fourthValidIpAddress ];
+
 export const firstUsageRecord: VstsUsageRecord = {
     application: 'Web Access',
     command: 'Account.Home',
     count: 2,
     delay: 0,
     endTime: isoFormatEndTime,
-    ipAddress: '72.123.58.1',
+    ipAddress: firstValidIpAddress,
     startTime: isoFormatStartTime,
     usage: 1,
     userAgent: 'Mozilla something'
@@ -88,7 +96,7 @@ export const secondUsageRecord: VstsUsageRecord = {
     count: 3,
     delay: 0,
     endTime: isoFormatEndTime,
-    ipAddress: '125.19.23.17',
+    ipAddress: secondValidIpAddress,
     startTime: isoFormatStartTime,
     usage: 1,
     userAgent: 'Mozilla/5.0'
@@ -118,7 +126,7 @@ export const internalVstsServiceUsageRecord: VstsUsageRecord = {
     count: 3,
     delay: 0,
     endTime: isoFormatEndTime,
-    ipAddress: '65.52.55.39',
+    ipAddress: thirdValidIpAddress,
     startTime: isoFormatStartTime,
     usage: 1,
     userAgent: 'VSServices/15.119.26629.2 (w3wp.exe) (Service=vsspsextprodch1su1)'

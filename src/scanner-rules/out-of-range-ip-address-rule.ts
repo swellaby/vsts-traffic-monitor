@@ -1,18 +1,18 @@
 'use strict';
 
-import IInvalidIpAddressScannerRule = require('./../interfaces/invalid-ip-address-scanner-rule');
+import IOutOfRangeIpAddressScannerRule = require('./../interfaces/out-of-range-ip-address-scanner-rule');
 import VstsUsageRecord = require('./../models/vsts-usage-record');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
 
 /**
- * Implementation of the @see
+ * Implementation of the @see {@link }
  *
- * @class InvalidIpAddressRule
- * @implements {IInvalidIpAddressScannerRule}
+ * @class OutOfRangeIpAddressRule
+ * @implements {IOutOfRangeIpAddressScannerRule}
  */
-class InvalidIpAddressRule implements IInvalidIpAddressScannerRule {
+class OutOfRangeIpAddressRule implements IOutOfRangeIpAddressScannerRule {
     private validIpRanges: string[];
     private includeInternalVstsServices: boolean;
 
@@ -36,15 +36,20 @@ class InvalidIpAddressRule implements IInvalidIpAddressScannerRule {
     }
 
     /**
-     * Determines whether or not the specified usageRecord should be flagged as a violation.
+     * Scans the specified VSTS Usage Record to determine if the record matches
+     * a condition identified by the ScannerRule implementation.
+     *
+     * @description This rule is determining whether the IP Address of record falls
+     * outside the expected list of IP Addresses and/or Ranges.
      *
      * @param {VstsUsageRecord} usageRecord
      * @memberof IScannerRule
      *
      * @throws {Error} - Will throw an error on invalid input.
-     * @returns {boolean} - Indicating whether or not the specified usageRecord should be flagged.
+     * @returns {boolean} - True if the specified Usage Record came from an out of range IP Address that
+     * does not fall within the specified list of expected addresses and/or ranges.
      */
-    public flagRecord(usageRecord: VstsUsageRecord): boolean {
+    public scanRecordForMatch(usageRecord: VstsUsageRecord): boolean {
         if (!usageRecord) {
             throw new Error('Invalid parameter. usageRecord cannot be null nor undefined');
         }
@@ -80,4 +85,4 @@ class InvalidIpAddressRule implements IInvalidIpAddressScannerRule {
     }
 }
 
-export = InvalidIpAddressRule;
+export = OutOfRangeIpAddressRule;

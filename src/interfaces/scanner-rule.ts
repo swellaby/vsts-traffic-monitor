@@ -9,13 +9,15 @@ import VstsUsageRecord = require('./../models/vsts-usage-record');
  */
 interface IScannerRule {
     /**
-     *
+     * Scans the specified VSTS Usage Record to determine if the record matches
+     * a condition identified by the ScannerRule implementation.
      *
      * @param {VstsUsageRecord} usageRecord
-     * @returns {boolean}
+     *
      * @memberof IScannerRule
+     * @returns {boolean} - Returns true if the record matches the condition of this rule.
      */
-    flagRecord(usageRecord: VstsUsageRecord): boolean,
+    scanRecordForMatch(usageRecord: VstsUsageRecord): boolean,
 }
 
 export = IScannerRule;

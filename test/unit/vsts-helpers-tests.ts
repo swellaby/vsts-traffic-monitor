@@ -3,7 +3,7 @@
 import Chai = require('chai');
 import Sinon = require('sinon');
 
-import helpers = require('./../../src/helpers');
+import formatValidator = require('./../../src/format-validator');
 import testHelpers = require('./test-helpers');
 import vstsHelpers = require('./../../src/vsts-helpers');
 
@@ -94,10 +94,10 @@ suite('VSTS Helpers Suite:', () => {
     });
 
     suite('validateUserIdFormat Suite:', () => {
-        let helpersIsValidGuidStub: Sinon.SinonStub;
+        let formatValidatorIsValidGuidStub: Sinon.SinonStub;
 
         setup(() => {
-            helpersIsValidGuidStub = sandbox.stub(helpers, 'isValidGuid').callsFake(() => { return false; });
+            formatValidatorIsValidGuidStub = sandbox.stub(formatValidator, 'isValidGuid').callsFake(() => { return false; });
         });
 
         test('Should throw an error when userId is null', () => {
@@ -113,7 +113,7 @@ suite('VSTS Helpers Suite:', () => {
         });
 
         test('Should not throw an error when userId is valid', () => {
-            helpersIsValidGuidStub.callsFake(() => { return true; });
+            formatValidatorIsValidGuidStub.callsFake(() => { return true; });
             assert.doesNotThrow(() => vstsHelpers.validateUserIdFormat(testHelpers.sampleGuid), invalidUserIdErrorMessage);
         });
     });

@@ -4,6 +4,7 @@ import Chai = require('chai');
 import moment = require('moment');
 import Sinon = require('sinon');
 
+import formatValidator = require('./../../src/format-validator');
 import helpers = require('./../../src/helpers');
 import testHelpers = require('./test-helpers');
 
@@ -24,12 +25,16 @@ suite('Helpers Suite:', () => {
     let momentSubtractStub: Sinon.SinonStub;
     const momentDays = 'day';
     const momentHours = 'hours';
+    let formatValidatorIsValidIsoFormatStub: Sinon.SinonStub;
 
     setup(() => {
         momentUtcStub = sandbox.stub(moment.prototype, 'utc').callsFake(() => {
             return momentStub;
         });
         momentSubtractStub = sandbox.stub(momentStub, 'subtract');
+        formatValidatorIsValidIsoFormatStub = sandbox.stub(formatValidator, 'isValidIsoFormat').callsFake(() => {
+            return true;
+        });
     });
 
     teardown(() => {
@@ -63,24 +68,6 @@ suite('Helpers Suite:', () => {
         });
     });
 
-    suite('isValidGuid Suite:', () => {
-        test('Should return false when the input is null', () => {
-            assert.deepEqual(helpers.isValidGuid(null), false);
-        });
-
-        test('Should return false when the input is undefined', () => {
-            assert.deepEqual(helpers.isValidGuid(undefined), false);
-        });
-
-        test('Should return false when the input is an invalid guid', () => {
-            assert.deepEqual(helpers.isValidGuid('!@#$%'), false);
-        });
-
-        test('Should return true when the input is a valid guid format', () => {
-            assert.deepEqual(helpers.isValidGuid(testHelpers.sampleGuid), true);
-        });
-    });
-
     // eslint-disable-next-line max-statements
     suite('buildUtcIsoDateRange Suite:', () => {
         const errorMessage = 'Invalid date specified.';
@@ -92,7 +79,6 @@ suite('Helpers Suite:', () => {
         };
         let dateStartOfStub: Sinon.SinonStub;
         let dateEndOfStub: Sinon.SinonStub;
-        let helpersIsValidIsoFormatStub: Sinon.SinonStub;
 
         setup(() => {
             dateStartOfStub = sandbox.stub(momentStub, 'startOf').callsFake(() => {
@@ -100,9 +86,6 @@ suite('Helpers Suite:', () => {
             });
             dateEndOfStub = sandbox.stub(momentStub, 'endOf').callsFake(() => {
                 return endOfStub;
-            });
-            helpersIsValidIsoFormatStub = sandbox.stub(helpers, 'isValidIsoFormat').callsFake(() => {
-                return true;
             });
         });
 
@@ -133,7 +116,7 @@ suite('Helpers Suite:', () => {
             const isoDateRange = helpers.buildUtcIsoDateRange(new Date());
             assert.deepEqual(isoDateRange.isoStartTime, testHelpers.isoFormatStartTime);
             assert.deepEqual(isoDateRange.isoEndTime, testHelpers.isoFormatEndTime);
-            assert.isTrue(helpersIsValidIsoFormatStub.called);
+            assert.isTrue(formatValidatorIsValidIsoFormatStub.called);
         });
     });
 
@@ -151,7 +134,6 @@ suite('Helpers Suite:', () => {
         };
         let yesterdayStartOfStub: Sinon.SinonStub;
         let yesterdayEndOfStub: Sinon.SinonStub;
-        let helpersIsValidIsoFormatStub: Sinon.SinonStub;
 
         setup(() => {
             momentSubtractStub.callsFake(() => {
@@ -162,9 +144,6 @@ suite('Helpers Suite:', () => {
             });
             yesterdayEndOfStub = sandbox.stub(yesterdayStub, 'endOf').callsFake(() => {
                 return endOfStub;
-            });
-            helpersIsValidIsoFormatStub = sandbox.stub(helpers, 'isValidIsoFormat').callsFake(() => {
-                return true;
             });
         });
 
@@ -192,7 +171,7 @@ suite('Helpers Suite:', () => {
             const isoDateRange = helpers.getYesterdayUtcDateRange();
             assert.deepEqual(isoDateRange.isoStartTime, testHelpers.isoFormatStartTime);
             assert.deepEqual(isoDateRange.isoEndTime, testHelpers.isoFormatEndTime);
-            assert.isTrue(helpersIsValidIsoFormatStub.called);
+            assert.isTrue(formatValidatorIsValidIsoFormatStub.called);
         });
     });
 
@@ -202,8 +181,6 @@ suite('Helpers Suite:', () => {
         };
         let beginningFormatStub: Sinon.SinonStub;
         let nowFormatStub: Sinon.SinonStub;
-        // eslint-disable-next-line no-unused-vars
-        let helpersIsValidIsoFormatStub: Sinon.SinonStub; // This stub is used to control flow.
 
         setup(() => {
             momentSubtractStub.callsFake(() => {
@@ -214,9 +191,6 @@ suite('Helpers Suite:', () => {
             });
             beginningFormatStub = sandbox.stub(beginningStub, 'format').callsFake(() => {
                 return testHelpers.isoFormatStartTime;
-            });
-            helpersIsValidIsoFormatStub = sandbox.stub(helpers, 'isValidIsoFormat').callsFake(() => {
-                return true;
             });
         });
 
@@ -244,44 +218,6 @@ suite('Helpers Suite:', () => {
             const isoDateRange = helpers.getLast24HoursUtcDateRange();
             assert.deepEqual(isoDateRange.isoStartTime, testHelpers.isoFormatStartTime);
             assert.deepEqual(isoDateRange.isoEndTime, testHelpers.isoFormatEndTime);
-        });
-    });
-
-    suite('isValidIsoFormat Suite:', () => {
-        test('Should return false when the input is null', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(null), false);
-        });
-
-        test('Should return false when the input is undefined', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(undefined), false);
-        });
-
-        test('Should return false when the input is not a valid ISO formatted string', () => {
-            assert.deepEqual(helpers.isValidIsoFormat('abc230497*&%754'), false);
-        });
-
-        test('Should return true when the input is a valid ISO format with no decimals', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(testHelpers.isoFormatNoDecimalString), true);
-        });
-
-        test('Should return false when the input contains an invalid decimal formatted ISO', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(testHelpers.isoFormatInvalidDecimalString), false);
-        });
-
-        test('Should return true when the input is a valid ISO format with one decimal place', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(testHelpers.isoFormatOneDecimalString), true);
-        });
-
-        test('Should return true when the input is a valid ISO format with two decimal places', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(testHelpers.isoFormatTwoDecimalsString), true);
-        });
-
-        test('Should return true when the input is a valid ISO format with three decimal places', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(testHelpers.isoFormatThreeDecimalsString), true);
-        });
-
-        test('Should return false when the input is a valid ISO format with four decimal places', () => {
-            assert.deepEqual(helpers.isValidIsoFormat(testHelpers.isoFormatFourDecimalsString), false);
         });
     });
 });

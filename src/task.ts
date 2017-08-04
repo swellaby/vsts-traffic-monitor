@@ -1,11 +1,13 @@
 'use strict';
 
 import tl = require('vsts-task-lib/task');
+import factory = require('./factory');
 import helpers = require('./helpers');
+import IVstsUsageService = require('./interfaces/vsts-usage-service');
 import VstsGraphApiUserService = require('./services/vsts-graph-api-user-service');
 import VstsUsageRecord = require('./models/vsts-usage-record');
 import VstsUser = require('./models/vsts-user');
-import VstsUtilizationApiUsageService = require('./services/vsts-utilization-api-usage-service');
+// import VstsUtilizationApiUsageService = require('./services/vsts-utilization-api-usage-service');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
@@ -14,7 +16,7 @@ let vstsAccountName: string;
 let pat: string;
 let validIpRange: string[];
 let timePeriod: string;
-let utilizationService: VstsUtilizationApiUsageService;
+let utilizationService: IVstsUsageService;
 let containsFlaggedRecords = false;
 
 /**
@@ -25,7 +27,7 @@ const initialize = () => {
     pat = tl.getInput('accessToken', true);
     validIpRange = tl.getDelimitedInput('ipRange', '\n', true);
     timePeriod = tl.getInput('timePeriod', true);
-    utilizationService = new VstsUtilizationApiUsageService();
+    utilizationService = factory.getVstsUsageService();
 };
 
 /**

@@ -1,6 +1,6 @@
 'use strict';
 
-import helpers = require('./../helpers');
+import formatValidator = require('./../format-validator');
 
 /**
  * Represents a date range with ISO Formatted
@@ -17,7 +17,7 @@ class IsoDateRange {
      * @memberof IsoDateRange
      */
     constructor(public isoStartTime: string, public isoEndTime: string) {
-        if (!helpers.isValidIsoFormat(isoStartTime) || !helpers.isValidIsoFormat(isoEndTime)) {
+        if (!formatValidator.isValidIsoFormat(isoStartTime) || !formatValidator.isValidIsoFormat(isoEndTime)) {
             throw new Error('Invalid constructor inputs. Both start and end time must be valid ISO strings.');
         }
     }

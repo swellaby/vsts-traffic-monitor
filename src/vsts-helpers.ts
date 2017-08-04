@@ -1,6 +1,6 @@
 'use strict';
 
-import helpers = require('./helpers');
+import formatValidator = require('./format-validator');
 import IsoDateRange = require('./models/iso-date-range');
 
 /**
@@ -47,7 +47,7 @@ export const validateAccountName = (accountName: string) => {
  * @throws {Error} Will throw an error if the specified User Id is invalid.
  */
 export const validateUserIdFormat = (userId: string) => {
-    if (!helpers.isValidGuid(userId)) {
+    if (!formatValidator.isValidGuid(userId)) {
         throw new Error('Invalid User Id. User Id must be a valid GUID.');
     }
 };
