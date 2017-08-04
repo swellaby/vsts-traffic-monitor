@@ -23,16 +23,16 @@ suite('VstsUsageScannerEngine Suite:', () => {
         assert.deepEqual(scanResult.scannedRecordCount, 0);
     });
 
-    test('Should have default value of false for containsFlaggedRecords', () => {
-        assert.isFalse(scanResult.containsFlaggedRecords);
+    test('Should have default value of false for containsMatchedRecords', () => {
+        assert.isFalse(scanResult.containsMatchedRecords);
     });
 
     test('Should have default value of false for containsRecordScanErrors', () => {
         assert.isFalse(scanResult.containsRecordScanErrors);
     });
 
-    test('Should have default empty array of flagged records', () => {
-        assert.deepEqual(scanResult.flaggedRecords.length, 0);
+    test('Should have default empty array of matched records', () => {
+        assert.deepEqual(scanResult.matchedRecords.length, 0);
     });
 
     test('Should have default empty array of recordScanErrorMessages', () => {

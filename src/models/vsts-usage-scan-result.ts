@@ -9,9 +9,9 @@ import VstsUsageRecord = require('./vsts-usage-record');
  */
 class VstsUsageScanResult {
     public scannedRecordCount: number;
-    public containsFlaggedRecords: boolean;
+    public containsMatchedRecords: boolean;
     public containsRecordScanErrors: boolean;
-    public flaggedRecords: VstsUsageRecord[] = [];
+    public matchedRecords: VstsUsageRecord[] = [];
     public recordScanErrorMessages: string[] = [];
     public erroredScanRecords: VstsUsageRecord[] = [];
 
@@ -21,7 +21,7 @@ class VstsUsageScanResult {
      */
     constructor() {
         this.scannedRecordCount = 0;
-        this.containsFlaggedRecords = false;
+        this.containsMatchedRecords = false;
         this.containsRecordScanErrors = false;
     }
 }
