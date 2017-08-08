@@ -1,9 +1,16 @@
 'use strict';
 
+import IOutOfRangeIpAddressScannerRule = require('./../../src/interfaces/out-of-range-ip-address-scanner-rule');
+import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
 import IsoDateRange = require('./../../src/models/iso-date-range');
 import IVstsGraphUsersApiResponse = require('./../../src/interfaces/vsts-graph-api-user-response');
+import IVstsUsageService = require('./../../src/interfaces/vsts-usage-service');
+import IVstsUserService = require('./../../src/interfaces/vsts-user-service');
+import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
+import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
 import VstsUser = require('./../../src/models/vsts-user');
+import VstsUtilizationApiUsageService = require('./../../src/services/vsts-utilization-api-usage-service');
 
 export const emptyString = '';
 
@@ -18,6 +25,8 @@ const buildVstsUser = (displayName: string, origin: string): VstsUser => {
     user.origin = origin;
     return user;
 }
+
+export const vstsAccountName = 'swellaby';
 
 const aadOrigin = 'aad';
 const vstsOrigin = 'vsts';
@@ -76,7 +85,7 @@ export const thirdValidIpAddress = '65.52.55.39';
 export const fourthValidIpAddress = '192.168.2.0';
 export const fifthValidIpAddress = '255.255.255.249';
 export const validIpRange = '255.255.255.248/29';
-export const validIpRanges = [ validIpRange, fourthValidIpAddress ];
+export const allowedIpRanges = [ validIpRange, fourthValidIpAddress ];
 
 export const firstUsageRecord: VstsUsageRecord = {
     application: 'Web Access',
@@ -108,6 +117,8 @@ export const usageRecordsJson = JSON.stringify({
   value: usageRecords
 });
 
+export const emptyUsageRecords: VstsUsageRecord[] = [];
+
 export const nullIpUsageRecord: VstsUsageRecord = {
     application: 'Web Access',
     command: 'Account.Foo',
@@ -130,4 +141,20 @@ export const internalVstsServiceUsageRecord: VstsUsageRecord = {
     startTime: isoFormatStartTime,
     usage: 1,
     userAgent: 'VSServices/15.119.26629.2 (w3wp.exe) (Service=vsspsextprodch1su1)'
+};
+
+export const buildOutOfRangeIpAddressScannerRule = (): IOutOfRangeIpAddressScannerRule => {
+    return new OutOfRangeIpAddressScannerRule(allowedIpRanges, false);
+};
+
+export const buildUsageServiceInstance = (): IVstsUsageService => {
+    return new VstsUtilizationApiUsageService();
+}
+
+export const buildUserServiceInstance = (): IVstsUserService => {
+    return new VstsGraphApiUserService();
+};
+
+export const getDefaultIpAddressScanRequest = (): IpAddressScanRequest => {
+    return new IpAddressScanRequest();
 };

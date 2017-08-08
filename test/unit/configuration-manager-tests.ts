@@ -1,6 +1,7 @@
 'use strict';
 
 import Chai = require('chai');
+import nconf = require('nconf');
 import request = require('request');
 import Sinon = require('sinon');
 
@@ -14,16 +15,35 @@ const assert = Chai.assert;
  */
 suite('ConfigurationManager Suite:', () => {
     const sandbox = Sinon.sandbox.create();
+    let nconfGetStub: Sinon.SinonStub;
+    let nconfSetStub: Sinon.SinonStub;
+    const allowedIpRangesKey = 'allowedIpRanges';
+
+    setup(() => {
+        nconfGetStub = sandbox.stub(nconf, 'get').callsFake(() => {
+            return testHelpers.emptyString;
+        });
+        nconfSetStub = sandbox.stub(nconf, 'set').callsFake(() => {
+            return;
+        });
+    });
 
     teardown(() => {
         sandbox.restore();
     });
 
+    test('Should return the correct value of allowed ip ranges', () => {
+        const value = testHelpers.allowedIpRanges;
+        nconfGetStub.callsFake(() => {
+            return value;
+        });
+        const allowedIpRanges = ConfigurationManager.getAllowedIpRanges();
+        assert.isTrue(nconfGetStub.calledWith(allowedIpRangesKey));
+        assert.deepEqual(allowedIpRanges, value);
+    });
+
     test('Should correctly set the value of Valid Ip Ranges', () => {
-        ConfigurationManager.setValidIpRanges(testHelpers.validIpRanges);
-        const ranges = ConfigurationManager.getValidIpRanges();
-        assert.deepEqual(ranges.length, 2);
-        assert.deepEqual(ranges[0], testHelpers.validIpRange);
-        assert.deepEqual(ranges[1], testHelpers.fourthValidIpAddress);
+        ConfigurationManager.setAllowedIpRanges(testHelpers.allowedIpRanges);
+        assert.isTrue(nconfSetStub.calledWith(allowedIpRangesKey, testHelpers.allowedIpRanges));
     });
 });

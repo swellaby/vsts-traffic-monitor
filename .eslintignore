@@ -1,4 +1,4 @@
 node_modules
-coverage
-testresults
+.coverage
+.testresults
 vsts-publish

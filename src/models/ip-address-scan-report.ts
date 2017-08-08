@@ -1,6 +1,7 @@
 'use strict';
 
 import VstsUsageScanReport = require('./vsts-usage-scan-report');
+import VstsUser = require('./vsts-user');
 import VstsUserActivityReport = require('./vsts-user-activity-report');
 
 /**
@@ -14,6 +15,7 @@ class IpAddressScanReport extends VstsUsageScanReport {
     public numUsersWithFlaggedRecords: number;
     public userActivityReports: VstsUserActivityReport[];
     public flaggedUserActivityReports: VstsUserActivityReport[];
+    public allowedIpRanges: string[];
 
     /**
      * Creates an instance of IpAddressScanReport.
@@ -25,6 +27,7 @@ class IpAddressScanReport extends VstsUsageScanReport {
         this.numUsersWithFlaggedRecords = 0;
         this.userActivityReports = [];
         this.flaggedUserActivityReports = [];
+        this.allowedIpRanges = [];
     }
 }
 

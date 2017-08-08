@@ -50,4 +50,14 @@ suite('VstsUserActivityReport Suite:', () => {
         report.matchedUsageRecords.push(new VstsUsageRecord());
         assert.deepEqual(report.matchedUsageRecords.length, 2);
     });
+
+    test('Should have accessible property for erroredScanUsageRecords', () => {
+        assert.deepEqual(report.erroredScanUsageRecords.length, 0);
+    });
+
+    test('Should have modifiable property for erroredScanUsageRecords', () => {
+        report.erroredScanUsageRecords.push(new VstsUsageRecord());
+        report.erroredScanUsageRecords.push(new VstsUsageRecord());
+        assert.deepEqual(report.erroredScanUsageRecords.length, 2);
+    });
 });

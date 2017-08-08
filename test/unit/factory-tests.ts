@@ -6,7 +6,7 @@ import factory = require('./../../src/factory');
 import IOutOfRangeIpAddressScannerRule = require('./../../src/interfaces/out-of-range-ip-address-scanner-rule');
 import IVstsUsageService = require('./../../src/interfaces/vsts-usage-service');
 import IVstsUserService = require('./../../src/interfaces/vsts-user-service');
-import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-rule');
+import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import testHelpers = require('./test-helpers');
 import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
 import VstsUtilizationApiUsageService = require('./../../src/services/vsts-utilization-api-usage-service');
@@ -27,8 +27,8 @@ suite('Factory Suite:', () => {
         assert.instanceOf<IVstsUserService>(userService, VstsGraphApiUserService);
     });
 
-    // test('Should return the correct instance type of IOutOfRangeIpAddressScannerRule', () => {
-    //     const scannerRule = factory.getOutOfRangeIpAddressScannerRule();
-    //     assert.instanceOf<IOutOfRangeIpAddressScannerRule>(scannerRule, OutOfRangeIpAddressScannerRule);
-    // });
+    test('Should return the correct instance type of IOutOfRangeIpAddressScannerRule', () => {
+        const scannerRule = factory.getOutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false);
+        assert.instanceOf<IOutOfRangeIpAddressScannerRule>(scannerRule, OutOfRangeIpAddressScannerRule);
+    });
 });

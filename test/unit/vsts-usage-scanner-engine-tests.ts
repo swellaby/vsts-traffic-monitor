@@ -3,7 +3,7 @@
 import Chai = require('chai');
 import Sinon = require('sinon');
 
-import OutOfRangeIpAddressRule = require('./../../src/scanner-rules/out-of-range-ip-address-rule');
+import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import testHelpers = require('./test-helpers');
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
 import vstsUsageScannerEngine = require('./../../src/vsts-usage-scanner-engine');
@@ -26,11 +26,11 @@ suite('VstsUsageScannerEngine Suite:', () => {
     // eslint-disable-next-line max-statements
     suite('scanUserIpAddresses', () => {
         const invalidParamsErrorMessage = 'Invalid parameters. Must specify valid usageRecords and ipScannerRule.';
-        let ruleStub: OutOfRangeIpAddressRule;
+        let ruleStub: OutOfRangeIpAddressScannerRule;
         let ruleScanRecordForMatchStub: Sinon.SinonStub;
 
         setup(() => {
-            ruleStub = new OutOfRangeIpAddressRule(testHelpers.validIpRanges, false);
+            ruleStub = new OutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false);
             ruleScanRecordForMatchStub = sandbox.stub(ruleStub, 'scanRecordForMatch').callsFake(() => {
                 return false;
             });

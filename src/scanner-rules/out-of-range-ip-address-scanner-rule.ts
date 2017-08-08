@@ -9,29 +9,29 @@ const ipRangeHelper = require('range_check'); // There is not a typedefinition f
 /**
  * Implementation of the @see {@link }
  *
- * @class OutOfRangeIpAddressRule
+ * @class OutOfRangeIpAddressScannerRule
  * @implements {IOutOfRangeIpAddressScannerRule}
  */
-class OutOfRangeIpAddressRule implements IOutOfRangeIpAddressScannerRule {
-    private validIpRanges: string[];
+class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule {
+    private allowedIpRanges: string[];
     private includeInternalVstsServices: boolean;
 
     /**
      * Creates a new instance
      *
-     * @param {string[]} validIpRanges
-     * @memberof InvalidIpAddressRule
+     * @param {string[]} allowedIpRanges
+     * @memberof OutOfRangeIpAddressScannerRule
      *
      * @throws {Error} - Will throw an error on invalid input.
      */
-    constructor (validIpRanges: string[], includeInternalVstsServices: boolean) {
-        if (!validIpRanges || validIpRanges.length === 0) {
-            throw new Error('Invalid constructor parameters. validIpRanges parameter must be a non-empty array of valid values.');
+    constructor (allowedIpRanges: string[], includeInternalVstsServices: boolean) {
+        if (!allowedIpRanges || allowedIpRanges.length === 0) {
+            throw new Error('Invalid constructor parameters. allowedIpRanges parameter must be a non-empty array of valid values.');
         }
 
-        this.validateIpRangeValues(validIpRanges);
+        this.validateIpRangeValues(allowedIpRanges);
 
-        this.validIpRanges = validIpRanges;
+        this.allowedIpRanges = allowedIpRanges;
         this.includeInternalVstsServices = includeInternalVstsServices;
     }
 
@@ -39,7 +39,7 @@ class OutOfRangeIpAddressRule implements IOutOfRangeIpAddressScannerRule {
      * Scans the specified VSTS Usage Record to determine if the record matches
      * a condition identified by the ScannerRule implementation.
      *
-     * @description This rule is determining whether the IP Address of record falls
+     * @description This rule is determining whether the IP Address of the usage record falls
      * outside the expected list of IP Addresses and/or Ranges.
      *
      * @param {VstsUsageRecord} usageRecord
@@ -55,7 +55,7 @@ class OutOfRangeIpAddressRule implements IOutOfRangeIpAddressScannerRule {
         }
 
         const ipAddress = usageRecord.ipAddress;
-        if (ipAddress && !ipRangeHelper.inRange(ipAddress, this.validIpRanges)) {
+        if (ipAddress && !ipRangeHelper.inRange(ipAddress, this.allowedIpRanges)) {
             if (usageRecord.userAgent.indexOf('VSServices') === 0) {
                 if (this.includeInternalVstsServices) {
                     return true;
@@ -69,20 +69,20 @@ class OutOfRangeIpAddressRule implements IOutOfRangeIpAddressScannerRule {
     }
 
     /**
-     *
+     * Validates that the specified values are each a valid IPv4 address or CIDR block.
      *
      * @private
      * @param {string[]} ipRanges
-     * @memberof InvalidIpAddressRule
+     * @memberof OutOfRangeIpAddressScannerRule
      */
     private validateIpRangeValues(ipRanges: string[]): void {
         ipRanges.forEach(ip => {
             if (!ipRangeHelper.isIP(ip) && !ipRangeHelper.isRange(ip)) {
-                throw new Error('Specified validIpRanges contains one or more invalid values. All values must be a valid IPv4 or ' +
+                throw new Error('Specified allowedIpRanges contains one or more invalid values. All values must be a valid IPv4 or ' +
                     'IPv6 address, or a valid CIDR block');
             }
         });
     }
 }
 
-export = OutOfRangeIpAddressRule;
+export = OutOfRangeIpAddressScannerRule;
