@@ -73,7 +73,6 @@ const analyzeOutOfRangeIpAddressScanResult =
     userActivityReport.erroredScanUsageRecords = scanResult.erroredScanRecords;
 
     if (scanResult.matchedRecords.length > 0) {
-        console.log('inside block on line 76 of usg mntr');
         scanReport.flaggedUserActivityReports.push(userActivityReport);
         scanReport.numOutOfRangeIpAddressRecords += scanResult.matchedRecords.length;
         scanReport.numMatchedUsageRecords += scanResult.matchedRecords.length;
