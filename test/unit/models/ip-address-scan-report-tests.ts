@@ -62,6 +62,15 @@ suite('IpAddressScanReport Suite:', () => {
         assert.deepEqual(report.flaggedUserActivityReports.length, 2);
     });
 
+    test('Should have accessible property for unscannedUserActivityReports', () => {
+        assert.deepEqual(report.unscannedUserActivityReports.length, 0);
+    });
+
+    test('Should have modifiable property for count of flaggedUserActivityReports', () => {
+        report.unscannedUserActivityReports.push(new VstsUserActivityReport());
+        assert.deepEqual(report.unscannedUserActivityReports.length, 1);
+    });
+
     test('Should have accessible property for scanPeriod', () => {
         assert.deepEqual(report.scanPeriod, undefined);
     });

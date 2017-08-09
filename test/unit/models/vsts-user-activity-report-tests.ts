@@ -60,4 +60,14 @@ suite('VstsUserActivityReport Suite:', () => {
         report.erroredScanUsageRecords.push(new VstsUsageRecord());
         assert.deepEqual(report.erroredScanUsageRecords.length, 2);
     });
+
+    test('Should have accessible property for scanFailureErrorMessages', () => {
+        assert.deepEqual(report.scanFailureErrorMessages.length, 0);
+    });
+
+    test('Should have modifiable property for scanFailureErrorMessages', () => {
+        const messages: string[] = [ 'fail', 'break' ];
+        report.scanFailureErrorMessages = messages;
+        assert.deepEqual(report.scanFailureErrorMessages, messages);
+    });
 });

@@ -9,6 +9,7 @@ import IVstsUserService = require('./../../src/interfaces/vsts-user-service');
 import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
+import VstsUsageScanResult = require('./../../src/models/vsts-usage-scan-result');
 import VstsUser = require('./../../src/models/vsts-user');
 import VstsUtilizationApiUsageService = require('./../../src/services/vsts-utilization-api-usage-service');
 
@@ -158,3 +159,5 @@ export const buildUserServiceInstance = (): IVstsUserService => {
 export const getDefaultIpAddressScanRequest = (): IpAddressScanRequest => {
     return new IpAddressScanRequest();
 };
+
+export const defaultVstsUsageScanResult = new VstsUsageScanResult();

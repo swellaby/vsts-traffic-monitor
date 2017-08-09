@@ -15,6 +15,7 @@ class IpAddressScanReport extends VstsUsageScanReport {
     public numUsersWithFlaggedRecords: number;
     public userActivityReports: VstsUserActivityReport[];
     public flaggedUserActivityReports: VstsUserActivityReport[];
+    public unscannedUserActivityReports: VstsUserActivityReport[];
     public allowedIpRanges: string[];
 
     /**
@@ -27,6 +28,7 @@ class IpAddressScanReport extends VstsUsageScanReport {
         this.numUsersWithFlaggedRecords = 0;
         this.userActivityReports = [];
         this.flaggedUserActivityReports = [];
+        this.unscannedUserActivityReports = [];
         this.allowedIpRanges = [];
     }
 }

@@ -13,6 +13,7 @@ class VstsUserActivityReport {
     public allUsageRecords: VstsUsageRecord[];
     public matchedUsageRecords: VstsUsageRecord[];
     public erroredScanUsageRecords: VstsUsageRecord[];
+    public scanFailureErrorMessages: string[];
 
     /**
      * Creates an instance of VstsUserActivityReport.
@@ -22,6 +23,7 @@ class VstsUserActivityReport {
         this.allUsageRecords = [];
         this.matchedUsageRecords = [];
         this.erroredScanUsageRecords = [];
+        this.scanFailureErrorMessages = [];
     }
 }
 
