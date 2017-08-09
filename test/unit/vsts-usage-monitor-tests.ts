@@ -28,36 +28,21 @@ suite('VstsUsageMonitor Suite:', () => {
     let vstsUsageService: IVstsUsageService;
     let vstsUserService: IVstsUserService;
     let scanResult: VstsUsageScanResult
-    // eslint-disable-next-line no-unused-vars
     let vstsUsageScannerEngineScanUserIpAddressStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let vstsUserServiceGetAADUsersStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let vstsUserServiceGetAllUsersStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let vstsUsageServiceGetUserActivityFromYesterdayStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let vstsUsageServiceGetUserActivityOverLast24Hours: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let factoryGetVstsUsageServiceStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let factoryGetVstsUserServiceStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     let factoryGetOutOfRangeIpAddressScannerRuleStub: Sinon.SinonStub;
-    // eslint-disable-next-line no-unused-vars
     const userServiceFailedErrorMessage = 'Failed to retrieve the list of users from the specified VSTS account. ' +
             'Please ensure that the Graph API is enabled on the account.';
-    // eslint-disable-next-line no-unused-vars
     const invalidUserOriginErrorMessage = 'Unable to retrieve user list from VSTS account. Unknown or unsupported user origin specified.';
-    // eslint-disable-next-line no-unused-vars
     const debugErrorMessagePrefix = 'Error details: ';
-    // eslint-disable-next-line no-unused-vars
     const emptyUserListErrorMessage = 'No users were found from the specified User Origin on the specified VSTS account.';
-    // eslint-disable-next-line no-unused-vars
     const usageServiceFailedErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for a user. Error details: ';
-    // eslint-disable-next-line
     const invalidTimePeriodErrorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.'
-    // eslint-disable-next-line
     const invalidTimePeriodDebugErrorMessageBase = 'Currently the only supported scan intervals are \'priorDay\' and \'last24Hours\'';
 
     /**
@@ -130,7 +115,6 @@ suite('VstsUsageMonitor Suite:', () => {
 
     // eslint-disable-next-line max-statements
     suite('scanForOutOfRangeIpAddresses Suite:', () => {
-        // eslint-disable-next-line
         const invalidParamsErrorMessage = 'Invalid scan request parameters. Unable to execute scan for out of range Ip Addresses.';
         let ipAddressScanRequest: IpAddressScanRequest;
 
@@ -170,6 +154,7 @@ suite('VstsUsageMonitor Suite:', () => {
                 assert.isFalse(scanReport.completedSuccessfully);
                 assert.isFalse(vstsUserServiceGetAADUsersStub.called);
                 assert.isFalse(vstsUserServiceGetAllUsersStub.called);
+                assert.isTrue(factoryGetVstsUserServiceStub.called);
                 assert.isFalse(factoryGetVstsUsageServiceStub.called);
                 assert.deepEqual(scanReport.errorMessage, userServiceFailedErrorMessage);
                 assert.deepEqual(scanReport.debugErrorMessage, debugErrorMessagePrefix + invalidUserOriginErrorMessage);
