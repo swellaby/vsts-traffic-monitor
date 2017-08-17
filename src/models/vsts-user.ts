@@ -13,7 +13,7 @@ class VstsUser {
     public metaTypeId: number;
     public origin: string;
     public originId: string;
-    public id: string;
+    public cuid: string;
     public displayName: string;
     public url: string;
     public descriptor: string;

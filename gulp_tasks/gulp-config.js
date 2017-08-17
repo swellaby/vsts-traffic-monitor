@@ -8,7 +8,7 @@ const vstsPublishRoot = './.vsts-publish';
 const testRoot = './test';
 const tsconfig = './tsconfig.json';
 const excludedExpressServerFile = '!' + srcRoot + '/server.js';
-const excludedVstsTaskFile = '!' + srcRoot + '/task.js';
+// const excludedVstsTaskFile = '!' + srcRoot + '/task.js';
 const excludedInterfaceFiles = '!' + srcRoot + '/interfaces/**/*.js';
 const appTranspiledJavaScript = srcRoot + '/**/*.js';
 
@@ -37,7 +37,7 @@ module.exports = {
         srcRoot + '/**/*.js',
         excludedInterfaceFiles,
         excludedExpressServerFile,
-        excludedVstsTaskFile,
+        '!./src/oldtask.js'
     ],
     javascriptUnitTests: testRoot + '/unit/**/*.js',
     javascriptComponentIntegrationTests: testRoot + '/component-integration/**/*.js',

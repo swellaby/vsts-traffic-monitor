@@ -65,8 +65,8 @@ suite('VstsUser Suite:', () => {
 
     test('Should have accessible id property', () => {
         const id = 'abcd1234-1ab2-12a1-a123-1ab23456cd78';
-        user.id = id;
-        assert.deepEqual(user.id, id);
+        user.cuid = id;
+        assert.deepEqual(user.cuid, id);
     });
 
     test('Should have accessible displayName property', () => {

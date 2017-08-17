@@ -112,6 +112,7 @@ const buildUserActivityReport = (user: VstsUser, usageRecords: VstsUsageRecord[]
 const scanUserUsageRecordsForOutOfRangeIpAddress =
     (user: VstsUser, usageRecords: VstsUsageRecord[], scanRequest: IpAddressScanRequest, scanReport: IpAddressScanReport) => {
     const userActivityReport = buildUserActivityReport(user, usageRecords);
+
     try {
         scanReport.numUsersActive += 1;
         userActivityReport.allUsageRecords = usageRecords;
@@ -170,7 +171,7 @@ const scanIpAddressesFromYesterday = async (user: VstsUser, scanRequest: IpAddre
         const usageService: IVstsUsageService = factory.getVstsUsageService();
         const vstsAccountName = scanRequest.vstsAccountName;
         const accessToken = scanRequest.vstsAccessToken;
-        const usageRecords = await usageService.getUserActivityFromYesterday(user.id, vstsAccountName, accessToken);
+        const usageRecords = await usageService.getUserActivityFromYesterday(user.cuid, vstsAccountName, accessToken);
         if (usageRecords.length === 0) {
             return;
         }
@@ -194,10 +195,11 @@ const scanUserActivityFromLast24Hours = async (user: VstsUser, scanRequest: IpAd
         const usageService: IVstsUsageService = factory.getVstsUsageService();
         const vstsAccountName = scanRequest.vstsAccountName;
         const accessToken = scanRequest.vstsAccessToken;
-        const usageRecords = await usageService.getUserActivityOverLast24Hours(user.id, vstsAccountName, accessToken);
+        const usageRecords = await usageService.getUserActivityOverLast24Hours(user.cuid, vstsAccountName, accessToken);
         if (usageRecords.length === 0) {
             return;
         }
+
         scanUserUsageRecordsForOutOfRangeIpAddress(user, usageRecords, scanRequest, scanReport);
     } catch (err) {
         addErrorDetailsOnUsageRecordRetrievalFailure(user, scanReport, err);

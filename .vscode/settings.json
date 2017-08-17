@@ -5,6 +5,7 @@
         "npm-debug.log": true,
         ".coverage": true,
         ".testresults": true,
-        ".vsts-publish": true
+        ".vsts-publish": true,
+        "node_modules": true
     }
 }

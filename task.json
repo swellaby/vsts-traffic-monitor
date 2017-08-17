@@ -55,9 +55,17 @@
       "required": true,
       "helpMarkDown": "Controls which time period of activity will be scanned (UTC Standard).",
       "options": {
-          "yesterday": "Yesterday",
-          "latest24Hours": "The most recent 24 hour period"
+          "priorDay": "Yesterday",
+          "last24Hours": "The most recent 24 hour period"
       }
+    },
+    {
+      "name": "scanInternalVstsServices",
+      "type": "boolean",
+      "label": "Include Internal VSTS Activity?",
+      "defaultValue": false,
+      "required": true,
+      "helpMarkDown": "Specifies whether or not the scan should include activity records that were created by internal VSTS services. This should almost always be set to false"
     }
   ],
   "execution": {

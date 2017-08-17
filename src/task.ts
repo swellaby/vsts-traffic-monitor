@@ -1,101 +1,138 @@
 'use strict';
 
 import tl = require('vsts-task-lib/task');
-import factory = require('./factory');
+import trm = require('vsts-task-lib/toolrunner');
+
 import helpers = require('./helpers');
-import IVstsUsageService = require('./interfaces/vsts-usage-service');
-import VstsGraphApiUserService = require('./services/vsts-graph-api-user-service');
-import VstsUsageRecord = require('./models/vsts-usage-record');
-import VstsUser = require('./models/vsts-user');
-// import VstsUtilizationApiUsageService = require('./services/vsts-utilization-api-usage-service');
+import IpAddressScanReport = require('./models/ip-address-scan-report');
+import IpAddressScanRequest = require('./models/ip-address-scan-request');
+import vstsUsageMonitor = require('./vsts-usage-monitor');
+import vstsUsageScanTimePeriod = require('./enums/vsts-usage-scan-time-period');
+import vstsUserOrigin = require('./enums/vsts-user-origin');
 
-// tslint:disable-next-line:no-var-requires
-const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
-
+let echo: trm.ToolRunner;
+const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses';
+const enableDebuggingMessage = 'Enable debugging to receive more detailed error information';
 let vstsAccountName: string;
-let pat: string;
-let validIpRange: string[];
-let timePeriod: string;
-let utilizationService: IVstsUsageService;
-let containsFlaggedRecords = false;
+let vstsAccessToken: string;
+let scanTimePeriod: vstsUsageScanTimePeriod;
+let userOrigin: vstsUserOrigin;
+let allowedIpRanges: string[];
+let includeInternalVstsServices: boolean;
 
 /**
- * Performs task setup operations.
+ * Initializes the task for execution.
+ * @private
  */
 const initialize = () => {
     vstsAccountName = tl.getInput('accountName', true);
-    pat = tl.getInput('accessToken', true);
-    validIpRange = tl.getDelimitedInput('ipRange', '\n', true);
-    timePeriod = tl.getInput('timePeriod', true);
-    utilizationService = factory.getVstsUsageService();
+    vstsAccessToken = tl.getInput('accessToken', true);
+    scanTimePeriod = +vstsUsageScanTimePeriod[tl.getInput('timePeriod', true)];
+    userOrigin = +vstsUserOrigin[tl.getInput('userOrigin', true)];
+    allowedIpRanges = tl.getDelimitedInput('ipRange', '\n', true);
+    includeInternalVstsServices = tl.getBoolInput('scanInternalVstsServices', true);
+    echo = tl.tool(tl.which('echo'));
+}
+
+/**
+ * Builds the scan request with the specified parameters.
+ * @private
+ */
+const buildScanRequest = () => {
+    const scanRequest = new IpAddressScanRequest();
+    scanRequest.vstsAccountName = vstsAccountName;
+    scanRequest.vstsAccessToken = vstsAccessToken;
+    scanRequest.scanTimePeriod = scanTimePeriod;
+    scanRequest.vstsUserOrigin = userOrigin;
+    scanRequest.includeInternalVstsServices = includeInternalVstsServices;
+    scanRequest.allowedIpRanges = allowedIpRanges
+
+    return scanRequest;
 };
 
 /**
- * Reviews each of the activity records and checks the origin IP of the request
- * against the specified ranges/blocks of valid IP address.
- *
- * @param {VstsUsageRecord[]} usageRecords - The activity records of the user.
- * @param {VstsUser} user - The VSTS user
+ * Sets the task result to failed.
+ * @param {string} failureMessage - The error message to display with the failure.
  * @private
  */
-const scanRecords = (usageRecords: VstsUsageRecord[], user: VstsUser) => {
-    usageRecords.forEach(record => {
-        const userName = user.displayName;
-        const ipAddress = record.ipAddress;
-        if (ipAddress && !ipRangeHelper.inRange(ipAddress, validIpRange)) {
-            if (record.userAgent.indexOf('VSServices') !== 0) {
-                containsFlaggedRecords = true;
-                tl.error('******************************************************************************************************************');
-                tl.error('User: ' + userName + ' - made illegal access from IP: ' + ipAddress + ' on around: ' + record.startTime + ' (UTC)');
-            }
-        }
-    });
+const failTask = (failureMessage: string) => {
+    tl.setResult(tl.TaskResult.Failed, failureMessage);
+}
+
+/**
+ * Handles task execution when a null or undefined scan report is returned.
+ */
+const handleInvalidScanReport = () => {
+    tl.error('An internal error occurred. Unable to complete scan.');
+    tl.error(enableDebuggingMessage);
+    tl.debug('The ScanReport object returned from the Monitor was null or undefined. This is not supposed to happen :) Please ' +
+        'open an issue on GitHub at https://github.com/swellaby/vsts-traffic-monitor/issues');
+    failTask(fatalErrorMessage);
 };
 
 /**
- * Scans the previous day's activity for the specified user.
+ * Handles execution when the scan report shows a fatal error occurred.
  *
- * @param {VstsUser} user - The VSTS user
+ * @param {IpAddressScanReport} scanReport - The report of object with details of the completed scan.
  * @private
- *
- * @returns {Promise<VstsUsageRecord[]>}
  */
-const scanYesterday = async (user: VstsUser): Promise<VstsUsageRecord[]> => {
-    try {
-        const usageRecords = await utilizationService.getUserActivityFromYesterday(user.id, vstsAccountName, pat);
-        scanRecords(usageRecords, user);
-        return usageRecords;
-    } catch (err) {
-        tl.error(helpers.buildError('Error while attempting to review yesterday\'s activity records: ', err).message);
-        return null;
+const handleScanFailure = (scanReport: IpAddressScanReport) => {
+    tl.error('An error occurred while attempting to execute the scan. Error details: ' + scanReport.errorMessage);
+    tl.error(enableDebuggingMessage);
+    tl.debug(scanReport.debugErrorMessage);
+    failTask('Failing the task because the scan was not successfully executed');
+};
+
+/**
+ * Displays the parameters that were used during the scan.
+ * @private
+ */
+const printScanParameters = () => {
+    echo.arg('VSTS Account Scanned: ' + vstsAccountName);
+    echo.arg('Scan Period: ' + scanTimePeriod.toString());
+    echo.arg('VSTS User Origin: ' + userOrigin.toString());
+    if (includeInternalVstsServices) {
+        echo.arg('Traffic generated from internal VSTS processes was also scanned');
+    } else {
+        echo.arg('Traffic generated from internal VSTS processes was ignored');
     }
+    echo.arg('The allowable IPv4 ranges that were used in this scan: ' + allowedIpRanges);
+};
+
+// eslint-disable-next-line no-unused-vars
+const displayUsageMetrics = (scanReport: IpAddressScanReport) => {
+    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period');
 };
 
 /**
- * Scans the latest 24 hours of activity for the specified user.
- *
- * @param {VstsUser} user - The VSTS user
- * @private
- *
- * @returns {Promise<VstsUsageRecord[]>}
+ * Reviews the report of scan results to see if any errors were encountered
+ * while attempting to scan the usage records of individual users.
+ * @param {IpAddressScanReport} scanReport - The report with details of the completed scan.
  */
-const scanLast24Hours = async (user: VstsUser): Promise<VstsUsageRecord[]> => {
-    try {
-        const usageRecords = await utilizationService.getUserActivityOverLast24Hours(user.id, vstsAccountName, pat);
-        scanRecords(usageRecords, user);
-        return usageRecords;
-    } catch (err) {
-        console.log(helpers.buildError('Error while attempting to review latest activity records: ', err).message);
-        return null;
+// eslint-disable-next-line no-unused-vars
+const checkForIndividualUserScanErrors = (scanReport: IpAddressScanReport) => {
+    // scanReport.
+};
+
+/**
+ * Reviews the scan of the report.
+ *
+ * @param {IpAddressScanReport} scanReport - The report with details of the completed scan.
+ * @private
+ */
+const reviewScanReport = (scanReport: IpAddressScanReport) => {
+    printScanParameters();
+    if (!scanReport) {
+        return handleInvalidScanReport();
     }
-};
 
-/**
- * Sets the final result of the task and exits.
- * @private
- */
-const setTaskResult = () => {
-    if (containsFlaggedRecords) {
+    if (!scanReport.completedSuccessfully) {
+        return handleScanFailure(scanReport);
+    }
+
+    displayUsageMetrics(scanReport);
+
+    if (scanReport.numOutOfRangeIpAddressRecords > 0) {
         tl.setResult(tl.TaskResult.Failed, 'Invalid records found. The user and traffic details are in the output.');
     } else {
         tl.setResult(tl.TaskResult.Succeeded, 'All activity originated from within the specified range(s) of IP Addresses.');
@@ -103,36 +140,17 @@ const setTaskResult = () => {
 };
 
 /**
- * Sets up an array of promises, each of which scans the activity for each respective user.
- *
- * @param {VstsUser[]} users - The users of the VSTS account.
- * @private
- *
- * @returns {Promise<VstsUsageRecord[]>[]}
- */
-const createTrafficScanPromises = (users: VstsUser[]): Promise<VstsUsageRecord[]>[] => {
-    if (timePeriod === 'yesterday') {
-        return users.map(async user => { return await scanYesterday(user); });
-    } else {
-        return users.map(async user => { return await scanLast24Hours(user); });
-    }
-}
-
-/**
  * Entry point for VSTS task execution.
  */
 export const run = async () => {
-    initialize();
-
     try {
-        const userService = new VstsGraphApiUserService();
-        const users: VstsUser[] = await userService.getAADUsers(vstsAccountName, pat);
-        await Promise.all(createTrafficScanPromises(users));
-        setTaskResult();
+        initialize();
+        const requestParams = buildScanRequest();
+        const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(requestParams);
+        reviewScanReport(scanReport);
     } catch (err) {
-        tl.error(helpers.buildError('Run error: ', err).message);
-        tl.setResult(tl.TaskResult.Failed, 'Error encountered.');
+        printScanParameters();
+        tl.error(helpers.buildError('Unexpected fatal execution error: ', err).message);
+        failTask(fatalErrorMessage);
     }
 };
-
-run();
