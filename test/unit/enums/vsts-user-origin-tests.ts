@@ -13,7 +13,17 @@ suite('VstsUserOrigin Suite:', () => {
         assert.deepEqual(vstsUserOrigin.aad, 0);
     });
 
+    test('Should have the correct string value for Azure AD origin', () => {
+        const key = 'aad';
+        assert.deepEqual(+vstsUserOrigin[key], vstsUserOrigin.aad);
+    });
+
     test('Should have the correct value for the origin for All users', () => {
         assert.deepEqual(vstsUserOrigin.all, 1);
+    });
+
+    test('Should have the correct string value for all origin', () => {
+        const key = 'all';
+        assert.deepEqual(+vstsUserOrigin[key], vstsUserOrigin.all);
     });
 });
