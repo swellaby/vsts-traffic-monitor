@@ -8,7 +8,6 @@ const vstsPublishRoot = './.vsts-publish';
 const testRoot = './test';
 const tsconfig = './tsconfig.json';
 const excludedExpressServerFile = '!' + srcRoot + '/server.js';
-// const excludedVstsTaskFile = '!' + srcRoot + '/task.js';
 const excludedInterfaceFiles = '!' + srcRoot + '/interfaces/**/*.js';
 const appTranspiledJavaScript = srcRoot + '/**/*.js';
 
@@ -36,8 +35,7 @@ module.exports = {
     istanbulCoverageJavaScript: [
         srcRoot + '/**/*.js',
         excludedInterfaceFiles,
-        excludedExpressServerFile,
-        '!./src/oldtask.js'
+        excludedExpressServerFile
     ],
     javascriptUnitTests: testRoot + '/unit/**/*.js',
     javascriptComponentIntegrationTests: testRoot + '/component-integration/**/*.js',
