@@ -11,6 +11,7 @@ import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-us
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
 import VstsUsageScanResult = require('./../../src/models/vsts-usage-scan-result');
 import VstsUser = require('./../../src/models/vsts-user');
+import VstsUserActivityReport = require('./../../src/models/vsts-user-activity-report');
 import VstsUtilizationApiUsageService = require('./../../src/services/vsts-utilization-api-usage-service');
 
 export const emptyString = '';
@@ -161,3 +162,31 @@ export const getDefaultIpAddressScanRequest = (): IpAddressScanRequest => {
 };
 
 export const defaultVstsUsageScanResult = new VstsUsageScanResult();
+
+const normFlaggedUserActivityReport = new VstsUserActivityReport();
+normFlaggedUserActivityReport.allUsageRecords = usageRecords;
+normFlaggedUserActivityReport.user = aadUserNorm;
+normFlaggedUserActivityReport.matchedUsageRecords.push(secondUsageRecord);
+
+const baileyFlaggedUserActivityReport = new VstsUserActivityReport();
+baileyFlaggedUserActivityReport.allUsageRecords = usageRecords;
+baileyFlaggedUserActivityReport.user = aadUserBailey;
+baileyFlaggedUserActivityReport.matchedUsageRecords.push(firstUsageRecord);
+
+const calebUserActivityReport = new VstsUserActivityReport();
+calebUserActivityReport.allUsageRecords = usageRecords;
+calebUserActivityReport.user = aadUserCaleb;
+
+const calebUnscannedActivityReport = new VstsUserActivityReport();
+calebUnscannedActivityReport.allUsageRecords = usageRecords;
+calebUnscannedActivityReport.user = aadUserCaleb;
+calebUnscannedActivityReport.erroredScanUsageRecords.push(firstUsageRecord);
+calebUnscannedActivityReport.scanFailureErrorMessages.push('woops');
+calebUnscannedActivityReport.scanFailureErrorMessages.push('ouch');
+
+export const firstUserActivityReport = calebUserActivityReport;
+export const firstFlaggedUserActivityReport = normFlaggedUserActivityReport;
+export const secondFlaggedUserActivityReport = baileyFlaggedUserActivityReport;
+export const unscannedUserActivityReport = calebUnscannedActivityReport;
+
+export const flaggedUserActivityReports = [ normFlaggedUserActivityReport, baileyFlaggedUserActivityReport ];

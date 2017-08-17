@@ -8,11 +8,13 @@ import IpAddressScanReport = require('./models/ip-address-scan-report');
 import IpAddressScanRequest = require('./models/ip-address-scan-request');
 import vstsUsageMonitor = require('./vsts-usage-monitor');
 import vstsUsageScanTimePeriod = require('./enums/vsts-usage-scan-time-period');
+import VstsUsageRecord = require('./models/vsts-usage-record');
+import VstsUserActivityReport = require('./models/vsts-user-activity-report');
 import vstsUserOrigin = require('./enums/vsts-user-origin');
 
 let echo: trm.ToolRunner;
-const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses';
-const enableDebuggingMessage = 'Enable debugging to receive more detailed error information';
+const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses.';
+const enableDebuggingMessage = 'Enable debugging to receive more detailed error information.';
 let vstsAccountName: string;
 let vstsAccessToken: string;
 let scanTimePeriod: vstsUsageScanTimePeriod;
@@ -52,6 +54,7 @@ const buildScanRequest = () => {
 
 /**
  * Sets the task result to failed.
+ *
  * @param {string} failureMessage - The error message to display with the failure.
  * @private
  */
@@ -61,12 +64,13 @@ const failTask = (failureMessage: string) => {
 
 /**
  * Handles task execution when a null or undefined scan report is returned.
+ * @private
  */
 const handleInvalidScanReport = () => {
     tl.error('An internal error occurred. Unable to complete scan.');
     tl.error(enableDebuggingMessage);
     tl.debug('The ScanReport object returned from the Monitor was null or undefined. This is not supposed to happen :) Please ' +
-        'open an issue on GitHub at https://github.com/swellaby/vsts-traffic-monitor/issues');
+        'open an issue on GitHub at https://github.com/swellaby/vsts-traffic-monitor/issues.');
     failTask(fatalErrorMessage);
 };
 
@@ -80,7 +84,7 @@ const handleScanFailure = (scanReport: IpAddressScanReport) => {
     tl.error('An error occurred while attempting to execute the scan. Error details: ' + scanReport.errorMessage);
     tl.error(enableDebuggingMessage);
     tl.debug(scanReport.debugErrorMessage);
-    failTask('Failing the task because the scan was not successfully executed');
+    failTask('Failing the task because the scan was not successfully executed.');
 };
 
 /**
@@ -92,26 +96,106 @@ const printScanParameters = () => {
     echo.arg('Scan Period: ' + scanTimePeriod.toString());
     echo.arg('VSTS User Origin: ' + userOrigin.toString());
     if (includeInternalVstsServices) {
-        echo.arg('Traffic generated from internal VSTS processes was also scanned');
+        echo.arg('Traffic generated from internal VSTS processes was also scanned.');
     } else {
-        echo.arg('Traffic generated from internal VSTS processes was ignored');
+        echo.arg('Traffic generated from internal VSTS processes was ignored.');
     }
     echo.arg('The allowable IPv4 ranges that were used in this scan: ' + allowedIpRanges);
 };
 
-// eslint-disable-next-line no-unused-vars
+/**
+ * Displays information about usage metrics discovered in the scan.
+ * @param {IpAddressScanReport} scanReport - The report containing the full scan results.
+ * @private
+ */
 const displayUsageMetrics = (scanReport: IpAddressScanReport) => {
-    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period');
+    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period.');
+    echo.arg('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage records were analyzed.');
+};
+
+/**
+ * Displays information about the flagged usage records.
+ *
+ * @param {VstsUsageRecord[]} flaggedUsageRecords - The usage records that contain out of range IP addresses.
+ * @private
+ */
+const writeTaskErrorMessageForUsageRecords = (flaggedUsageRecords: VstsUsageRecord[]) => {
+    flaggedUsageRecords.forEach(flaggedRecord => {
+        const application = flaggedRecord.application;
+        const command = flaggedRecord.command;
+        const ipAddress = flaggedRecord.ipAddress;
+        const startTime = flaggedRecord.startTime;
+        const endTime = flaggedRecord.endTime;
+        const userAgent = flaggedRecord.userAgent;
+        const recordErrorMessage = 'IP Address: ' + ipAddress + ' Application: ' + application +
+            ' Command: ' + command + ' Start: ' + startTime + ' End: ' + endTime + ' UserAgent: ' + userAgent
+        tl.error(recordErrorMessage);
+    });
+};
+
+/**
+ * Displays information about users whose activity was flagged by the scan.
+ *
+ * @param {VstsUserActivityReport[]} flaggedUserActivityReports - The reports of user activity that were flagged.
+ * @private
+ */
+const displayFlaggedUserInformation = (flaggedUserActivityReports: VstsUserActivityReport[]) => {
+    const numFlaggedUsers = flaggedUserActivityReports.length;
+    tl.error(numFlaggedUsers + ' users accessed the VSTS account from an unallowed IP Address that was outside the specified range.');
+    flaggedUserActivityReports.forEach(userActivityReport => {
+        const user = userActivityReport.user;
+        const numFlaggedRecords = userActivityReport.matchedUsageRecords.length;
+        const totalUsageRecords = userActivityReport.allUsageRecords.length;
+        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.')
+        tl.error('User: ' + user.displayName + ' had: ' + numFlaggedRecords + ' usage entries from an unallowed IP Address.');
+        writeTaskErrorMessageForUsageRecords(userActivityReport.matchedUsageRecords);
+    });
+};
+
+/**
+ * Displays information for users whose activity was not scanned, typically due to errors.
+ *
+ * @param {VstsUserActivityReport[]} flaggedUserActivityReports - The reports of user activity that were not scanned.
+ * @private
+ */
+const displayUnscannedUserInformation = (unscannedUserActivityReports: VstsUserActivityReport[]) => {
+    tl.error('Unable to scan the usage records for: ' + unscannedUserActivityReports.length + ' user(s).');
+    tl.error(enableDebuggingMessage);
+    unscannedUserActivityReports.forEach(userActivityReport => {
+        const user = userActivityReport.user;
+        tl.error('Unable to analyze activity for user: ' + user.displayName);
+        tl.debug('Error details: ');
+        userActivityReport.scanFailureErrorMessages.forEach(errorMessage => {
+            tl.debug(errorMessage);
+        });
+    });
 };
 
 /**
  * Reviews the report of scan results to see if any errors were encountered
  * while attempting to scan the usage records of individual users.
+ *
  * @param {IpAddressScanReport} scanReport - The report with details of the completed scan.
+ * @private
  */
-// eslint-disable-next-line no-unused-vars
-const checkForIndividualUserScanErrors = (scanReport: IpAddressScanReport) => {
-    // scanReport.
+const reviewUserScanResults = (scanReport: IpAddressScanReport) => {
+    let scanPassed = true;
+
+    if (scanReport.flaggedUserActivityReports.length > 0) {
+        scanPassed = false;
+        displayFlaggedUserInformation(scanReport.flaggedUserActivityReports);
+    }
+
+    if (scanReport.unscannedUserActivityReports.length > 0) {
+        scanPassed = false;
+        displayUnscannedUserInformation(scanReport.unscannedUserActivityReports);
+    }
+
+    if (scanPassed) {
+        tl.setResult(tl.TaskResult.Succeeded, 'All activity originated from within the specified range(s) of IP Addresses.');
+    } else {
+        failTask('Scan result included matched/invalid records. The user and traffic details are in the output.');
+    }
 };
 
 /**
@@ -131,12 +215,7 @@ const reviewScanReport = (scanReport: IpAddressScanReport) => {
     }
 
     displayUsageMetrics(scanReport);
-
-    if (scanReport.numOutOfRangeIpAddressRecords > 0) {
-        tl.setResult(tl.TaskResult.Failed, 'Invalid records found. The user and traffic details are in the output.');
-    } else {
-        tl.setResult(tl.TaskResult.Succeeded, 'All activity originated from within the specified range(s) of IP Addresses.');
-    }
+    reviewUserScanResults(scanReport);
 };
 
 /**
