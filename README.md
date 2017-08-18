@@ -20,16 +20,11 @@ Future:
 - VSTS Hub
 
 ## Contributing
-Pull requests are happily accepted! Check the [contributing guidelines][contributingmd] for more info on PRs, opening an Issue, and developing/building the application.
-
-### Icon Credits
-VSTS Task [Icons][vsts-task-icons] made by [Freepik][icon-author-url] from [www.flaticon.com][flaticon-url] is licensed by [CC 3.0 BY][cc3-url]  
-
+Pull requests are happily accepted! Check the [contributing guidelines][contributingmd] for more info on PRs, opening an Issue, and developing/building the application.  
   
-  
-  
+<br />
 
-Initially created by this [swell generator][parent-generator-url]!
+Initially created by this [swell generator][parent-generator-url]!  
 
 [parent-generator-url]: https://github.com/swellaby/generator-swell
 [vsts-url]: https://www.visualstudio.com/team-services/
