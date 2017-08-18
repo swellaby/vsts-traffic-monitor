@@ -1,4 +1,4 @@
-# vsts-traffic-monitor README
+# vsts-traffic-monitor *** BETA ***
 
 Provides capabilities that allow you to scan, analyze and monitor user traffic of a [Visual Studio Team Services][vsts-url] account. 
 
@@ -21,7 +21,14 @@ Future:
 
 ## Contributing
 Pull requests are happily accepted! Check the [contributing guidelines][contributingmd] for more info on PRs, opening an Issue, and developing/building the application.
+
+### Icon Credits
+VSTS Task [Icons][vsts-task-icons] made by [Freepik][icon-author-url] from [www.flaticon.com][flaticon-url] is licensed by [CC 3.0 BY][cc3-url]  
+
   
+  
+  
+
 Initially created by this [swell generator][parent-generator-url]!
 
 [parent-generator-url]: https://github.com/swellaby/generator-swell
@@ -34,4 +41,8 @@ Initially created by this [swell generator][parent-generator-url]!
 [coveralls-url]: https://coveralls.io/github/swellaby/vsts-traffic-monitor
 [sonar-quality-gate-badge]: https://sonarcloud.io/api/badges/gate?key=swellaby:vsts-traffic-monitor
 [sonar-url]: https://sonarcloud.io/dashboard/index/swellaby:vsts-traffic-monitor
-[contributingmd]: contributing.md
+[contributingmd]: CONTRIBUTING.md
+[vsts-task-icons]: docs/images
+[icon-author-url]: http://www.freepik.com
+[flaticon-url]: http://www.flaticon.com
+[cc3-url]: http://creativecommons.org/licenses/by/3.0
