@@ -37,7 +37,3 @@ Initially created by this [swell generator][parent-generator-url]!
 [sonar-quality-gate-badge]: https://sonarcloud.io/api/badges/gate?key=swellaby:vsts-traffic-monitor
 [sonar-url]: https://sonarcloud.io/dashboard/index/swellaby:vsts-traffic-monitor
 [contributingmd]: CONTRIBUTING.md
-[vsts-task-icons]: docs/images
-[icon-author-url]: http://www.freepik.com
-[flaticon-url]: http://www.flaticon.com
-[cc3-url]: http://creativecommons.org/licenses/by/3.0

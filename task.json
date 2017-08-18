@@ -1,10 +1,10 @@
 {
   "id": "a29184ce-186c-428f-be0f-10bec26a9329",
   "name": "ScanIPAddreses",
-  "friendlyName": "Scan Traffic IP Addresses",
+  "friendlyName": "Scan User IP Addresses",
   "description": "Checks to see if any user has accessed the VSTS account from an IP Address outside of the allowed IP range specified.",
   "author": "Swellaby",
-  "helpMarkDown": "Replace with markdown to show in help",
+  "helpMarkDown": "[]()",
   "category": "Utility",
   "visibility": [
     "Build",
@@ -14,7 +14,7 @@
   "version": {
     "Major": "0",
     "Minor": "1",
-    "Patch": "2"
+    "Patch": "3"
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "This is how the task displays",
