@@ -16,7 +16,7 @@
     "Minor": "1",
     "Patch": "2"
   },
-  "minimumAgentVersion": "1.95.0",
+  "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "This is how the task displays",
   "inputs": [
     {
@@ -57,6 +57,18 @@
       "options": {
           "priorDay": "Yesterday",
           "last24Hours": "The most recent 24 hour period"
+      }
+    },
+    {
+      "name": "userOrigin",
+      "type": "picklist",
+      "label": "User Origin",
+      "defaultValue": "aad",
+      "required": true,
+      "helpMarkDown": "Controls which set of users will be scanned. Azure Active Directory will only scan traffic from accounts that come from your AAD tenant. All will scan traffic for every single user identity that has access to your VSTS acount, which includes several internal/non-user VSTS accounts.",
+      "options": {
+          "aad": "Azure Active Directory",
+          "all": "All"
       }
     },
     {

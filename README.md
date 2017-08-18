@@ -1,12 +1,27 @@
 # vsts-traffic-monitor README
 
-Monitors the traffic of a [Visual Studio Team Services][vsts-url] account. 
+Provides capabilities that allow you to scan, analyze and montior user traffic of a [Visual Studio Team Services][vsts-url] account. 
 
 <img src="docs/images/TravisCI-Mascot-2.png" width="25" height="25" /> [![Travis CI Badge][travis-ci-build-status-badge]][travis-ci-url]
 [![Coveralls Badge][coveralls-badge]][coveralls-url]
 [![Sonar Quality Gate Badge][sonar-quality-gate-badge]][sonar-url]
 [![VSTS Badge][supercharge-vsts-badge]][vsts-url]
 
+## Use Cases
+- Monitor which IP Addresses your users are using to access your VSTS account(s)
+  
+## How to Use
+The capabilities are currently exposed as:
+- A build/release task for VSTS
+
+Future:
+- Docker image
+- Express.js API
+- VSTS Hub
+
+## Contributing
+Pull requests are happily accepted! Check the [contributing guidelines][contributingmd] for more info on PRs, opening an Issue, and developing/building the application.
+  
 Initially created by this [swell generator][parent-generator-url]!
 
 [parent-generator-url]: https://github.com/swellaby/generator-swell
@@ -19,3 +34,4 @@ Initially created by this [swell generator][parent-generator-url]!
 [coveralls-url]: https://coveralls.io/github/swellaby/vsts-traffic-monitor
 [sonar-quality-gate-badge]: https://sonarcloud.io/api/badges/gate?key=swellaby:vsts-traffic-monitor
 [sonar-url]: https://sonarcloud.io/dashboard/index/swellaby:vsts-traffic-monitor
+[contributingmd]: contributing.md
