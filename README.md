@@ -1,6 +1,6 @@
 # vsts-traffic-monitor README
 
-Provides capabilities that allow you to scan, analyze and montior user traffic of a [Visual Studio Team Services][vsts-url] account. 
+Provides capabilities that allow you to scan, analyze and monitor user traffic of a [Visual Studio Team Services][vsts-url] account. 
 
 <img src="docs/images/TravisCI-Mascot-2.png" width="25" height="25" /> [![Travis CI Badge][travis-ci-build-status-badge]][travis-ci-url]
 [![Coveralls Badge][coveralls-badge]][coveralls-url]
