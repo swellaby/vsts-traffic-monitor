@@ -12,7 +12,8 @@ const ipRangeHelper = require('range_check'); // There is not a typedefinition f
 const assert = Chai.assert;
 
 /**
- * Contains unit tests for the @see {OutOfRangeIpAddressScannerRule} class defined in {@link ./src/scanner-rules/out-of-range-ip-address-scanner-rule.ts}
+ * Contains unit tests for the @see {OutOfRangeIpAddressScannerRule} class
+ * defined in {@link ./src/scanner-rules/out-of-range-ip-address-scanner-rule.ts}
  */
 suite('OutOfRangeIpAddressScannerRule Tests:', () => {
     const sandbox = Sinon.sandbox.create();
@@ -39,7 +40,7 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
 
         const errorMessage = 'Invalid constructor parameters. allowedIpRanges parameter must be a non-empty array of valid values.';
         const invalidIpErrorMessage = 'Specified allowedIpRanges contains one or more invalid values. All values must be a valid IPv4 or ' +
-            'IPv6 address, or a valid CIDR block'
+            'IPv6 address, or a valid CIDR block';
 
         test('Should throw an error when allowedIpRanges is null and includeInternalVstsServices is null', () => {
             assert.throws(() => new OutOfRangeIpAddressScannerRule(null, null), errorMessage);
@@ -165,5 +166,5 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
             const isFlagged = rule.scanRecordForMatch(testHelpers.internalVstsServiceUsageRecord);
             assert.isTrue(isFlagged);
         });
-    })
+    });
 });

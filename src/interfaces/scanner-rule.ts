@@ -17,7 +17,7 @@ interface IScannerRule {
      * @memberof IScannerRule
      * @returns {boolean} - Returns true if the record matches the condition of this rule.
      */
-    scanRecordForMatch(usageRecord: VstsUsageRecord): boolean,
+    scanRecordForMatch(usageRecord: VstsUsageRecord): boolean;
 }
 
 export = IScannerRule;

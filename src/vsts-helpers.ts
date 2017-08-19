@@ -34,11 +34,11 @@ export const validateAccountName = (accountName: string) => {
 
     // Must start with a letter or number, can be followed by letters, numbers, or hyphens, and
     // must end with a letter or number.
-    const regEx = new RegExp('^[a-zA-Z0-9]{1}[a-zA-Z0-9\-]*[a-zA-Z0-9]{1}$');
+    const regEx = new RegExp('^[a-zA-Z0-9]{1}[a-zA-Z0-9-]*[a-zA-Z0-9]{1}$');
     if (!regEx.test(accountName)) {
         throw new Error(errMessage);
     }
-}
+};
 
 /**
  * Validates the specified VSTS User Id is the correct format for VSTS.
@@ -81,7 +81,7 @@ export const vstsUtilizationApiUrlSegment = vstsCoreApiUrlSegment + 'utilization
 const buildVstsApiUrl = (accountName: string, urlSegment: string) => {
     validateAccountName(accountName);
     return protocol + accountName + urlSegment;
-}
+};
 
 /**
  * Builds the full URL of the VSTS Graph API.
@@ -114,7 +114,7 @@ export const buildGraphApiUsersUrl = (accountName: string) => {
  */
 export const buildUtilizationApiUrl = (accountName: string) => {
     return buildVstsApiUrl(accountName, vstsUtilizationApiUrlSegment);
-}
+};
 
 /**
  * Builds the full url for the UsageSummary VSTS Rest API.
@@ -132,7 +132,7 @@ export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: 
 
     const url = buildUtilizationApiUrl(accountName) + 'usagesummary';
     return url + '?userId=' + userId + '&startTime=' + dateRange.isoStartTime + '&endTime=' + dateRange.isoEndTime;
-}
+};
 
 /**
  * Builds the Request options object with basic authentication to make VSTS REST API calls.
@@ -151,5 +151,5 @@ export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken:
         headers: {
             'Authorization': 'basic ' + auth
         }
-    }
+    };
 };

@@ -63,22 +63,22 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
      * Helper function to set the VstsHelper BuiltUtilizationUsageSummaryApiUrl Stub to return a valid URL.
      */
     const setBuildUtilizationApiStubToReturnValidUrl = () => {
-        vstsHelpersbuildUtilizationUsageSummaryApiUrlStub.callsFake(() => { return validUtilizationSummaryApiUrl });
-    }
+        vstsHelpersbuildUtilizationUsageSummaryApiUrlStub.callsFake(() => { return validUtilizationSummaryApiUrl; });
+    };
 
     /**
      * Helper function to set the VstsHelper buildRestApiBasicAuthRequestOptions Stub to return a valid URL.
      */
     const setBuildRestApiRequestOptionsStubToReturnValidValue = () => {
         vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { return { }; });
-    }
+    };
 
     /**
      * Helper function to set the Request get Stub to throw an error.
      */
     const setRequestGetStubToThrowError = () => {
         requestGetStub.callsFake(() => { throw new Error(requestErrorMessageDetails); });
-    }
+    };
 
     // eslint-disable-next-line max-statements
     suite('getUserActivityFromYesterday Suite:', () => {
@@ -1804,7 +1804,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         suite('Null userId Suite:', () => {
             // eslint-disable-next-line max-statements
             suite('Null date Suite:', () => {
-                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, null, null).catch((err: Error) => {
                         assert.isTrue(helpersBuildUtcIsoDateRangeStub.called);
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
@@ -1820,14 +1821,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, null, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is null, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is null, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, null, undefined);
                     } catch (err) {
@@ -1835,14 +1838,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, null, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is null, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is null, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, null, empty);
                     } catch (err) {
@@ -1850,7 +1855,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, null, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -1865,14 +1871,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, null);
                     } catch (err) {
@@ -1880,14 +1888,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, undefined);
                     } catch (err) {
@@ -1895,14 +1905,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, empty);
                     } catch (err) {
@@ -1910,14 +1922,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is undefined, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is undefined, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, undefined, pat);
                     } catch (err) {
@@ -1925,7 +1939,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -1940,14 +1955,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is empty, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is empty, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, undefined);
                     } catch (err) {
@@ -1955,14 +1972,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is empty, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is empty, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, empty);
                     } catch (err) {
@@ -1970,14 +1989,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is empty, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is empty, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is empty, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, empty, pat);
                     } catch (err) {
@@ -1985,14 +2006,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, null);
                     } catch (err) {
@@ -2000,14 +2023,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, undefined);
                     } catch (err) {
@@ -2015,14 +2040,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, empty);
                     } catch (err) {
@@ -2030,14 +2057,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is invalid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is invalid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, invalidAccountName, pat);
                     } catch (err) {
@@ -2045,14 +2074,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is valid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is valid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, accountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is valid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is valid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, accountName, null);
                     } catch (err) {
@@ -2077,14 +2108,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                         }
                 });
 
-                test('Should reject the promise when userId is null, date is null, accountName is valid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is null, accountName is valid, and accessToken is empty',
+                (done: () => void) => {
                         vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, accountName, empty).catch((err: Error) => {
                             assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                             done();
                         });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is valid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is valid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, accountName, empty);
                     } catch (err) {
@@ -2092,14 +2125,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject promise when userId is null, date is null, accountName is valid, and accessToken is valid', (done: () => void) => {
+                test('Should reject promise when userId is null, date is null, accountName is valid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, accountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is null, accountName is valid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is null, accountName is valid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, null, accountName, pat);
                     } catch (err) {
@@ -2110,7 +2145,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
 
             // eslint-disable-next-line max-statements
             suite('Undefined date Suite:', () => {
-                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, null).catch((err: Error) => {
                         assert.isTrue(helpersBuildUtcIsoDateRangeStub.called);
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
@@ -2118,7 +2154,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, null);
                     } catch (err) {
@@ -2126,14 +2163,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, undefined);
                     } catch (err) {
@@ -2141,14 +2180,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, empty);
                     } catch (err) {
@@ -2156,14 +2197,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is null, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, null, pat);
                     } catch (err) {
@@ -2171,14 +2214,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, null);
                     } catch (err) {
@@ -2186,14 +2231,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, undefined);
                     } catch (err) {
@@ -2201,14 +2248,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, empty);
                     } catch (err) {
@@ -2216,14 +2265,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is undefined, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is undefined, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, undefined, pat);
                     } catch (err) {
@@ -2231,14 +2282,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, null);
                     } catch (err) {
@@ -2246,14 +2299,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, undefined);
                     } catch (err) {
@@ -2261,14 +2316,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, empty);
                     } catch (err) {
@@ -2276,14 +2333,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is empty, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is empty, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, empty, pat);
                     } catch (err) {
@@ -2291,14 +2350,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, null);
                     } catch (err) {
@@ -2306,14 +2367,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, undefined);
                     } catch (err) {
@@ -2321,14 +2384,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, empty);
                     } catch (err) {
@@ -2336,14 +2401,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is invalid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is invalid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, invalidAccountName, pat);
                     } catch (err) {
@@ -2351,14 +2418,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is valid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is valid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, accountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is valid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is valid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, accountName, null);
                     } catch (err) {
@@ -2383,14 +2452,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                         }
                 });
 
-                test('Should reject the promise when userId is null, date is undefined, accountName is valid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is undefined, accountName is valid, and accessToken is empty',
+                (done: () => void) => {
                         vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, accountName, empty).catch((err: Error) => {
                             assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                             done();
                         });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is valid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is valid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, accountName, empty);
                     } catch (err) {
@@ -2398,14 +2469,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject promise when userId is null, date is undefined, accountName is valid, and accessToken is valid', (done: () => void) => {
+                test('Should reject promise when userId is null, date is undefined, accountName is valid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, accountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is undefined, accountName is valid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is undefined, accountName is valid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, undefined, accountName, pat);
                     } catch (err) {
@@ -2413,10 +2486,11 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
             });
-            
+
             // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
-                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, null).catch((err: Error) => {
                         assert.isTrue(helpersBuildUtcIsoDateRangeStub.called);
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
@@ -2432,14 +2506,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is null, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is null, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, undefined);
                     } catch (err) {
@@ -2447,14 +2523,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is null, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is null, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, empty);
                     } catch (err) {
@@ -2462,14 +2540,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is null, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is null, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, null, pat);
                     } catch (err) {
@@ -2477,14 +2557,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, null);
                     } catch (err) {
@@ -2492,14 +2574,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, undefined);
                     } catch (err) {
@@ -2507,14 +2591,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, empty);
                     } catch (err) {
@@ -2522,14 +2608,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is undefined, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is undefined, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, undefined, pat);
                     } catch (err) {
@@ -2537,14 +2625,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, null);
                     } catch (err) {
@@ -2552,14 +2642,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, undefined);
                     } catch (err) {
@@ -2567,14 +2659,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, empty);
                     } catch (err) {
@@ -2582,14 +2676,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is empty, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is empty, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, empty, pat);
                     } catch (err) {
@@ -2597,14 +2693,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, null);
                     } catch (err) {
@@ -2612,14 +2710,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, undefined);
                     } catch (err) {
@@ -2627,14 +2727,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, empty);
                     } catch (err) {
@@ -2642,14 +2744,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is invalid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is invalid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, invalidAccountName, pat);
                     } catch (err) {
@@ -2657,14 +2761,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is valid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is valid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, accountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is valid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is valid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, accountName, null);
                     } catch (err) {
@@ -2689,14 +2795,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                         }
                 });
 
-                test('Should reject the promise when userId is null, date is valid, accountName is valid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is null, date is valid, accountName is valid, and accessToken is empty',
+                (done: () => void) => {
                         vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, accountName, empty).catch((err: Error) => {
                             assert.deepEqual(err.message, expectedUserIdErrorMessage);
                             done();
                         });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is valid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is valid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, accountName, empty);
                     } catch (err) {
@@ -2704,14 +2812,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject promise when userId is null, date is valid, accountName is valid, and accessToken is valid', (done: () => void) => {
+                test('Should reject promise when userId is null, date is valid, accountName is valid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, accountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is null, date is valid, accountName is valid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is null, date is valid, accountName is valid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(null, validDate, accountName, pat);
                     } catch (err) {
@@ -2725,7 +2835,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         suite('Undefined userId Suite:', () => {
             // eslint-disable-next-line max-statements
             suite('Null date Suite:', () => {
-                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, null).catch((err: Error) => {
                         assert.isTrue(helpersBuildUtcIsoDateRangeStub.called);
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
@@ -2733,7 +2844,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, null);
                     } catch (err) {
@@ -2741,14 +2853,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, undefined);
                     } catch (err) {
@@ -2756,14 +2870,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, empty);
                     } catch (err) {
@@ -2771,14 +2887,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is null, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, null, pat);
                     } catch (err) {
@@ -2786,14 +2904,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, null);
                     } catch (err) {
@@ -2801,14 +2921,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, undefined);
                     } catch (err) {
@@ -2816,14 +2938,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, empty);
                     } catch (err) {
@@ -2831,14 +2955,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is undefined, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is undefined, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, undefined, pat);
                     } catch (err) {
@@ -2846,14 +2972,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, null);
                     } catch (err) {
@@ -2861,14 +2989,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, undefined);
                     } catch (err) {
@@ -2876,14 +3006,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, empty);
                     } catch (err) {
@@ -2891,14 +3023,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is empty, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is empty, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, empty, pat);
                     } catch (err) {
@@ -2906,14 +3040,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, null);
                     } catch (err) {
@@ -2921,14 +3057,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, undefined);
                     } catch (err) {
@@ -2936,14 +3074,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, empty);
                     } catch (err) {
@@ -2951,14 +3091,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is invalid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is invalid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, invalidAccountName, pat);
                     } catch (err) {
@@ -2966,14 +3108,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is valid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is valid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, accountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is valid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is valid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, accountName, null);
                     } catch (err) {
@@ -2998,14 +3142,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                         }
                 });
 
-                test('Should reject the promise when userId is undefined, date is null, accountName is valid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is null, accountName is valid, and accessToken is empty',
+                (done: () => void) => {
                         vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, accountName, empty).catch((err: Error) => {
                             assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                             done();
                         });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is valid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is valid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, accountName, empty);
                     } catch (err) {
@@ -3013,14 +3159,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject promise when userId is undefined, date is null, accountName is valid, and accessToken is valid', (done: () => void) => {
+                test('Should reject promise when userId is undefined, date is null, accountName is valid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, accountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is null, accountName is valid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is null, accountName is valid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, null, accountName, pat);
                     } catch (err) {
@@ -3031,7 +3179,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
 
             // eslint-disable-next-line max-statements
             suite('Undefined date Suite:', () => {
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, null).catch((err: Error) => {
                         assert.isTrue(helpersBuildUtcIsoDateRangeStub.called);
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
@@ -3039,7 +3188,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, null);
                     } catch (err) {
@@ -3047,14 +3197,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, undefined);
                     } catch (err) {
@@ -3062,14 +3214,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, empty);
                     } catch (err) {
@@ -3077,14 +3231,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is null, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, null, pat);
                     } catch (err) {
@@ -3092,14 +3248,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, null);
                     } catch (err) {
@@ -3107,14 +3265,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, undefined);
                     } catch (err) {
@@ -3122,14 +3282,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, empty);
                     } catch (err) {
@@ -3137,14 +3299,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is undefined, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is undefined, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, undefined, pat);
                     } catch (err) {
@@ -3152,14 +3316,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, null);
                     } catch (err) {
@@ -3167,14 +3333,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, undefined);
                     } catch (err) {
@@ -3182,14 +3350,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, empty);
                     } catch (err) {
@@ -3197,14 +3367,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is empty, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is empty, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, empty, pat);
                     } catch (err) {
@@ -3212,14 +3384,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, null);
                     } catch (err) {
@@ -3227,14 +3401,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, undefined);
                     } catch (err) {
@@ -3242,14 +3418,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, empty);
                     } catch (err) {
@@ -3257,14 +3435,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is invalid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is valid', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is invalid, and accessToken is valid',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, invalidAccountName, pat);
                     } catch (err) {
@@ -3272,14 +3452,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is valid, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is valid, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, accountName, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is valid, and accessToken is null', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is valid, and accessToken is null',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, accountName, null);
                     } catch (err) {
@@ -3304,14 +3486,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                         }
                 });
 
-                test('Should reject the promise when userId is undefined, date is undefined, accountName is valid, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is undefined, accountName is valid, and accessToken is empty',
+                (done: () => void) => {
                         vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, accountName, empty).catch((err: Error) => {
                             assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                             done();
                         });
                 });
 
-                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is valid, and accessToken is empty', async () => {
+                test('Should throw error when awaited when userId is undefined, date is undefined, accountName is valid, and accessToken is empty',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, accountName, empty);
                     } catch (err) {
@@ -3319,7 +3503,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject promise when userId is undefined, date is undefined, accountName is valid, and accessToken is valid', (done: () => void) => {
+                test('Should reject promise when userId is undefined, date is undefined, accountName is valid, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, undefined, accountName, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -3334,7 +3519,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
             });
-            
+
             // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is undefined, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
@@ -3413,7 +3598,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is valid, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is valid, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, validDate, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
@@ -3533,7 +3719,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is undefined, date is valid, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is undefined, date is valid, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, validDate, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
@@ -4028,7 +4215,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is empty, date is undefined, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is empty, date is undefined, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(empty, undefined, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4148,7 +4336,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is empty, date is undefined, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is empty, date is undefined, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(empty, undefined, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4255,7 +4444,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
             });
-            
+
             // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is empty, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
@@ -4643,7 +4832,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is null, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is null, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, null, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4889,7 +5079,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is null, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is null, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, null, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4919,7 +5110,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is null, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is null, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, null, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4934,7 +5126,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is null', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is null',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, undefined, null).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4949,14 +5142,16 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
                     });
                 });
 
-                test('Should throw error when awaited when userId is invalid, date is undefined, accountName is undefined, and accessToken is undefined', async () => {
+                test('Should throw error when awaited when userId is invalid, date is undefined, accountName is undefined, and accessToken is undefined',
+                async () => {
                     try {
                         await vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, undefined, undefined);
                     } catch (err) {
@@ -4964,7 +5159,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is empty', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is empty',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, undefined, empty).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -4979,7 +5175,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is valid', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is undefined, and accessToken is valid',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, undefined, pat).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -5009,7 +5206,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is empty, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is empty, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, empty, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -5069,7 +5267,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is undefined, accountName is invalid, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is undefined, accountName is invalid, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, invalidAccountName, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedDateRangeErrorMesage);
                         done();
@@ -5176,7 +5375,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
             });
-            
+
             // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is invalid, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
@@ -5255,7 +5454,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     }
                 });
 
-                test('Should reject the promise when userId is invalid, date is valid, accountName is undefined, and accessToken is undefined', (done: () => void) => {
+                test('Should reject the promise when userId is invalid, date is valid, accountName is undefined, and accessToken is undefined',
+                (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, validDate, undefined, undefined).catch((err: Error) => {
                         assert.deepEqual(err.message, expectedUserIdErrorMessage);
                         done();
@@ -7187,4 +7387,4 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
     });
-})
+});

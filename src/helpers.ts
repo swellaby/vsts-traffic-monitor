@@ -24,7 +24,7 @@ export const buildError = (baseErrorMessage: string, error: any): Error => {
     }
 
     return new Error(message);
-}
+};
 
 /**
  * Returns a @see {@link IsoDateRange} instance with start and end times
@@ -56,7 +56,7 @@ export const buildUtcIsoDateRange = (targetDate: Date): IsoDateRange => {
 
     const utcDate = moment(targetDate).utc();
     return getFullDayIsoDateRange(utcDate);
-}
+};
 
 /**
  * Returns a @see {@link IsoDateRange} object with ISO date formatted strings
@@ -69,7 +69,7 @@ export const getYesterdayUtcDateRange = (): IsoDateRange => {
     const yesterday = utcNow.subtract(1, momentDay);
 
     return getFullDayIsoDateRange(yesterday);
-}
+};
 
 /**
  * Returns a @see {@link IsoDateRange} object with ISO date formatted strings
@@ -83,4 +83,4 @@ export const getLast24HoursUtcDateRange = (): IsoDateRange => {
     const startTime = utcNow.subtract(24, momentHours).format();
 
     return new IsoDateRange(startTime, endTime);
-}
+};

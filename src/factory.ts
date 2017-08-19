@@ -18,7 +18,7 @@ import VstsUtilizationApiUsageService = require('./services/vsts-utilization-api
  */
 export const getVstsUsageService = (): IVstsUsageService => {
     return new VstsUtilizationApiUsageService();
-}
+};
 
 /**
  * Provides a new instance of a @see {@link IVstsUserService} implementation.
@@ -27,7 +27,7 @@ export const getVstsUsageService = (): IVstsUsageService => {
  */
 export const getVstsUserService = (): IVstsUserService => {
     return new VstsGraphApiUserService();
-}
+};
 
 /**
  * Provides a new instance of a @see {@link IOutOfRangeIpAddressScannerRule} implementation.
@@ -41,4 +41,4 @@ export const getVstsUserService = (): IVstsUserService => {
 export const getOutOfRangeIpAddressScannerRule =
     (allowedIpRanges: string[], includeInternalVstsServices: boolean): IOutOfRangeIpAddressScannerRule => {
         return new OutOfRangeIpAddressScannerRule(allowedIpRanges, includeInternalVstsServices);
-}
+};

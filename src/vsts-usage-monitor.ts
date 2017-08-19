@@ -56,7 +56,7 @@ const setInfoFieldsOnScanReport = (request: VstsUsageScanRequest, report: VstsUs
     report.vstsAccountName = request.vstsAccountName;
     report.userOrigin = request.vstsUserOrigin;
     report.scanPeriod = request.scanTimePeriod;
-}
+};
 
 /**
  * Reviews the result of the scanned records and adds them to the final report.
@@ -80,7 +80,7 @@ const analyzeOutOfRangeIpAddressScanResult =
     }
 
     scanReport.userActivityReports.push(userActivityReport);
-}
+};
 
 /**
  * Creates a @see {VstsUserActivityReport} object for the specified user.
@@ -141,7 +141,7 @@ const addErrorDetailsOnUsageRecordRetrievalFailure = (user: VstsUser, scanReport
     scanReport.usageRetrievalErrorUsers.push(user);
     const baseErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for a user. Error details: ';
     scanReport.usageRetrievalErrorMessages.push(helpers.buildError(baseErrorMessage, error).message);
-}
+};
 
 /**
  * Sets the values of the IP range fields on the report of the scan.
@@ -204,7 +204,7 @@ const scanUserActivityFromLast24Hours = async (user: VstsUser, scanRequest: IpAd
     } catch (err) {
         addErrorDetailsOnUsageRecordRetrievalFailure(user, scanReport, err);
     }
-}
+};
 
 /**
  * Scans the activity of a set of VSTS users for any activities that came from
@@ -221,9 +221,9 @@ const scanUsersActivityForOutOfRangeIpAddresses = async (scanRequest: IpAddressS
     scanReport.completedSuccessfully = true;
 
     if (scanRequest.scanTimePeriod === vstsUsageScanTimePeriod.last24Hours) {
-        await Promise.all(users.map(async user => { await scanUserActivityFromLast24Hours(user, scanRequest, scanReport) }));
+        await Promise.all(users.map(async user => { await scanUserActivityFromLast24Hours(user, scanRequest, scanReport); }));
     } else if (scanRequest.scanTimePeriod === vstsUsageScanTimePeriod.priorDay) {
-        await Promise.all(users.map(async user => { await scanIpAddressesFromYesterday(user, scanRequest, scanReport) }));
+        await Promise.all(users.map(async user => { await scanIpAddressesFromYesterday(user, scanRequest, scanReport); }));
     } else {
         scanReport.completedSuccessfully = false;
         scanReport.errorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';
@@ -269,7 +269,7 @@ const buildScanReportOnFailedUserRetrieval = (error: Error, request: IpAddressSc
     setInfoFieldsOnScanReport(request, scanReport);
 
     return scanReport;
-}
+};
 
 /**
  * Scans the usage records of the specified VSTS account to determine if any of those records of

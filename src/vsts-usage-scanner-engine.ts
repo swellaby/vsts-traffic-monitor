@@ -19,7 +19,7 @@ const executeScannerRule = (usageRecords: VstsUsageRecord[], scannerRule: IScann
 
     usageRecords.forEach(record => {
         try {
-            const isMatch = scannerRule.scanRecordForMatch(record)
+            const isMatch = scannerRule.scanRecordForMatch(record);
 
             if (isMatch) {
                 scanResult.containsMatchedRecords = true;
@@ -34,7 +34,7 @@ const executeScannerRule = (usageRecords: VstsUsageRecord[], scannerRule: IScann
 
     scanResult.scannedRecordCount = usageRecords.length;
     return scanResult;
-}
+};
 
 /**
  * Scans the IP Addresses in the VSTS Usage Records for a single user.
@@ -57,7 +57,7 @@ export const scanUserIpAddresses =
         }
 
         return executeScannerRule(usageRecords, outOfRangeIpAddressScannerRule);
-}
+};
 
 /**
  *
@@ -67,4 +67,4 @@ export const scanUserIpAddresses =
 // eslint-disable-next-line no-unused-vars
 export const scanRecords = (usageRecords: VstsUsageRecord[], scannerRules: IScannerRule[]) => {
     throw new Error('Not yet implemented.');
-}
+};

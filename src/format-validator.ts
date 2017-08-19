@@ -25,4 +25,4 @@ export const isValidIsoFormat = (input: string): boolean => {
 
     // For now limiting to no more than 3 decimal places to represent milliseconds.
     return new RegExp('^(\\d{4})-(\\d{2})-(\\d{2})T((\\d{2}):(\\d{2}):(\\d{2}))(\\.\\d{1,3})?Z$').test(input);
-}
+};

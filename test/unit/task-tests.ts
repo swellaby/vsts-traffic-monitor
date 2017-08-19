@@ -83,7 +83,7 @@ suite('Task Suite:', () => {
         });
         tlGetBoolInput = sandbox.stub(tl, 'getBoolInput');
         tlGetBoolInput.withArgs(includeInternalVstsServicesKey, true).callsFake(() => false);
-    }
+    };
 
     // eslint-disable-next-line max-statements
     setup(() => {
@@ -242,7 +242,7 @@ suite('Task Suite:', () => {
          */
         const addUnscannedUserRecordsToScanReport = () => {
             scanReport.unscannedUserActivityReports.push(testHelpers.unscannedUserActivityReport);
-        }
+        };
 
         /**
          * Helper function to clear flagged user scan reports.

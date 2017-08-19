@@ -27,7 +27,7 @@ suite('VstsUsageMonitor Suite:', () => {
     let outOfRangeIpAddressScannerRule: IOutOfRangeIpAddressScannerRule;
     let vstsUsageService: IVstsUsageService;
     let vstsUserService: IVstsUserService;
-    let scanResult: VstsUsageScanResult
+    let scanResult: VstsUsageScanResult;
     let vstsUsageScannerEngineScanUserIpAddressStub: Sinon.SinonStub;
     let vstsUserServiceGetAADUsersStub: Sinon.SinonStub;
     let vstsUserServiceGetAllUsersStub: Sinon.SinonStub;
@@ -42,7 +42,7 @@ suite('VstsUsageMonitor Suite:', () => {
     const debugErrorMessagePrefix = 'Error details: ';
     const emptyUserListErrorMessage = 'No users were found from the specified User Origin on the specified VSTS account.';
     const usageServiceFailedErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for a user. Error details: ';
-    const invalidTimePeriodErrorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.'
+    const invalidTimePeriodErrorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';
     const invalidTimePeriodDebugErrorMessageBase = 'Currently the only supported scan intervals are \'priorDay\' and \'last24Hours\'';
 
     /**

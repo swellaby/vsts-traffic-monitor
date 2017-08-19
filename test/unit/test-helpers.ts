@@ -26,7 +26,7 @@ const buildVstsUser = (displayName: string, origin: string): VstsUser => {
     user.displayName = displayName;
     user.origin = origin;
     return user;
-}
+};
 
 export const vstsAccountName = 'swellaby';
 
@@ -57,7 +57,7 @@ export const mixedOriginVstsGraphUsersApiJson = JSON.stringify({
  */
 const buildResponseObject = (httpStatusCode: number) => {
     return { statusCode: httpStatusCode };
-}
+};
 
 export const invalidJson = '{[]';
 export const http200Response = buildResponseObject(200);
@@ -151,7 +151,7 @@ export const buildOutOfRangeIpAddressScannerRule = (): IOutOfRangeIpAddressScann
 
 export const buildUsageServiceInstance = (): IVstsUsageService => {
     return new VstsUtilizationApiUsageService();
-}
+};
 
 export const buildUserServiceInstance = (): IVstsUserService => {
     return new VstsGraphApiUserService();

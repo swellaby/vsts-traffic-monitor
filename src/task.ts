@@ -34,7 +34,7 @@ const initialize = () => {
     allowedIpRanges = tl.getDelimitedInput('ipRange', '\n', true);
     includeInternalVstsServices = tl.getBoolInput('scanInternalVstsServices', true);
     echo = tl.tool(tl.which('echo'));
-}
+};
 
 /**
  * Builds the scan request with the specified parameters.
@@ -47,7 +47,7 @@ const buildScanRequest = () => {
     scanRequest.scanTimePeriod = scanTimePeriod;
     scanRequest.vstsUserOrigin = userOrigin;
     scanRequest.includeInternalVstsServices = includeInternalVstsServices;
-    scanRequest.allowedIpRanges = allowedIpRanges
+    scanRequest.allowedIpRanges = allowedIpRanges;
 
     return scanRequest;
 };
@@ -60,7 +60,7 @@ const buildScanRequest = () => {
  */
 const failTask = (failureMessage: string) => {
     tl.setResult(tl.TaskResult.Failed, failureMessage);
-}
+};
 
 /**
  * Handles task execution when a null or undefined scan report is returned.
@@ -128,7 +128,7 @@ const writeTaskErrorMessageForUsageRecords = (flaggedUsageRecords: VstsUsageReco
         const endTime = flaggedRecord.endTime;
         const userAgent = flaggedRecord.userAgent;
         const recordErrorMessage = 'IP Address: ' + ipAddress + ' Application: ' + application +
-            ' Command: ' + command + ' Start: ' + startTime + ' End: ' + endTime + ' UserAgent: ' + userAgent
+            ' Command: ' + command + ' Start: ' + startTime + ' End: ' + endTime + ' UserAgent: ' + userAgent;
         tl.error(recordErrorMessage);
     });
 };
@@ -146,7 +146,7 @@ const displayFlaggedUserInformation = (flaggedUserActivityReports: VstsUserActiv
         const user = userActivityReport.user;
         const numFlaggedRecords = userActivityReport.matchedUsageRecords.length;
         const totalUsageRecords = userActivityReport.allUsageRecords.length;
-        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.')
+        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.');
         tl.error('User: ' + user.displayName + ' had: ' + numFlaggedRecords + ' usage entries from an unallowed IP Address.');
         writeTaskErrorMessageForUsageRecords(userActivityReport.matchedUsageRecords);
     });
