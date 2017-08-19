@@ -1,47 +1,47 @@
 {
     "manifestVersion": 1,
-    "id": "",
+    "id": "ip-address-scanner",
     "version": "0.0.1",
-    "name": <%- JSON.stringify(appName) %>,
-    "publisher": <%- JSON.stringify(author) %>,
-    "description": <%- JSON.stringify(description) %>,
+    "name": "IP Address Scanner",
+    "publisher": "Swellaby",
+    "description": "A build/release task for scanning the IP Addresses of your users activity on VSTS and comparing those addresses against a known/allowed range of addresses.",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
     "icons": {
-        "default": "extension-icon.png"
+        "default": "docs/images/tas-swell-green-128.png"
     },
     "scopes": [
         ""
     ],
     "categories": [
-        ""
+        "Build and release"
     ],
     "branding": {
-        "color": "rgb(34, 34, 34)",
+        "color": "rgb(44, 62, 80)",
         "theme": "dark"
     },
     "content": {
         "details": {
-            "path": "EXTENSION.md"
+            "path": "docs/VSTS-TASK.md"
         },
         "license": {
-            "path": ""
+            "path": "LICENSE"
         }
     },
     "links": {
         "getstarted": {
-            "uri": ""
+            "uri": "https://github.com/swellaby/vsts-traffic-monitor/docs/VSTS-TASK.md"
         },
         "support": {
-            "uri": ""
+            "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
         }
     },
     "repository": {
         "type": "git",
-        "uri": ""
+        "uri": "https://github.com/swellaby/vsts-traffic-monitor"
     },
     "contributions": [
         {

@@ -60,8 +60,7 @@ gulp.task('enforce-code-coverage', ['run-unit-tests'], function() {
                     functions: istanbulConfig.unitTestLocalThresholds.functionCoverageThreshold
                 }
             }
-        }
-    ));
+        }));
 });
 
 gulp.task('show-unit-test-coverage-report', ['run-unit-tests'], function() {
@@ -113,8 +112,7 @@ gulp.task('enforce-component-integration-test-code-coverage', ['run-component-in
                     functions: istanbulConfig.componentIntegrationTestLocalThresholds.functionCoverageThreshold
                 }
             }
-        }
-    ));
+        }));
 });
 
 gulp.task('show-component-integration-test-coverage-report', ['run-component-integration-tests'], function() {

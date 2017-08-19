@@ -2,10 +2,11 @@
 // Related to: https://github.com/Microsoft/TypeScript/issues/13270
 'use strict';
 
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var tslint = require('gulp-tslint');
-var gulpConfig = require('./../gulp-config');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
+const gulpTslint = require('gulp-tslint');
+const gulpConfig = require('./../gulp-config');
+const tslint = require('tslint');
 
 gulp.task('eslint', ['transpile'], function () {
     return gulp.src(gulpConfig.allJavascript)
@@ -15,10 +16,11 @@ gulp.task('eslint', ['transpile'], function () {
 });
 
 gulp.task('tslint', function () {
-    return gulp.src(gulpConfig.appTypescript)
-        .pipe(tslint({
-            formatter: 'verbose',
-            rulesDirectory: 'node_modules/tslint-microsoft-contrib',
-        }))
-        .pipe(tslint.report());
+    const program = tslint.Linter.createProgram('./tsconfig.json');
+    program.formatter = 'verbose';
+    program.rulesDirectory = 'node_modules/tslint-microsoft-contrib';
+    
+    return gulp.src(gulpConfig.allTypescript)
+        .pipe(gulpTslint({ program }))
+        .pipe(gulpTslint.report());
 });

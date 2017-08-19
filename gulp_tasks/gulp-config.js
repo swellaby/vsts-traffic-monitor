@@ -42,10 +42,11 @@ module.exports = {
     allTypescript: [
         srcRoot + '/**/*.ts',
         testRoot + '/**/*.ts',
-        '/node_modules/vsts-task-lib/**.d.ts'
     ],
     appTypescript: [
         srcRoot + '/**/*.ts',
     ],
     typescriptCompilerOptions: tsconfig
 };
+
+// '/node_modules/vsts-task-lib/**.d.ts'
