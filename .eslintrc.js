@@ -64,8 +64,7 @@ module.exports = {
         strict: [
             'error',
             'global'
-        ]
-        
+        ]        
     },
     // Custom Globals
     globals: {

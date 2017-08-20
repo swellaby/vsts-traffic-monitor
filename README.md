@@ -24,6 +24,7 @@ Pull requests are happily accepted! Check the [contributing guidelines][contribu
   
 <br />
 
+### Generator
 Initially created by this [swell generator][parent-generator-url]!  
 
 [parent-generator-url]: https://github.com/swellaby/generator-swell
