@@ -2,8 +2,8 @@
 // Related to: https://github.com/Microsoft/TypeScript/issues/13270
 'use strict';
 
-var gulp = require('gulp');
-var gulpConfig = require('./../gulp-config');
+const gulp = require('gulp');
+const gulpConfig = require('./../gulp-config');
 
 gulp.task('copy-dependencies', ['transpile', 'clean-vsts-task-publish'], function() {
     return gulp.src('./node_modules/**/*')

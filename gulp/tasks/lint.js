@@ -5,8 +5,8 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const gulpTslint = require('gulp-tslint');
-const gulpConfig = require('./../gulp-config');
 const tslint = require('tslint');
+const gulpConfig = require('./../gulp-config');
 
 gulp.task('eslint', ['transpile'], function () {
     return gulp.src(gulpConfig.allJavascript)
@@ -16,7 +16,7 @@ gulp.task('eslint', ['transpile'], function () {
 });
 
 gulp.task('tslint', function () {
-    const program = tslint.Linter.createProgram('./tsconfig.json');
+    const program = tslint.Linter.createProgram(gulpConfig.typescriptCompilerOptions);
     program.formatter = 'verbose';
     program.rulesDirectory = 'node_modules/tslint-microsoft-contrib';
     

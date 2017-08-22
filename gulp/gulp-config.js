@@ -6,7 +6,7 @@ const path = require('path');
 const srcRoot = './src';
 const vstsPublishRoot = './.vsts-publish';
 const testRoot = './test';
-const tsconfig = './tsconfig.json';
+const tsconfig = 'tsconfig.json';
 const excludedExpressServerFile = '!' + srcRoot + '/server.js';
 const excludedInterfaceFiles = '!' + srcRoot + '/interfaces/**/*.js';
 const appTranspiledJavaScript = srcRoot + '/**/*.js';
@@ -46,7 +46,5 @@ module.exports = {
     appTypescript: [
         srcRoot + '/**/*.ts',
     ],
-    typescriptCompilerOptions: tsconfig
+    typescriptCompilerOptions: path.resolve(tsconfig)
 };
-
-// '/node_modules/vsts-task-lib/**.d.ts'
