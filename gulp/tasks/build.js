@@ -9,7 +9,6 @@ const gulpConfig = require('./../gulp-config');
 
 gulp.task('transpile', ['clean'], function() {
     const tsProject = tsc.createProject(gulpConfig.typescriptCompilerOptions);
-
     const tsResult = gulp.src(gulpConfig.allTypescript, { base: '.' })
         .pipe(sourceMaps.init())
         .pipe(tsProject())

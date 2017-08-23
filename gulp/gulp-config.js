@@ -19,7 +19,8 @@ module.exports = {
     vstsTaskContent: [
         './task.json',
         './package.json',
-        './icon.png'
+        'docs/images/icon.png',
+        './task-wrapper.js'
     ],
     allJavascript: [
         './**/*.js',

@@ -35,7 +35,8 @@ suite('Task Suite:', () => {
     let tlWhichStub: Sinon.SinonStub;
     let tlToolStub: Sinon.SinonStub;
     let helpersBuildErrorStub: Sinon.SinonStub;
-    const echo = { arg: () => { return; } };
+    const argToolRunner = <trm.ToolRunner>{ execSync: () => null };
+    const echo = { arg: () => { return argToolRunner; } };
     let echoArgStub: Sinon.SinonStub;
     let scanReport: IpAddressScanReport;
     const accountName = testHelpers.vstsAccountName;
@@ -98,7 +99,7 @@ suite('Task Suite:', () => {
         });
         tlSetResultStub = sandbox.stub(tl, 'setResult').callsFake(() => null);
         tlWhichStub = sandbox.stub(tl, 'which').callsFake(() => { return echoPath; });
-        echoArgStub = sandbox.stub(echo, 'arg').callsFake(() => { return; });
+        echoArgStub = sandbox.stub(echo, 'arg').callsFake(() => { return argToolRunner; });
         tlToolStub = sandbox.stub(tl, 'tool').callsFake(() => { return echo; });
         helpersBuildErrorStub = sandbox.stub(helpers, 'buildError').callsFake(() => {
             return new Error(buildErrorMessage);
@@ -205,7 +206,7 @@ suite('Task Suite:', () => {
         const displayNumRecordsScannedPrefix = 'A total of: ';
         const displayNumRecordsScannedSuffix = ' usage records were analyzed.';
         const taskSuccededMessage = 'All activity originated from within the specified range(s) of IP Addresses.';
-        const flaggedUsersErrorMessageSuffix = ' users accessed the VSTS account from an unallowed IP Address that was outside the specified range.';
+        const flaggedUsersErrorMessageSuffix = ' user(s) accessed the VSTS account from an unallowed IP Address that was outside the specified range.';
         const flaggedUserRecordsErrorMessagePrefix = 'User: ';
         const flaggedUserRecordsErrorMessageMiddle = ' had: ';
         const flaggedUserTotalRecordsErrorMessageSuffix = ' total usage entries during the scan period.';

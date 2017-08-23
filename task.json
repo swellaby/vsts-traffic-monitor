@@ -13,8 +13,8 @@
   "demands": [],
   "version": {
     "Major": "0",
-    "Minor": "1",
-    "Patch": "3"
+    "Minor": "2",
+    "Patch": "8"
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "This is how the task displays",
@@ -65,7 +65,7 @@
       "label": "User Origin",
       "defaultValue": "aad",
       "required": true,
-      "helpMarkDown": "Controls which set of users will be scanned. Azure Active Directory will only scan traffic from accounts that come from your AAD tenant. All will scan traffic for every single user identity that has access to your VSTS acount, which includes several internal/non-user VSTS accounts.",
+      "helpMarkDown": "Controls which set of users will have their traffic scanned. Specifying Azure Active Directory means the scanner will only scan traffic from accounts that come from your AAD tenant. 'All' will result in scanning the traffic for every single user identity that has access to your VSTS acount, which includes several internal/non-user VSTS accounts.",
       "options": {
           "aad": "Azure Active Directory",
           "all": "All"
@@ -82,7 +82,7 @@
   ],
   "execution": {
     "Node": {
-      "target": "src/task.js",
+      "target": "task-wrapper.js",
       "argumentFormat": ""
     }
   }

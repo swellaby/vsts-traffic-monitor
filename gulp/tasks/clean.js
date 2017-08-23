@@ -10,6 +10,6 @@ gulp.task('clean', function () {
     return del(gulpConfig.allTranspiledJavascript);
 });
 
-gulp.task('clean-vsts-task-publish', function () {
+gulp.task('clean-vsts-task-publish', [ 'clean', 'transpile' ], function () {
     return del(gulpConfig.vstsPublishRoot + '/**/*');
 });

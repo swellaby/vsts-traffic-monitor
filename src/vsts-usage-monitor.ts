@@ -175,6 +175,8 @@ const scanIpAddressesFromYesterday = async (user: VstsUser, scanRequest: IpAddre
         if (usageRecords.length === 0) {
             return;
         }
+
+        scanReport.totalUsageRecordsScanned += usageRecords.length;
         scanUserUsageRecordsForOutOfRangeIpAddress(user, usageRecords, scanRequest, scanReport);
     } catch (err) {
         addErrorDetailsOnUsageRecordRetrievalFailure(user, scanReport, err);
@@ -200,6 +202,7 @@ const scanUserActivityFromLast24Hours = async (user: VstsUser, scanRequest: IpAd
             return;
         }
 
+        scanReport.totalUsageRecordsScanned += usageRecords.length;
         scanUserUsageRecordsForOutOfRangeIpAddress(user, usageRecords, scanRequest, scanReport);
     } catch (err) {
         addErrorDetailsOnUsageRecordRetrievalFailure(user, scanReport, err);

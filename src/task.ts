@@ -92,15 +92,15 @@ const handleScanFailure = (scanReport: IpAddressScanReport) => {
  * @private
  */
 const printScanParameters = () => {
-    echo.arg('VSTS Account Scanned: ' + vstsAccountName);
-    echo.arg('Scan Period: ' + scanTimePeriod.toString());
-    echo.arg('VSTS User Origin: ' + userOrigin.toString());
+    echo.arg('VSTS Account Scanned: ' + vstsAccountName).execSync();
+    echo.arg('Scan Period: ' + scanTimePeriod.toString()).execSync();
+    echo.arg('VSTS User Origin: ' + userOrigin.toString()).execSync();
     if (includeInternalVstsServices) {
-        echo.arg('Traffic generated from internal VSTS processes was also scanned.');
+        echo.arg('Traffic generated from internal VSTS processes was also scanned.').execSync();
     } else {
-        echo.arg('Traffic generated from internal VSTS processes was ignored.');
+        echo.arg('Traffic generated from internal VSTS processes was ignored.').execSync();
     }
-    echo.arg('The allowable IPv4 ranges that were used in this scan: ' + allowedIpRanges);
+    echo.arg('The allowable IPv4 ranges that were used in this scan: ' + allowedIpRanges).execSync();
 };
 
 /**
@@ -109,8 +109,8 @@ const printScanParameters = () => {
  * @private
  */
 const displayUsageMetrics = (scanReport: IpAddressScanReport) => {
-    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period.');
-    echo.arg('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage records were analyzed.');
+    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period.').execSync();
+    echo.arg('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage records were analyzed.').execSync();
 };
 
 /**
@@ -141,12 +141,12 @@ const writeTaskErrorMessageForUsageRecords = (flaggedUsageRecords: VstsUsageReco
  */
 const displayFlaggedUserInformation = (flaggedUserActivityReports: VstsUserActivityReport[]) => {
     const numFlaggedUsers = flaggedUserActivityReports.length;
-    tl.error(numFlaggedUsers + ' users accessed the VSTS account from an unallowed IP Address that was outside the specified range.');
+    tl.error(numFlaggedUsers + ' user(s) accessed the VSTS account from an unallowed IP Address that was outside the specified range.');
     flaggedUserActivityReports.forEach(userActivityReport => {
         const user = userActivityReport.user;
         const numFlaggedRecords = userActivityReport.matchedUsageRecords.length;
         const totalUsageRecords = userActivityReport.allUsageRecords.length;
-        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.');
+        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.').execSync();
         tl.error('User: ' + user.displayName + ' had: ' + numFlaggedRecords + ' usage entries from an unallowed IP Address.');
         writeTaskErrorMessageForUsageRecords(userActivityReport.matchedUsageRecords);
     });
