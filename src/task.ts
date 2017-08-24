@@ -12,7 +12,6 @@ import VstsUsageRecord = require('./models/vsts-usage-record');
 import VstsUserActivityReport = require('./models/vsts-user-activity-report');
 import vstsUserOrigin = require('./enums/vsts-user-origin');
 
-let echo: trm.ToolRunner;
 const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses.';
 const enableDebuggingMessage = 'Enable debugging to receive more detailed error information.';
 let vstsAccountName: string;
@@ -33,7 +32,15 @@ const initialize = () => {
     userOrigin = +vstsUserOrigin[tl.getInput('userOrigin', true)];
     allowedIpRanges = tl.getDelimitedInput('ipRange', '\n', true);
     includeInternalVstsServices = tl.getBoolInput('scanInternalVstsServices', true);
-    echo = tl.tool(tl.which('echo'));
+};
+
+/**
+ * Provides an instance of the tool runner for Echo
+ */
+const getEchoToolRunner = (): trm.ToolRunner => {
+    const echo = tl.tool(tl.which('echo'));
+    echo.arg('-e');
+    return echo;
 };
 
 /**
@@ -92,15 +99,17 @@ const handleScanFailure = (scanReport: IpAddressScanReport) => {
  * @private
  */
 const printScanParameters = () => {
-    echo.arg('VSTS Account Scanned: ' + vstsAccountName).execSync();
-    echo.arg('Scan Period: ' + scanTimePeriod.toString()).execSync();
-    echo.arg('VSTS User Origin: ' + userOrigin.toString()).execSync();
+    const echo = getEchoToolRunner();
+    echo.arg('VSTS Account Scanned: ' + vstsAccountName + '\\n');
+    echo.arg('Scan Period: ' + scanTimePeriod.toString() + '\\n');
+    echo.arg('VSTS User Origin: ' + userOrigin.toString() + '\\n');
     if (includeInternalVstsServices) {
-        echo.arg('Traffic generated from internal VSTS processes was also scanned.').execSync();
+        echo.arg('Traffic generated from internal VSTS processes was also scanned.\\n');
     } else {
-        echo.arg('Traffic generated from internal VSTS processes was ignored.').execSync();
+        echo.arg('Traffic generated from internal VSTS processes was ignored.\\n');
     }
-    echo.arg('The allowable IPv4 ranges that were used in this scan: ' + allowedIpRanges).execSync();
+    echo.arg('The allowable IPv4 ranges that were used in this scan: ' + allowedIpRanges + '\\n');
+    echo.execSync();
 };
 
 /**
@@ -109,8 +118,10 @@ const printScanParameters = () => {
  * @private
  */
 const displayUsageMetrics = (scanReport: IpAddressScanReport) => {
-    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period.').execSync();
-    echo.arg('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage records were analyzed.').execSync();
+    const echo = getEchoToolRunner();
+    echo.arg('There were: ' + scanReport.numUsersActive + ' users from the specified user origin that were active during the specified period.\\n');
+    echo.arg('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage records were analyzed.\\n');
+    echo.execSync();
 };
 
 /**
@@ -146,7 +157,8 @@ const displayFlaggedUserInformation = (flaggedUserActivityReports: VstsUserActiv
         const user = userActivityReport.user;
         const numFlaggedRecords = userActivityReport.matchedUsageRecords.length;
         const totalUsageRecords = userActivityReport.allUsageRecords.length;
-        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.').execSync();
+        const echo = getEchoToolRunner();
+        echo.arg('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.\\n').execSync();
         tl.error('User: ' + user.displayName + ' had: ' + numFlaggedRecords + ' usage entries from an unallowed IP Address.');
         writeTaskErrorMessageForUsageRecords(userActivityReport.matchedUsageRecords);
     });
