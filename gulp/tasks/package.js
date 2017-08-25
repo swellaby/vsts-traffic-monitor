@@ -19,3 +19,8 @@ gulp.task('package-vsts-task-files', ['clean-vsts-task-publish', 'copy-dependenc
     return gulp.src(gulpConfig.vstsTaskContent)
         .pipe(gulp.dest(gulpConfig.vstsPublishRoot));
 });
+
+gulp.task('package-vsts-task-extension-files', ['package-vsts-task-files', 'package-vsts-task-src'], function () {
+    return gulp.src(gulpConfig.vstsExtensionContent)
+        .pipe(gulp.dest(gulpConfig.vstsPublishRoot));
+});

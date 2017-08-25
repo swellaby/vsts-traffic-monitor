@@ -101,8 +101,8 @@ const handleScanFailure = (scanReport: IpAddressScanReport) => {
 const printScanParameters = () => {
     const echo = getEchoToolRunner();
     echo.arg('VSTS Account Scanned: ' + vstsAccountName + '\\n');
-    echo.arg('Scan Period: ' + scanTimePeriod.toString() + '\\n');
-    echo.arg('VSTS User Origin: ' + userOrigin.toString() + '\\n');
+    echo.arg('Scan Period: ' + vstsUsageScanTimePeriod[scanTimePeriod] + '\\n');
+    echo.arg('VSTS User Origin: ' + vstsUserOrigin[userOrigin] + '\\n');
     if (includeInternalVstsServices) {
         echo.arg('Traffic generated from internal VSTS processes was also scanned.\\n');
     } else {

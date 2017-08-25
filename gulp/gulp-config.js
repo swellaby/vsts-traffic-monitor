@@ -22,6 +22,12 @@ module.exports = {
         'docs/images/icon.png',
         './task-wrapper.js'
     ],
+    vstsExtensionContent: [
+        './vss-extension.json',
+        'README.md',
+        'LICENSE',
+        'docs/images/task-swell-green-128.png'
+    ],
     allJavascript: [
         './**/*.js',
         '!node_modules/**',

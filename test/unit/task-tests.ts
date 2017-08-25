@@ -141,8 +141,8 @@ suite('Task Suite:', () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
             assert.isTrue(echoArgStub.calledWith(vstsAccountParamDisplayMessageBase + accountName + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + scanPeriod.toString() + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + userOrigin.toString() + newlinePrintMessage));
+            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod] + newlinePrintMessage));
+            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin] + newlinePrintMessage));
             assert.isTrue(echoArgStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges + newlinePrintMessage));
         });
 
@@ -163,8 +163,8 @@ suite('Task Suite:', () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => undefined);
             await task.run();
             assert.isTrue(echoArgStub.calledWith(vstsAccountParamDisplayMessageBase + accountName + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + scanPeriod.toString() + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + userOrigin.toString() + newlinePrintMessage));
+            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod] + newlinePrintMessage));
+            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin] + newlinePrintMessage));
             assert.isTrue(echoArgStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges + newlinePrintMessage));
             assert.isTrue(tlErrorStub.calledWith(invalidScanReportErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));
@@ -176,8 +176,8 @@ suite('Task Suite:', () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => null);
             await task.run();
             assert.isTrue(echoArgStub.calledWith(vstsAccountParamDisplayMessageBase + accountName + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + scanPeriod.toString() + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + userOrigin.toString() + newlinePrintMessage));
+            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod] + newlinePrintMessage));
+            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin] + newlinePrintMessage));
             assert.isTrue(echoArgStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges + newlinePrintMessage));
             assert.isTrue(tlErrorStub.calledWith(invalidScanReportErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));

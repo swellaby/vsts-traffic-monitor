@@ -1,10 +1,10 @@
 {
   "id": "a29184ce-186c-428f-be0f-10bec26a9329",
-  "name": "ScanIPAddreses",
-  "friendlyName": "Scan User IP Addresses",
-  "description": "Checks to see if any user has accessed the VSTS account from an IP Address outside of the allowed IP range specified.",
+  "name": "IPAddressScanner",
+  "friendlyName": "IP Address Scanner",
+  "description": "Scan the IP Addresses that your users have used to access a VSTS account, and compares them against a list of known/allowable addresses and/or ranges.",
   "author": "Swellaby",
-  "helpMarkDown": "[]()",
+  "helpMarkDown": "[More Information](https://github.com/swellaby/vsts-traffic-monitor)",
   "category": "Utility",
   "visibility": [
     "Build",
@@ -13,11 +13,11 @@
   "demands": [],
   "version": {
     "Major": "0",
-    "Minor": "3",
+    "Minor": "4",
     "Patch": "0"
   },
   "minimumAgentVersion": "1.95.3",
-  "instanceNameFormat": "This is how the task displays",
+  "instanceNameFormat": "Scan IP Addresses",
   "inputs": [
     {
       "name": "accountName",
@@ -44,7 +44,7 @@
       "helpMarkDown": "The valid ranges or blocks of IP Addresses. Enter each block on its own line.",
       "properties": {
         "rows": "3",
-        "maxLength": "500"
+        "maxLength": "1500"
       }
     },
     {
