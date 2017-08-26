@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "name": "IP Address Scanner",
     "publisher": "Swellaby",
-    "description": "A build/release task for scanning the IP Addresses of your users activity on VSTS and comparing those addresses against a known/allowed range of addresses.",
+    "description": "A build/release task for scanning the IP Addresses of your users' activity on VSTS and comparing those addresses against a known/allowed range of addresses.",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
@@ -15,6 +15,13 @@
     },
     "scopes": [
         ""
+    ],
+    "tags": [
+        "security",
+        "ip address",
+        "scanner",
+        "traffic",
+        "activity"
     ],
     "categories": [
         "Build and release"
@@ -32,10 +39,19 @@
         }
     },
     "links": {
+        "home": {
+            "uri": "http://swellaby.com"
+        },
         "getstarted": {
             "uri": "https://github.com/swellaby/vsts-traffic-monitor/docs/VSTS-TASK.md"
         },
         "support": {
+            "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
+        },
+        "repository": {
+            "uri": "https://github.com/swellaby/vsts-traffic-monitor"
+        },
+        "issues": {
             "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
         }
     },

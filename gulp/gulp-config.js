@@ -24,9 +24,10 @@ module.exports = {
     ],
     vstsExtensionContent: [
         './vss-extension.json',
-        'README.md',
-        'LICENSE',
-        'docs/images/task-swell-green-128.png'
+        './README.md',
+        './LICENSE',
+        'docs/images/task-swell-green-128.png',
+        'docs/VSTS-TASK.md'
     ],
     allJavascript: [
         './**/*.js',

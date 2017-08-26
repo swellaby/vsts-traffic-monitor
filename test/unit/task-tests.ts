@@ -92,7 +92,6 @@ suite('Task Suite:', () => {
     setup(() => {
         tlErrorStub = sandbox.stub(tl, 'error').callsFake(() => null);
         tlDebugStub = sandbox.stub(tl, 'debug').callsFake(() => null);
-        process.env.VSTS_TASKVARIABLE_ = '';
         setupInputStubs();
         scanReport = new IpAddressScanReport();
         vstsUsageMonitorScanForOutOfRangeIpAddressesStub = sandbox.stub(vstsUsageMonitor, 'scanForOutOfRangeIpAddresses').callsFake(() => {
