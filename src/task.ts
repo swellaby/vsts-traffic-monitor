@@ -1,7 +1,6 @@
 'use strict';
 
 import tl = require('vsts-task-lib/task');
-import trm = require('vsts-task-lib/toolrunner');
 
 import helpers = require('./helpers');
 import IpAddressScanReport = require('./models/ip-address-scan-report');

@@ -6,7 +6,6 @@ import Sinon = require('sinon');
 import internal = require('vsts-task-lib/internal');
 Sinon.stub(internal, '_loadData').callsFake(() => null);
 import tl = require('vsts-task-lib/task');
-import trm = require('vsts-task-lib/toolrunner');
 
 import helpers = require('./../../src/helpers');
 import IpAddressScanReport = require('./../../src/models/ip-address-scan-report');
