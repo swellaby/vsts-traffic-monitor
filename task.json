@@ -2,7 +2,7 @@
   "id": "a29184ce-186c-428f-be0f-10bec26a9329",
   "name": "IPAddressScanner",
   "friendlyName": "IP Address Scanner",
-  "description": "Scan the IP Addresses that your users have used to access a VSTS account, and compares them against a list of known/allowable addresses and/or ranges.",
+  "description": "Scans the IP Addresses that your users have used to access a VSTS account, and compares them against a list of known/allowable addresses and/or ranges.",
   "author": "Swellaby",
   "helpMarkDown": "[More Information](https://github.com/swellaby/vsts-traffic-monitor)",
   "category": "Utility",
@@ -14,7 +14,7 @@
   "version": {
     "Major": "0",
     "Minor": "4",
-    "Patch": "3"
+    "Patch": "4"
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "Scan IP Addresses",
@@ -25,7 +25,7 @@
       "label": "VSTS Account Name",
       "defaultValue": "myaccount",
       "required": true,
-      "helpMarkDown": "The name of your account (the part that comes before the '.visualstudio.com' in the URL)."
+      "helpMarkDown": "The name of your VSTS account (the part that comes before the '.visualstudio.com' in the URL)."
     },
     {
       "name": "accessToken",
@@ -38,10 +38,10 @@
     {
       "name": "ipRange",
       "type": "multiLine",
-      "label": "Valid IP Range/CIDR Blocks (IPV4)",
+      "label": "Allowed IP Address/CIDR Blocks (IPV4)",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The valid ranges or blocks of IP Addresses. Enter each block on its own line.",
+      "helpMarkDown": "The valid/allowed IP Addresses and/or ranges (CIDR Blocks) of IP Addresses. Enter each block on its own line.",
       "properties": {
         "rows": "3",
         "maxLength": "1500"
@@ -65,7 +65,7 @@
       "label": "User Origin",
       "defaultValue": "aad",
       "required": true,
-      "helpMarkDown": "Controls which set of users will have their traffic scanned. Specifying Azure Active Directory means the scanner will only scan traffic from accounts that come from your AAD tenant. 'All' will result in scanning the traffic for every single user identity that has access to your VSTS acount, which includes several internal/non-user VSTS accounts.",
+      "helpMarkDown": "Controls which set of users will have their traffic scanned. Specifying Azure Active Directory means the scanner will only scan traffic from user accounts that come from your AAD tenant. 'All' will result in scanning the traffic for every single user identity that has access to your VSTS acount, which includes several internal/non-user VSTS accounts.",
       "options": {
           "aad": "Azure Active Directory",
           "all": "All"
