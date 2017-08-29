@@ -23,7 +23,6 @@ suite('VstsUsageScannerEngine Suite:', () => {
         sandbox.restore();
     });
 
-    // eslint-disable-next-line max-statements
     suite('scanUserIpAddresses', () => {
         const invalidParamsErrorMessage = 'Invalid parameters. Must specify valid usageRecords and ipScannerRule.';
         let ruleStub: OutOfRangeIpAddressScannerRule;

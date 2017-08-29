@@ -46,7 +46,6 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('validateAccountName Suite:', () => {
         test('Should throw an error when account name is null', () => {
             assert.throws(() => vstsHelpers.validateAccountName(null), invalidAccountNameErrorMessage);
@@ -174,7 +173,6 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('buildUtilizationUsageSummaryApiUrl Suite:', () => {
         const dateRangeErrorMessage = 'Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.';
         const invalidUserId = '!@%FGHF#$f';
@@ -474,7 +472,6 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('buildRestApiBasicAuthRequestOptions Suite:', () => {
         const url = expectedUtilizationApiUrl + 'notimportant';
         const expectedAuthValue = 'basic ' + expectedBase64AccessToken;

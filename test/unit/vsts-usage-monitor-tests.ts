@@ -113,7 +113,6 @@ suite('VstsUsageMonitor Suite:', () => {
         scanResult = null;
     });
 
-    // eslint-disable-next-line max-statements
     suite('scanForOutOfRangeIpAddresses Suite:', () => {
         const invalidParamsErrorMessage = 'Invalid scan request parameters. Unable to execute scan for out of range Ip Addresses.';
         let ipAddressScanRequest: IpAddressScanRequest;

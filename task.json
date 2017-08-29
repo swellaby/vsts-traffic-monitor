@@ -14,7 +14,7 @@
   "version": {
     "Major": "0",
     "Minor": "4",
-    "Patch": "0"
+    "Patch": "2"
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "Scan IP Addresses",
@@ -25,7 +25,7 @@
       "label": "VSTS Account Name",
       "defaultValue": "myaccount",
       "required": true,
-      "helpMarkDown": "The name of your account (the part that comes before the '.visualstudio.com' in the URL."
+      "helpMarkDown": "The name of your account (the part that comes before the '.visualstudio.com' in the URL)."
     },
     {
       "name": "accessToken",

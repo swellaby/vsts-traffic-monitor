@@ -14,7 +14,6 @@ const assert = Chai.assert;
 /**
  * Contains unit tests for the @see {@link VstsGraphApiUserService} class defined in {@link ./src/services/vsts-graph-api-user-service.ts}
  */
-// eslint-disable-next-line max-statements
 suite('VSTS Graph API User Service Suite:', () => {
     const sandbox: Sinon.SinonSandbox = Sinon.sandbox.create();
     let requestGetStub: Sinon.SinonStub;
@@ -36,7 +35,6 @@ suite('VSTS Graph API User Service Suite:', () => {
         vstsGraphApiUserService = null;
     });
 
-    // eslint-disable-next-line max-statements
     suite('getAADUsers Suite:', () => {
         const errorMessageBase = 'Encountered an error while retrieving VSTS users from AAD. Error details: ';
         const errorMessageDetails = 'Specifics';
@@ -139,7 +137,6 @@ suite('VSTS Graph API User Service Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('getAllUsers Suite:', () => {
         const errorMessageBase = 'Encountered an error while retrieving VSTS users. Error details: ';
         const errorMessageDetails = 'Specific details of information';

@@ -3,9 +3,9 @@
         "**/*.js": { "when": "$(basename).ts" },
         "**/*.map": { "when": "$(basename).map" },
         "npm-debug.log": true,
+        ".vsts-publish": true,
         ".coverage": true,
         ".testresults": true,
-        ".vsts-publish": true,
         "node_modules": true
     }
 }

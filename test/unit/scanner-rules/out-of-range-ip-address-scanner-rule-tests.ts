@@ -23,7 +23,6 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
         sandbox.restore();
     });
 
-    // eslint-disable-next-line max-statements
     suite('Constructor Suite:', () => {
         let ipRangeHelperIsIPStub: Sinon.SinonStub;
         let ipRangeHelperIsRangeStub: Sinon.SinonStub;
@@ -111,7 +110,6 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('scanRecordForMatch Suite:', () => {
         const invalidUsageRecordErrorMessage = 'Invalid parameter. usageRecord cannot be null nor undefined';
         let rule: OutOfRangeIpAddressScannerRule;

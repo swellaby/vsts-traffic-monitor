@@ -12,6 +12,7 @@ import helpers = require('./../../src/helpers');
 import IpAddressScanReport = require('./../../src/models/ip-address-scan-report');
 import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
 import task = require('./../../src/task');
+import taskLogger = require('./../../src/task-logger');
 import testHelpers = require('./test-helpers');
 import vstsUsageMonitor = require('./../../src/vsts-usage-monitor');
 import vstsUsageScanTimePeriod = require('./../../src/enums/vsts-usage-scan-time-period');
@@ -22,7 +23,6 @@ const assert = Chai.assert;
 /**
  * Contains unit tests for the functions defined in {@link ./src/task.ts}
  */
-// eslint-disable-next-line max-statements
 suite('Task Suite:', () => {
     const sandbox = Sinon.sandbox.create();
     let vstsUsageMonitorScanForOutOfRangeIpAddressesStub: Sinon.SinonStub;
@@ -32,15 +32,8 @@ suite('Task Suite:', () => {
     let tlErrorStub: Sinon.SinonStub;
     let tlDebugStub: Sinon.SinonStub;
     let tlSetResultStub: Sinon.SinonStub;
-    let tlWhichStub: Sinon.SinonStub;
-    let tlToolStub: Sinon.SinonStub;
     let helpersBuildErrorStub: Sinon.SinonStub;
-    const argToolRunner = <trm.ToolRunner>{ execSync: () => null };
-    const echo = {
-        arg: () => { return argToolRunner; },
-        execSync: () => null
-    };
-    let echoArgStub: Sinon.SinonStub;
+    let taskLoggerLogStub: Sinon.SinonStub;
     let scanReport: IpAddressScanReport;
     const accountName = testHelpers.vstsAccountName;
     const allowedRanges = testHelpers.allowedIpRanges;
@@ -54,11 +47,9 @@ suite('Task Suite:', () => {
     const timePeriodKey = 'timePeriod';
     const userOriginKey = 'userOrigin';
     const includeInternalVstsServicesKey = 'scanInternalVstsServices';
-    const echoPath = '/bin/echo';
     const buildErrorMessage = 'fail error crash';
     const buildErrorMessageBase = 'Unexpected fatal execution error: ';
     const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses.';
-    const newlinePrintMessage = '\\n';
     const vstsAccountParamDisplayMessageBase = 'VSTS Account Scanned: ';
     const scanPeriodParamDisplayMessageBase = 'Scan Period: ';
     const userOriginParamDisplayMessageBase = 'VSTS User Origin: ';
@@ -88,7 +79,6 @@ suite('Task Suite:', () => {
         tlGetBoolInput.withArgs(includeInternalVstsServicesKey, true).callsFake(() => false);
     };
 
-    // eslint-disable-next-line max-statements
     setup(() => {
         tlErrorStub = sandbox.stub(tl, 'error').callsFake(() => null);
         tlDebugStub = sandbox.stub(tl, 'debug').callsFake(() => null);
@@ -98,9 +88,7 @@ suite('Task Suite:', () => {
             return scanReport;
         });
         tlSetResultStub = sandbox.stub(tl, 'setResult').callsFake(() => null);
-        tlWhichStub = sandbox.stub(tl, 'which').callsFake(() => { return echoPath; });
-        echoArgStub = sandbox.stub(echo, 'arg').callsFake(() => { return argToolRunner; });
-        tlToolStub = sandbox.stub(tl, 'tool').callsFake(() => { return echo; });
+        taskLoggerLogStub = sandbox.stub(taskLogger, 'log').callsFake(() => null);
         helpersBuildErrorStub = sandbox.stub(helpers, 'buildError').callsFake(() => {
             return new Error(buildErrorMessage);
         });
@@ -111,7 +99,6 @@ suite('Task Suite:', () => {
         sandbox.restore();
     });
 
-    // eslint-disable-next-line max-statements
     suite('scan error Suite:', () => {
         test('Should correctly initialize parameters', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
@@ -122,8 +109,6 @@ suite('Task Suite:', () => {
             assert.isTrue(tlGetInputStub.calledWith(userOriginKey, true));
             assert.isTrue(tlGetDelimitedInputStub.calledWith('ipRange', '\n', true));
             assert.isTrue(tlGetBoolInput.calledWith(includeInternalVstsServicesKey, true));
-            assert.isTrue(tlWhichStub.calledWith('echo'));
-            assert.isTrue(tlToolStub.calledWith(echoPath));
         });
 
         test('Should handle fatal scan error correctly', async () => {
@@ -139,32 +124,32 @@ suite('Task Suite:', () => {
         test('Should still print scan parameters when fatal error occurs', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
-            assert.isTrue(echoArgStub.calledWith(vstsAccountParamDisplayMessageBase + accountName + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod] + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin] + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(vstsAccountParamDisplayMessageBase + accountName));
+            assert.isTrue(taskLoggerLogStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod]));
+            assert.isTrue(taskLoggerLogStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin]));
+            assert.isTrue(taskLoggerLogStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges));
         });
 
         test('Should display correct error message when internal VSTS traffic is excluded', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
-            assert.isTrue(echoArgStub.calledWith(excludeInternalVstsDisplayMessage + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(excludeInternalVstsDisplayMessage));
         });
 
         test('Should display correct error message when internal VSTS traffic is included', async () => {
             tlGetBoolInput.withArgs(includeInternalVstsServicesKey, true).callsFake(() => true);
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
-            assert.isTrue(echoArgStub.calledWith(includeInternalVstsDisplayMessage + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(includeInternalVstsDisplayMessage));
         });
 
         test('Should correctly handle when undefined scan report is returned', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => undefined);
             await task.run();
-            assert.isTrue(echoArgStub.calledWith(vstsAccountParamDisplayMessageBase + accountName + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod] + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin] + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(vstsAccountParamDisplayMessageBase + accountName));
+            assert.isTrue(taskLoggerLogStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod]));
+            assert.isTrue(taskLoggerLogStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin]));
+            assert.isTrue(taskLoggerLogStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges));
             assert.isTrue(tlErrorStub.calledWith(invalidScanReportErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));
             assert.isTrue(tlDebugStub.calledWith(invalidScanReportDebugMessage));
@@ -174,10 +159,10 @@ suite('Task Suite:', () => {
         test('Should correctly handle when null scan report is returned', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => null);
             await task.run();
-            assert.isTrue(echoArgStub.calledWith(vstsAccountParamDisplayMessageBase + accountName + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod] + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin] + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(vstsAccountParamDisplayMessageBase + accountName));
+            assert.isTrue(taskLoggerLogStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod]));
+            assert.isTrue(taskLoggerLogStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin]));
+            assert.isTrue(taskLoggerLogStub.calledWith(allowedIpRangesParamDisplayMessageBase + allowedRanges));
             assert.isTrue(tlErrorStub.calledWith(invalidScanReportErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));
             assert.isTrue(tlDebugStub.calledWith(invalidScanReportDebugMessage));
@@ -198,11 +183,10 @@ suite('Task Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('scanCompletedSuccessfully Suite:', () => {
         const failedTaskErrorMessage = 'Scan result included matched/invalid records. The user and traffic details are in the output.';
         const displayUserCountMessagePrefix = 'There were: ';
-        const displayUserCountMessageSuffix = ' users from the specified user origin that were active during the specified period.';
+        const displayUserCountMessageSuffix = ' user(s) from the specified user origin that were active during the specified period.';
         const displayNumRecordsScannedPrefix = 'A total of: ';
         const displayNumRecordsScannedSuffix = ' usage records were analyzed.';
         const taskSuccededMessage = 'All activity originated from within the specified range(s) of IP Addresses.';
@@ -267,10 +251,10 @@ suite('Task Suite:', () => {
             await task.run();
             assert.deepEqual(scanReport.numUsersWithFlaggedRecords, 2);
             assert.isTrue(tlErrorStub.calledWith(2 + flaggedUsersErrorMessageSuffix));
-            assert.isTrue(echoArgStub.calledWith(normTotalRecordsErrorMessage + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(normTotalRecordsErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(normFlaggedRecordsErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(secondRecordDetailsMessage));
-            assert.isTrue(echoArgStub.calledWith(baileyTotalRecordsErrorMessage + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(baileyTotalRecordsErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(baileyFlaggedRecordsErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(firstRecordDetailsMessage));
         });
@@ -307,8 +291,8 @@ suite('Task Suite:', () => {
         test('Should display usage metrics when scan completes successfully', async () => {
             removeFlaggedUserRecordsFromScanReport();
             await task.run();
-            assert.isTrue(echoArgStub.calledWith(displayUserCountMessagePrefix + 3 + displayUserCountMessageSuffix + newlinePrintMessage));
-            assert.isTrue(echoArgStub.calledWith(displayNumRecordsScannedPrefix + 128 + displayNumRecordsScannedSuffix + newlinePrintMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(displayUserCountMessagePrefix + 3 + displayUserCountMessageSuffix));
+            assert.isTrue(taskLoggerLogStub.calledWith(displayNumRecordsScannedPrefix + 128 + displayNumRecordsScannedSuffix));
         });
 
         test('Should set the final task result to succeeded when there are no flagged nor failed user scan results', async () => {

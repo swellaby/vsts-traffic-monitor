@@ -4,18 +4,22 @@
 
 const path = require('path');
 const srcRoot = './src';
-const vstsPublishRoot = './.vsts-publish';
 const testRoot = './test';
 const tsconfig = 'tsconfig.json';
 const excludedExpressServerFile = '!' + srcRoot + '/server.js';
 const excludedInterfaceFiles = '!' + srcRoot + '/interfaces/**/*.js';
 const appTranspiledJavaScript = srcRoot + '/**/*.js';
+const vstsPublishRoot = './.vsts-publish';
+const vstsPublishTaskRoot = vstsPublishRoot + '/task';
+const vstsPublishImageRoot = vstsPublishRoot + '/images';
+const vssExtensionManifest = './vss-extension.json';
 
 module.exports = {
     packageJSON: path.resolve('package.json'),
     root: srcRoot,
     vstsPublishRoot: vstsPublishRoot,
-    vstsPublishSrc: vstsPublishRoot + '/src',
+    vstsPublishTaskRoot: vstsPublishTaskRoot,
+    vstsPublishTaskSrc: vstsPublishTaskRoot + '/src',
     vstsTaskContent: [
         './task.json',
         './package.json',
@@ -23,12 +27,16 @@ module.exports = {
         './task-wrapper.js'
     ],
     vstsExtensionContent: [
-        './vss-extension.json',
+        vssExtensionManifest,
         './README.md',
         './LICENSE',
-        'docs/images/task-swell-green-128.png',
         'docs/VSTS-TASK.md'
     ],
+    vstsExtensionManifest: vssExtensionManifest,
+    vstsExtensionImages: [
+        'docs/images/task-swell-green-128.png',
+    ],
+    vstsPublishImageRoot: vstsPublishImageRoot,
     allJavascript: [
         './**/*.js',
         '!node_modules/**',

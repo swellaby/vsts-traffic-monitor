@@ -61,14 +61,12 @@ suite('Helpers Suite:', () => {
             assert.deepEqual(error.message, baseErrorMessage);
         });
 
-        // eslint-disable-next-line max-statements
         test('Should return an error with the full message when the err param has a message property', () => {
             const error = helpers.buildError(baseErrorMessage, { message: errorMessageDetails });
             assert.deepEqual(error.message, errorMessage);
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('buildUtcIsoDateRange Suite:', () => {
         const errorMessage = 'Invalid date specified.';
         const startOfStub = {
@@ -120,7 +118,6 @@ suite('Helpers Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('getYesterdayUtcDateRange Suite:', () => {
         const yesterdayStub = {
             startOf: () => { return { }; },

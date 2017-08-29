@@ -80,7 +80,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         requestGetStub.callsFake(() => { throw new Error(requestErrorMessageDetails); });
     };
 
-    // eslint-disable-next-line max-statements
     suite('getUserActivityFromYesterday Suite:', () => {
         let helpersGetYesterdayUtcDateRangeStub: Sinon.SinonStub;
         const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve VSTS User Activity ' +
@@ -110,7 +109,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             }
         });
 
-        // eslint-disable-next-line max-statements
         suite('Null userId Suite:', () => {
             test('Should reject the promise when userId is null, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(null, null, null).catch((err: Error) => {
@@ -414,7 +412,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Undefined userId Suite:', () => {
             test('Should reject the promise when userId is undefined, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(undefined, null, null).catch((err: Error) => {
@@ -717,7 +714,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Empty User Id Suite: ', () => {
             test('Should reject the promise when userId is empty, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(empty, null, null).catch((err: Error) => {
@@ -1020,7 +1016,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Invalid userId Suite:', () => {
             test('Should reject the promise when userId is invalid, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(invalidUserId, null, null).catch((err: Error) => {
@@ -1323,7 +1318,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Valid userId Suite:', () => {
             setup(() => {
                 vstsHelpersbuildUtilizationUsageSummaryApiUrlStub.callsFake(() => { throw new Error(invalidAccountErrorMessage); });
@@ -1622,7 +1616,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Request Get Suite:', () => {
             setup(() => {
                 setBuildUtilizationApiStubToReturnValidUrl();
@@ -1783,7 +1776,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('getUserActivityOnDate Suite:', () => {
         let helpersBuildUtcIsoDateRangeStub: Sinon.SinonStub;
         const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve VSTS User Activity ' +
@@ -1800,9 +1792,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Null userId Suite:', () => {
-            // eslint-disable-next-line max-statements
             suite('Null date Suite:', () => {
                 test('Should reject the promise when userId is null, date is null, accountName is null, and accessToken is null',
                 (done: () => void) => {
@@ -2143,7 +2133,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Undefined date Suite:', () => {
                 test('Should reject the promise when userId is null, date is undefined, accountName is null, and accessToken is null',
                 (done: () => void) => {
@@ -2487,7 +2476,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is null, date is valid, accountName is null, and accessToken is null',
                 (done: () => void) => {
@@ -2831,9 +2819,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Undefined userId Suite:', () => {
-            // eslint-disable-next-line max-statements
             suite('Null date Suite:', () => {
                 test('Should reject the promise when userId is undefined, date is null, accountName is null, and accessToken is null',
                 (done: () => void) => {
@@ -3177,7 +3163,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Undefined date Suite:', () => {
                 test('Should reject the promise when userId is undefined, date is undefined, accountName is null, and accessToken is null',
                 (done: () => void) => {
@@ -3520,7 +3505,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is undefined, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(undefined, validDate, null, null).catch((err: Error) => {
@@ -3829,9 +3813,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Empty userId Suite:', () => {
-            // eslint-disable-next-line max-statements
             suite('Null date Suite:', () => {
                 test('Should reject the promise when userId is empty, date is null, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(empty, null, null, null).catch((err: Error) => {
@@ -4137,7 +4119,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Undefined date Suite:', () => {
                 test('Should reject the promise when userId is empty, date is undefined, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(empty, undefined, null, null).catch((err: Error) => {
@@ -4445,7 +4426,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is empty, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(empty, validDate, null, null).catch((err: Error) => {
@@ -4752,9 +4732,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Invalid userId Suite:', () => {
-            // eslint-disable-next-line max-statements
+
             suite('Null date Suite:', () => {
                 test('Should reject the promise when userId is invalid, date is null, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, null, null, null).catch((err: Error) => {
@@ -5061,7 +5040,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Undefined date Suite:', () => {
                 test('Should reject the promise when userId is invalid, date is undefined, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, undefined, null, null).catch((err: Error) => {
@@ -5376,7 +5354,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 });
             });
 
-            // eslint-disable-next-line max-statements
             suite('Valid date Suite:', () => {
                 test('Should reject the promise when userId is invalid, date is valid, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, validDate, null, null).catch((err: Error) => {
@@ -5685,7 +5662,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         });
     });
 
-    // eslint-disable-next-line max-statements
     suite('getUserActivityOverLast24Hours Suite:', () => {
         let helpersgetLast24HoursUtcDateRangeStub: Sinon.SinonStub;
         const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve VSTS User Activity ' +
@@ -5715,7 +5691,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             }
         });
 
-        // eslint-disable-next-line max-statements
         suite('Null userId Suite:', () => {
             test('Should reject the promise when userId is null, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(null, null, null).catch((err: Error) => {
@@ -6019,7 +5994,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Undefined userId Suite:', () => {
             test('Should reject the promise when userId is undefined, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(undefined, null, null).catch((err: Error) => {
@@ -6322,7 +6296,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Empty User Id Suite: ', () => {
             test('Should reject the promise when userId is empty, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(empty, null, null).catch((err: Error) => {
@@ -6625,7 +6598,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Invalid userId Suite:', () => {
             test('Should reject the promise when userId is invalid, accountName is null, and accessToken is null', (done: () => void) => {
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(invalidUserId, null, null).catch((err: Error) => {
@@ -6928,7 +6900,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Valid userId Suite:', () => {
             setup(() => {
                 vstsHelpersbuildUtilizationUsageSummaryApiUrlStub.callsFake(() => { throw new Error(invalidAccountErrorMessage); });
@@ -7227,7 +7198,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             });
         });
 
-        // eslint-disable-next-line max-statements
         suite('Request Get Suite:', () => {
             setup(() => {
                 setBuildUtilizationApiStubToReturnValidUrl();

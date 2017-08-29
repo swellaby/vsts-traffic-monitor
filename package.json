@@ -34,13 +34,13 @@
     "docker-build": "bash build.sh",
     "start": "node src/app.js",
     "inline": "node -e \"require('./src/task.js').run()\" ",
-    "package-local-vsts-task": "gulp package-vsts-task-src package-vsts-task-files",
-    "pack-up-local-vsts-task": "npm run package-local-vsts-task && cd .vsts-publish && npm prune --production && tfx build tasks upload --task-path .",
-    "package-vsts-task": "npm prune --production && npm run package-local-vsts-task",
-    "pack-up-vsts-task": "npm run package-vsts-task && npm run upload-vsts-task",
+    "tfx-login": "tfx login",
+    "package-vsts-task": "gulp package-vsts-task-src package-vsts-task-files",
     "upload-vsts-task": "tfx build tasks upload --task-path .vsts-publish",
-    "package-local-vsts-task-extension": "gulp package-vsts-task-extension-files",
-    "pack-pub-local-vsts-task-extension": "npm run package-local-vsts-task-extension && cd .vsts-publish && npm prune --production && tfx "
+    "pack-up-vsts-task": "npm run package-vsts-task && npm run upload-vsts-task",
+    "package-vsts-task-extension": "gulp package-vsts-task-extension-files && cd .vsts-publish && tfx extension create",
+    "publish-vsts-task-extension": "cd .vsts-publish && tfx extension publish",
+    "pack-pub-vsts-task-extension": "gulp package-vsts-task-extension-files && cd .vsts-publish && tfx extension publish"
   },
   "pre-commit": [
     "build"
@@ -55,9 +55,11 @@
     "@types/request": "2.0.1",
     "@types/sinon": "^2.3.3",
     "chai": "^4.1.1",
+    "copy-node-modules": "^1.0.2",
     "del": "^3.0.0",
     "eslint": "^4.5.0",
     "gulp": "^3.9.1",
+    "gulp-bump": "^2.7.0",
     "gulp-eslint": "^4.0.0",
     "gulp-istanbul": "^1.1.2",
     "gulp-mocha": "^3.0.1",
@@ -72,7 +74,8 @@
     "path": "^0.12.7",
     "pre-commit": "^1.2.2",
     "require-dir": "^0.3.2",
-    "sinon": "^3.2.1",    
+    "sinon": "^3.2.1",
+    "tfx-cli": "^0.4.9",
     "tslint": "^5.6.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "typescript": "^2.4.2"
