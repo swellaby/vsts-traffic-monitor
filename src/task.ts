@@ -78,8 +78,26 @@ const handleInvalidScanReport = () => {
  * @param {IpAddressScanReport} scanReport - The report of object with details of the completed scan.
  * @private
  */
+const handleUnscannedUserErrors = (scanReport: IpAddressScanReport) => {
+    const userRecordRetrievalErrors = scanReport.usageRetrievalErrorMessages;
+    userRecordRetrievalErrors.forEach(retreivalError => {
+        tl.error(retreivalError);
+    });
+};
+
+/**
+ * Handles execution when the scan report shows a fatal error occurred.
+ *
+ * @param {IpAddressScanReport} scanReport - The report of object with details of the completed scan.
+ * @private
+ */
 const handleScanFailure = (scanReport: IpAddressScanReport) => {
     tl.error('An error occurred while attempting to execute the scan. Error details: ' + scanReport.errorMessage);
+    const unscannedUsers = scanReport.usageRetrievalErrorUsers;
+    if (unscannedUsers.length > 0) {
+        tl.error('Failed to retrieve usage records for ' + unscannedUsers.length + ' user(s).');
+        handleUnscannedUserErrors(scanReport);
+    }
     tl.error(enableDebuggingMessage);
     tl.debug(scanReport.debugErrorMessage);
     failTask('Failing the task because the scan was not successfully executed.');
@@ -191,7 +209,8 @@ const reviewUserScanResults = (scanReport: IpAddressScanReport) => {
     }
 
     if (scanPassed) {
-        tl.setResult(tl.TaskResult.Succeeded, 'All activity originated from within the specified range(s) of IP Addresses.');
+        taskLogger.log('All activity originated from within the specified range(s) of IP Addresses.');
+        tl.setResult(tl.TaskResult.Succeeded, null);
     } else {
         failTask('Scan result included matched/invalid records. The user and traffic details are in the output.');
     }

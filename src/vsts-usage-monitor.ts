@@ -138,8 +138,9 @@ const scanUserUsageRecordsForOutOfRangeIpAddress =
  * @private
  */
 const addErrorDetailsOnUsageRecordRetrievalFailure = (user: VstsUser, scanReport: VstsUsageScanReport, error: Error) => {
+    scanReport.completedSuccessfully = false;
     scanReport.usageRetrievalErrorUsers.push(user);
-    const baseErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for a user. Error details: ';
+    const baseErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for user: ' + user.displayName + '. Error details: ';
     scanReport.usageRetrievalErrorMessages.push(helpers.buildError(baseErrorMessage, error).message);
 };
 
@@ -171,7 +172,7 @@ const scanIpAddressesFromYesterday = async (user: VstsUser, scanRequest: IpAddre
         const usageService: IVstsUsageService = factory.getVstsUsageService();
         const vstsAccountName = scanRequest.vstsAccountName;
         const accessToken = scanRequest.vstsAccessToken;
-        const usageRecords = await usageService.getUserActivityFromYesterday(user.cuid, vstsAccountName, accessToken);
+        const usageRecords = await usageService.getUserActivityFromYesterday(user.descriptor, vstsAccountName, accessToken);
         if (usageRecords.length === 0) {
             return;
         }
@@ -197,7 +198,7 @@ const scanUserActivityFromLast24Hours = async (user: VstsUser, scanRequest: IpAd
         const usageService: IVstsUsageService = factory.getVstsUsageService();
         const vstsAccountName = scanRequest.vstsAccountName;
         const accessToken = scanRequest.vstsAccessToken;
-        const usageRecords = await usageService.getUserActivityOverLast24Hours(user.cuid, vstsAccountName, accessToken);
+        const usageRecords = await usageService.getUserActivityOverLast24Hours(user.descriptor, vstsAccountName, accessToken);
         if (usageRecords.length === 0) {
             return;
         }
@@ -293,7 +294,6 @@ export const scanForOutOfRangeIpAddresses = async (scanRequest: IpAddressScanReq
         if (users.length === 0) {
             return buildEmptyUserListScanReport(scanRequest);
         }
-
         return await scanUsersActivityForOutOfRangeIpAddresses(scanRequest, users);
     } catch (err) {
         return buildScanReportOnFailedUserRetrieval(err, scanRequest);

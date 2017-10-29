@@ -41,7 +41,7 @@ suite('VstsUsageMonitor Suite:', () => {
     const invalidUserOriginErrorMessage = 'Unable to retrieve user list from VSTS account. Unknown or unsupported user origin specified.';
     const debugErrorMessagePrefix = 'Error details: ';
     const emptyUserListErrorMessage = 'No users were found from the specified User Origin on the specified VSTS account.';
-    const usageServiceFailedErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for a user. Error details: ';
+    const usageServiceFailedErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for user: caleb. Error details: ';
     const invalidTimePeriodErrorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';
     const invalidTimePeriodDebugErrorMessageBase = 'Currently the only supported scan intervals are \'priorDay\' and \'last24Hours\'';
 
@@ -288,7 +288,7 @@ suite('VstsUsageMonitor Suite:', () => {
                     throw new Error(usageRetrievalErrorMessage);
                 });
                 const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(ipAddressScanRequest);
-                assert.isTrue(scanReport.completedSuccessfully);
+                assert.isFalse(scanReport.completedSuccessfully);
                 assert.deepEqual(scanReport.errorMessage, undefined);
                 assert.deepEqual(scanReport.debugErrorMessage, undefined);
                 assert.deepEqual(scanReport.usageRetrievalErrorUsers.length, 1);
@@ -354,7 +354,7 @@ suite('VstsUsageMonitor Suite:', () => {
                     throw new Error(usageRetrievalErrorMessage);
                 });
                 const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(ipAddressScanRequest);
-                assert.isTrue(scanReport.completedSuccessfully);
+                assert.isFalse(scanReport.completedSuccessfully);
                 assert.deepEqual(scanReport.errorMessage, undefined);
                 assert.deepEqual(scanReport.debugErrorMessage, undefined);
                 assert.deepEqual(scanReport.usageRetrievalErrorUsers.length, 1);

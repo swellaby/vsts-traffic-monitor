@@ -16,11 +16,14 @@ const assert = Chai.assert;
 suite('Helpers Suite:', () => {
     const sandbox: Sinon.SinonSandbox = Sinon.sandbox.create();
     let momentUtcStub: Sinon.SinonStub;
-    const momentStub = {
+    // eslint-disable-next-line no-unused-vars
+    const momentStub: moment.Moment = <moment.Moment> {
         subtract: () => { return { }; },
         format: () => { return { }; },
-        startOf: () => { return { }; },
-        endOf: () => { return { }; }
+        // eslint-disable-next-line no-unused-vars
+        startOf: (format?: string) => { return { }; }, // eslint-disable-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
+        endOf: (format?: string) => { return { }; } // tslint:disable-line:no-unused-vars
     };
     let momentSubtractStub: Sinon.SinonStub;
     const momentDays = 'day';

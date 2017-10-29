@@ -180,6 +180,19 @@ suite('Task Suite:', () => {
             assert.isTrue(tlDebugStub.calledWith(scanDebugErrorMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, scanFailureTaskFailureMessage));
         });
+
+        test('Should correctly handle usage retrieval errors', async () => {
+            scanReport.completedSuccessfully = false;
+            const retrievalErrorMessage = 'crashed';
+            scanReport.usageRetrievalErrorMessages.push(retrievalErrorMessage);
+            const unscannedUser = testHelpers.allVstsOriginUsers[0];
+            const errorMessage = 'Failed to retrieve usage records for 1 user(s).';
+            scanReport.usageRetrievalErrorUsers.push(unscannedUser);
+            await task.run();
+            assert.isTrue(tlErrorStub.calledWith(errorMessage));
+            assert.isTrue(tlErrorStub.calledWith(retrievalErrorMessage));
+            assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, scanFailureTaskFailureMessage));
+        });
     });
 
     suite('scanCompletedSuccessfully Suite:', () => {
@@ -297,7 +310,8 @@ suite('Task Suite:', () => {
         test('Should set the final task result to succeeded when there are no flagged nor failed user scan results', async () => {
             removeFlaggedUserRecordsFromScanReport();
             await task.run();
-            assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Succeeded, taskSuccededMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(taskSuccededMessage));
+            assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Succeeded, null));
         });
     });
 });

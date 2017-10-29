@@ -126,6 +126,10 @@ export const buildUtilizationApiUrl = (accountName: string) => {
  */
 export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: string, dateRange: IsoDateRange) => {
     validateUserIdFormat(userId);
+    console.log('***********************************************************');
+    console.log('***********************************************************');
+    console.log('***********************************************************');
+    console.log('User id is: ' + userId);
     if (!dateRange) {
         throw new Error('Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.');
     }

@@ -101,6 +101,7 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
         : Promise<VstsUsageRecord[]> {
         return new Promise<VstsUsageRecord[]>((resolve, reject) => {
             try {
+                userId = '42197a11-6f1b-4b53-984d-8f048f55ade5';
                 const url = VstsHelpers.buildUtilizationUsageSummaryApiUrl(vstsAccountName, userId, isoDateRange);
                 const options = VstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
 
