@@ -145,10 +145,15 @@ export const buildStorageKeyApiUrl = (accountName: string, user: VstsUser): stri
         throw new Error('Invalid parameter. Must specify a valid user');
     }
 
-    let baseUrl = buildGraphApiUrl(accountName);
-    baseUrl += 'storagekeys/' + user.descriptor;
+    const links = user._links;
 
-    return baseUrl;
+    if (links && links.storageKey && links.storageKey.href) {
+        return links.storageKey.href;
+    } else {
+        let baseUrl = buildGraphApiUrl(accountName);
+        baseUrl += 'storagekeys/' + user.descriptor;
+        return baseUrl;
+    }
 };
 
 /**

@@ -1,5 +1,8 @@
 'use strict';
 
+import IVstsUserGraphLinks = require('./../interfaces/vsts-user-graph-links');
+import VstsStorageKey = require('./vsts-storage-key');
+
 /**
  * Represents a User in VSTS.
  *
@@ -17,6 +20,8 @@ class VstsUser {
     public displayName: string;
     public url: string;
     public descriptor: string;
+    public storageKey: VstsStorageKey;
+    public _links: IVstsUserGraphLinks; // tslint:disable-line:variable-name
 }
 
 export = VstsUser;

@@ -3,9 +3,12 @@
 import Chai = require('chai');
 import Sinon = require('sinon');
 
+import IVstsGraphLink = require('./../../src/interfaces/vsts-graph-link');
+import IVstsUserGraphLinks = require('./../../src/interfaces/vsts-user-graph-links');
 import formatValidator = require('./../../src/format-validator');
 import testHelpers = require('./test-helpers');
 import vstsHelpers = require('./../../src/vsts-helpers');
+import VstsUser = require('./../../src/models/vsts-user');
 
 const assert = Chai.assert;
 
@@ -528,6 +531,174 @@ suite('VSTS Helpers Suite:', () => {
             const options = vstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
             assert.deepEqual(options.url, url);
             assert.deepEqual(options.headers.Authorization, expectedAuthValue);
+        });
+    });
+
+    suite('buildStorageKeyApiUrl', () => {
+        const invalidUserErrorMessage = 'Invalid parameter. Must specify a valid user';
+        const user: VstsUser = testHelpers.buildVstsUser('link', 'aad');
+        let graphLinks: IVstsUserGraphLinks;
+        let storageKeyLink: IVstsGraphLink;
+        const expectedStorageKeyUrl = testHelpers.sampleStorageKeyUrl;
+        const descriptor = 'aad.AaBbCCIyM2ItZmY2Yy03ODBiLWEwMzYtMGQzMzc5YjY0ZWJk';
+        const composedStorageKeyUrl = expectedGraphApiUrl + 'storagekeys/' + descriptor;
+
+        setup(() => {
+            storageKeyLink = <IVstsGraphLink> {
+                href: expectedStorageKeyUrl
+            };
+            graphLinks = <IVstsUserGraphLinks> {
+                storageKey: storageKeyLink
+            };
+            user._links = graphLinks;
+            user.descriptor = descriptor;
+        });
+
+        teardown(() => {
+            user._links = null;
+        });
+
+        test('Should throw error when account name is null and user is null', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(null, null), invalidUserErrorMessage);
+        });
+
+        test('Should throw an error when account name is null and user is undefined', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(null, undefined), invalidUserErrorMessage);
+        });
+
+        test('Should throw error when account name is null and user graph links are null', () => {
+            user._links = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(null, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is null and user graph links storage key is null', () => {
+            user._links.storageKey = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(null, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is null and user graph links storage key href is null', () => {
+            user._links.storageKey.href = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(null, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should return correct url when account name is null and user storage key href is valid', () => {
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(null, user);
+            assert.deepEqual(storageKeyApiUrl, expectedStorageKeyUrl);
+        });
+
+        test('Should throw error when account name is undefined and user is null', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(undefined, null), invalidUserErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined and user is undefined', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(undefined, undefined), invalidUserErrorMessage);
+        });
+
+        test('Should throw error when account name is undefined and user graph links are null', () => {
+            user._links = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(undefined, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is undefined and user graph links storage key is null', () => {
+            user._links.storageKey = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(undefined, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is undefined and user graph links storage key href is null', () => {
+            user._links.storageKey.href = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(undefined, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should return correct url when account name is undefined and user storage key href is valid', () => {
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(undefined, user);
+            assert.deepEqual(storageKeyApiUrl, expectedStorageKeyUrl);
+        });
+
+        test('Should throw error when account name is empty and user is null', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(testHelpers.emptyString, null), invalidUserErrorMessage);
+        });
+
+        test('Should throw an error when account name is empty and user is undefined', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(testHelpers.emptyString, undefined), invalidUserErrorMessage);
+        });
+
+        test('Should throw error when account name is empty and user graph links are null', () => {
+            user._links = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(testHelpers.emptyString, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is empty and user graph links storage key is null', () => {
+            user._links.storageKey = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(testHelpers.emptyString, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is empty and user graph links storage key href is null', () => {
+            user._links.storageKey.href = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(testHelpers.emptyString, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should return correct url when account name is empty and user storage key href is valid', () => {
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(testHelpers.emptyString, user);
+            assert.deepEqual(storageKeyApiUrl, expectedStorageKeyUrl);
+        });
+
+        test('Should throw error when account name is invalid and user is null', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(invalidAccountName, null), invalidUserErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid and user is undefined', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(invalidAccountName, undefined), invalidUserErrorMessage);
+        });
+
+        test('Should throw error when account name is invalid and user graph links are null', () => {
+            user._links = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(invalidAccountName, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is invalid and user graph links storage key is null', () => {
+            user._links.storageKey = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(invalidAccountName, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw error when account name is invalid and user graph links storage key href is null', () => {
+            user._links.storageKey.href = null;
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(invalidAccountName, user), invalidAccountNameErrorMessage);
+        });
+
+        test('Should return correct url when account name is invalid and user storage key href is valid', () => {
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(invalidAccountName, user);
+            assert.deepEqual(storageKeyApiUrl, expectedStorageKeyUrl);
+        });
+
+        test('Should throw error when account name is valid and user is null', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(accountName, null), invalidUserErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid and user is undefined', () => {
+            assert.throws(() => vstsHelpers.buildStorageKeyApiUrl(accountName, undefined), invalidUserErrorMessage);
+        });
+
+        test('Should throw error when account name is valid and user graph links are null', () => {
+            user._links = null;
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(accountName, user);
+            assert.deepEqual(storageKeyApiUrl, composedStorageKeyUrl);
+        });
+
+        test('Should throw error when account name is valid and user graph links storage key is null', () => {
+            user._links.storageKey = null;
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(accountName, user);
+            assert.deepEqual(storageKeyApiUrl, composedStorageKeyUrl);
+        });
+
+        test('Should throw error when account name is valid and user graph links storage key href is null', () => {
+            user._links.storageKey.href = null;
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(accountName, user);
+            assert.deepEqual(storageKeyApiUrl, composedStorageKeyUrl);
+        });
+
+        test('Should return correct url when account name is valid and user storage key href is valid', () => {
+            const storageKeyApiUrl = vstsHelpers.buildStorageKeyApiUrl(accountName, user);
+            assert.deepEqual(storageKeyApiUrl, expectedStorageKeyUrl);
         });
     });
 });

@@ -3,8 +3,10 @@
 import IOutOfRangeIpAddressScannerRule = require('./../../src/interfaces/out-of-range-ip-address-scanner-rule');
 import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
 import IsoDateRange = require('./../../src/models/iso-date-range');
+import IVstsGraphLink = require('./../../src/interfaces/vsts-graph-link');
 import IVstsGraphUsersApiResponse = require('./../../src/interfaces/vsts-graph-api-user-response');
 import IVstsUsageService = require('./../../src/interfaces/vsts-usage-service');
+import IVstsUserGraphLinks = require('./../../src/interfaces/vsts-user-graph-links');
 import IVstsUserService = require('./../../src/interfaces/vsts-user-service');
 import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
@@ -21,7 +23,7 @@ export const emptyString = '';
  * @param displayName
  * @param origin
  */
-const buildVstsUser = (displayName: string, origin: string): VstsUser => {
+export const buildVstsUser = (displayName: string, origin: string): VstsUser => {
     const user = new VstsUser();
     user.displayName = displayName;
     user.origin = origin;
@@ -29,9 +31,19 @@ const buildVstsUser = (displayName: string, origin: string): VstsUser => {
 };
 
 export const vstsAccountName = 'swellaby';
+export const sampleUserDescriptor = 'aad.AbCDeFc0OWQtOTM2YS03YmMzLTg5Y2YtNjZhZjBmMzJlNDIx';
+export const sampleStorageKeyUrl = 'https://' + vstsAccountName + '.visualstudio.com/_apis/graph/storagekeys/' + sampleUserDescriptor;
 
 const aadOrigin = 'aad';
 const vstsOrigin = 'vsts';
+
+const storageKeyLink: IVstsGraphLink = {
+    href: sampleStorageKeyUrl
+};
+
+const graphLinks: IVstsUserGraphLinks = <IVstsUserGraphLinks> {
+    storageKey: storageKeyLink
+};
 
 const aadUserCaleb = buildVstsUser('caleb', aadOrigin);
 const aadUserBailey = buildVstsUser('bailey', aadOrigin);
@@ -41,6 +53,11 @@ const vstsUserRuchi = buildVstsUser('ruchi', vstsOrigin);
 const vstsUserSally = buildVstsUser('sally', vstsOrigin);
 const vstsUserTravis = buildVstsUser('travis', vstsOrigin);
 const vstsUserAdmin = buildVstsUser('admin', vstsOrigin);
+
+const linksUser = buildVstsUser('links', aadOrigin);
+linksUser._links = graphLinks;
+
+export const graphLinksUser = linksUser;
 
 export const allAADOriginUsers: VstsUser[] = [ aadUserCaleb, aadUserBailey, aadUserNorm ];
 export const allVstsOriginUsers: VstsUser[] = [ vstsUserRuchi, vstsUserSally, vstsUserTravis, vstsUserAdmin ];
