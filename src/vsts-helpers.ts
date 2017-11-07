@@ -2,6 +2,7 @@
 
 import formatValidator = require('./format-validator');
 import IsoDateRange = require('./models/iso-date-range');
+import VstsUser = require('./models/vsts-user');
 
 /**
  * Converts a VSTS Personal Access Token (PAT) into the necessary format
@@ -126,16 +127,28 @@ export const buildUtilizationApiUrl = (accountName: string) => {
  */
 export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: string, dateRange: IsoDateRange) => {
     validateUserIdFormat(userId);
-    console.log('***********************************************************');
-    console.log('***********************************************************');
-    console.log('***********************************************************');
-    console.log('User id is: ' + userId);
     if (!dateRange) {
         throw new Error('Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.');
     }
 
     const url = buildUtilizationApiUrl(accountName) + 'usagesummary';
     return url + '?userId=' + userId + '&startTime=' + dateRange.isoStartTime + '&endTime=' + dateRange.isoEndTime;
+};
+
+/**
+ * Builds the URL for making Storage Key API calls.
+ * @param {string} accountName - The name of the VSTS account.
+ * @param {VstsUser} user - The target user for the desired storage key.
+ */
+export const buildStorageKeyApiUrl = (accountName: string, user: VstsUser): string => {
+    if (!user) {
+        throw new Error('Invalid parameter. Must specify a valid user');
+    }
+
+    let baseUrl = buildGraphApiUrl(accountName);
+    baseUrl += 'storagekeys/' + user.descriptor;
+
+    return baseUrl;
 };
 
 /**
