@@ -10,6 +10,7 @@ import IVstsUserGraphLinks = require('./../../src/interfaces/vsts-user-graph-lin
 import IVstsUserService = require('./../../src/interfaces/vsts-user-service');
 import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
+import VstsStorageKey = require('./../../src/models/vsts-storage-key');
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
 import VstsUsageScanResult = require('./../../src/models/vsts-usage-scan-result');
 import VstsUser = require('./../../src/models/vsts-user');
@@ -17,6 +18,28 @@ import VstsUserActivityReport = require('./../../src/models/vsts-user-activity-r
 import VstsUtilizationApiUsageService = require('./../../src/services/vsts-utilization-api-usage-service');
 
 export const emptyString = '';
+
+export const vstsAccountName = 'swellaby';
+export const sampleUserDescriptor = 'aad.AbCDeFc0OWQtOTM2YS03YmMzLTg5Y2YtNjZhZjBmMzJlNDIx';
+export const sampleStorageKeyUrl = 'https://' + vstsAccountName + '.visualstudio.com/_apis/graph/storagekeys/' + sampleUserDescriptor;
+
+const aadOrigin = 'aad';
+const vstsOrigin = 'vsts';
+export const sampleGuid = '626c88e3-1e13-4663-abdc-5658b0757b80';
+export const invalidGuid = 'NOgood';
+
+const storageKeyLink: IVstsGraphLink = {
+    href: sampleStorageKeyUrl
+};
+
+const graphLinks: IVstsUserGraphLinks = <IVstsUserGraphLinks> {
+    storageKey: storageKeyLink
+};
+
+const storageKey: VstsStorageKey = new VstsStorageKey();
+storageKey.value = sampleGuid;
+export const sampleStorageKey = storageKey;
+export const storageKeyApiJson = JSON.stringify(storageKey);
 
 /**
  * Helper function that performs a discrete Fourier transform... just kidding.
@@ -27,22 +50,8 @@ export const buildVstsUser = (displayName: string, origin: string): VstsUser => 
     const user = new VstsUser();
     user.displayName = displayName;
     user.origin = origin;
+    user.storageKey = storageKey;
     return user;
-};
-
-export const vstsAccountName = 'swellaby';
-export const sampleUserDescriptor = 'aad.AbCDeFc0OWQtOTM2YS03YmMzLTg5Y2YtNjZhZjBmMzJlNDIx';
-export const sampleStorageKeyUrl = 'https://' + vstsAccountName + '.visualstudio.com/_apis/graph/storagekeys/' + sampleUserDescriptor;
-
-const aadOrigin = 'aad';
-const vstsOrigin = 'vsts';
-
-const storageKeyLink: IVstsGraphLink = {
-    href: sampleStorageKeyUrl
-};
-
-const graphLinks: IVstsUserGraphLinks = <IVstsUserGraphLinks> {
-    storageKey: storageKeyLink
 };
 
 const aadUserCaleb = buildVstsUser('caleb', aadOrigin);
@@ -56,7 +65,6 @@ const vstsUserAdmin = buildVstsUser('admin', vstsOrigin);
 
 const linksUser = buildVstsUser('links', aadOrigin);
 linksUser._links = graphLinks;
-
 export const graphLinksUser = linksUser;
 
 export const allAADOriginUsers: VstsUser[] = [ aadUserCaleb, aadUserBailey, aadUserNorm ];
@@ -84,8 +92,6 @@ export const http403Response = buildResponseObject(403);
 export const http404Response = buildResponseObject(404);
 export const http409Response = buildResponseObject(409);
 
-export const sampleGuid = '626c88e3-1e13-4663-abdc-5658b0757b80';
-export const invalidGuid = 'NOgood';
 export const invalidIsoFormat = 'nope';
 export const isoFormatStartTime = '2017-05-17T17:31:43Z';
 export const isoFormatEndTime = '2017-05-18T17:31:43Z';

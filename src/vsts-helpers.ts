@@ -102,8 +102,14 @@ export const buildGraphApiUrl = (accountName: string) => {
  * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
  * or does not match the VSTS account naming standards.
  */
-export const buildGraphApiUsersUrl = (accountName: string) => {
-    return buildGraphApiUrl(accountName) + 'users';
+export const buildGraphApiUsersUrl = (accountName: string, subjectTypes?: string[]) => {
+    const url = buildGraphApiUrl(accountName) + 'users?subjectTypes=';
+
+    if (subjectTypes) {
+        return url + subjectTypes.toString();
+    } else {
+        return url;
+    }
 };
 
 /**

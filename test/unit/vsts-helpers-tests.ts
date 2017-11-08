@@ -7,6 +7,7 @@ import IVstsGraphLink = require('./../../src/interfaces/vsts-graph-link');
 import IVstsUserGraphLinks = require('./../../src/interfaces/vsts-user-graph-links');
 import formatValidator = require('./../../src/format-validator');
 import testHelpers = require('./test-helpers');
+import vstsConstants = require('./../../src/vsts-constants');
 import vstsHelpers = require('./../../src/vsts-helpers');
 import VstsUser = require('./../../src/models/vsts-user');
 
@@ -130,9 +131,8 @@ suite('VSTS Helpers Suite:', () => {
         });
 
         test('Should return correct url string when account name is valid', () => {
-            const expectedUrl = protocol + accountName + graphApiUrlSegment;
             const actualUrl = vstsHelpers.buildGraphApiUrl(accountName);
-            assert.deepEqual(expectedUrl, actualUrl);
+            assert.deepEqual(actualUrl, expectedGraphApiUrl);
         });
 
         test('Should have correct value for exported Graph API Url segment', () => {
@@ -141,6 +141,8 @@ suite('VSTS Helpers Suite:', () => {
     });
 
     suite('buildGraphApiUsersUrl Suite:', () => {
+        const expectedUrlBase = expectedGraphApiUrl + 'users?subjectTypes=';
+
         test('Should throw an error when account name is null', () => {
             assert.throws(() => vstsHelpers.buildGraphApiUsersUrl(null), invalidAccountNameErrorMessage);
         });
@@ -149,10 +151,26 @@ suite('VSTS Helpers Suite:', () => {
             assert.throws(() => vstsHelpers.buildGraphApiUsersUrl(undefined), invalidAccountNameErrorMessage);
         });
 
-        test('Should return correct url string when account name is valid', () => {
+        test('Should return correct url string when account name is valid and no subject types are specified', () => {
             const actualUrl = vstsHelpers.buildGraphApiUsersUrl(accountName);
-            const expectedUrl = expectedGraphApiUrl + 'users';
-            assert.deepEqual(expectedUrl, actualUrl);
+            assert.deepEqual(actualUrl, expectedUrlBase);
+        });
+
+        test('Should return correct url string when account name is valid and subject types are null', () => {
+            const actualUrl = vstsHelpers.buildGraphApiUsersUrl(accountName, null);
+            assert.deepEqual(actualUrl, expectedUrlBase);
+        });
+
+        test('Should return correct url string when account name is valid and subject types are undefined', () => {
+            const actualUrl = vstsHelpers.buildGraphApiUsersUrl(accountName, undefined);
+            assert.deepEqual(actualUrl, expectedUrlBase);
+        });
+
+        test('Should return correct url string when account name is valid and multiple subject types are specified', () => {
+            const subjectTypes = [ vstsConstants.aadGraphSubjectType, vstsConstants.msaGraphSubjectType ];
+            const expectedUrl = expectedUrlBase + vstsConstants.aadGraphSubjectType + ',' + vstsConstants.msaGraphSubjectType;
+            const actualUrl = vstsHelpers.buildGraphApiUsersUrl(accountName, subjectTypes);
+            assert.deepEqual(actualUrl, expectedUrl);
         });
     });
 
@@ -168,7 +186,7 @@ suite('VSTS Helpers Suite:', () => {
         test('Should return correct url string when account name is valid', () => {
             const expectedUrl = protocol + accountName + utilizationApiUrlSgement;
             const actualUrl = vstsHelpers.buildUtilizationApiUrl(accountName);
-            assert.deepEqual(expectedUrl, actualUrl);
+            assert.deepEqual(actualUrl, expectedUrl);
         });
 
         test('Should have correct value for exported Graph API Url segment', () => {
@@ -534,7 +552,7 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
-    suite('buildStorageKeyApiUrl', () => {
+    suite('buildStorageKeyApiUrl Suite:', () => {
         const invalidUserErrorMessage = 'Invalid parameter. Must specify a valid user';
         const user: VstsUser = testHelpers.buildVstsUser('link', 'aad');
         let graphLinks: IVstsUserGraphLinks;

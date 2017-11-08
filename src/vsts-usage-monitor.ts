@@ -284,16 +284,19 @@ const buildScanReportOnFailedUserRetrieval = (error: Error, request: IpAddressSc
  * @throws {Error} - Will throw an error if the scanRequest parameter is invalid.
  * @returns {Promise<IpAddressScanReport>}
  */
-export const scanForOutOfRangeIpAddresses = async (scanRequest: IpAddressScanRequest): Promise<IpAddressScanReport> => {
+// tslint:disable-next-line
+ export const scanForOutOfRangeIpAddresses = async (scanRequest: IpAddressScanRequest): Promise<IpAddressScanReport> => {
     if (!scanRequest) {
         throw new Error('Invalid scan request parameters. Unable to execute scan for out of range Ip Addresses.');
     }
 
     try {
         const users = await getUsers(scanRequest);
+
         if (users.length === 0) {
             return buildEmptyUserListScanReport(scanRequest);
         }
+
         return await scanUsersActivityForOutOfRangeIpAddresses(scanRequest, users);
     } catch (err) {
         return buildScanReportOnFailedUserRetrieval(err, scanRequest);
