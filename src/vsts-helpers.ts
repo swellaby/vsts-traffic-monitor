@@ -137,8 +137,13 @@ export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: 
         throw new Error('Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.');
     }
 
-    const url = buildUtilizationApiUrl(accountName) + 'usagesummary';
-    return url + '?userId=' + userId + '&startTime=' + dateRange.isoStartTime + '&endTime=' + dateRange.isoEndTime;
+    let url = buildUtilizationApiUrl(accountName) + 'usagesummary';
+    url += '?queryCriteria[userId]=' + userId + '&queryCriteria[startTime]=' + dateRange.isoStartTime + '&queryCriteria[endTime]=' + dateRange.isoEndTime;
+    url += '&queryCriteria[timeBucket]=00:05:00&queryCriteria[columns]=user&queryCriteria[columns]=userAgent&queryCriteria[columns]=ipAddress';
+    url += '&queryCriteria[columns]=startTime&queryCriteria[columns]=application&queryCriteria[columns]=command&queryCriteria[columns]=status';
+    url += '&queryCriteria[columns]=authenticationMechanism';
+
+    return url;
 };
 
 /**

@@ -172,7 +172,7 @@ const scanIpAddressesFromYesterday = async (user: VstsUser, scanRequest: IpAddre
         const usageService: IVstsUsageService = factory.getVstsUsageService();
         const vstsAccountName = scanRequest.vstsAccountName;
         const accessToken = scanRequest.vstsAccessToken;
-        const usageRecords = await usageService.getUserActivityFromYesterday(user.descriptor, vstsAccountName, accessToken);
+        const usageRecords = await usageService.getUserActivityFromYesterday(user.storageKey.value, vstsAccountName, accessToken);
         if (usageRecords.length === 0) {
             return;
         }
@@ -198,7 +198,7 @@ const scanUserActivityFromLast24Hours = async (user: VstsUser, scanRequest: IpAd
         const usageService: IVstsUsageService = factory.getVstsUsageService();
         const vstsAccountName = scanRequest.vstsAccountName;
         const accessToken = scanRequest.vstsAccessToken;
-        const usageRecords = await usageService.getUserActivityOverLast24Hours(user.descriptor, vstsAccountName, accessToken);
+        const usageRecords = await usageService.getUserActivityOverLast24Hours(user.storageKey.value, vstsAccountName, accessToken);
         if (usageRecords.length === 0) {
             return;
         }
@@ -284,7 +284,6 @@ const buildScanReportOnFailedUserRetrieval = (error: Error, request: IpAddressSc
  * @throws {Error} - Will throw an error if the scanRequest parameter is invalid.
  * @returns {Promise<IpAddressScanReport>}
  */
-// tslint:disable-next-line
  export const scanForOutOfRangeIpAddresses = async (scanRequest: IpAddressScanRequest): Promise<IpAddressScanReport> => {
     if (!scanRequest) {
         throw new Error('Invalid scan request parameters. Unable to execute scan for out of range Ip Addresses.');
