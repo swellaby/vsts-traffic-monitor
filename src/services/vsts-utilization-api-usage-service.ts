@@ -97,6 +97,7 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
      *
      * @returns {Promise<VstsUsageRecord[]>}
      */
+    // tslint:disable-next-line
     private getUserActivityInRange(userId: string, isoDateRange: IsoDateRange, vstsAccountName: string, accessToken: string)
         : Promise<VstsUsageRecord[]> {
         return new Promise<VstsUsageRecord[]>((resolve, reject) => {
@@ -113,7 +114,11 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
                             reject(new Error('Invalid or unexpected JSON response from VSTS API. Unable to determine VSTS User Activity.'));
                         }
                     }
-                    reject(new Error('VSTS User Activity API Call Failed.'));
+                    let baseErrorMessage = 'VSTS User Activity API Call Failed.';
+                    if (response && response.statusCode) {
+                        baseErrorMessage += ' Response status code: ' + response.statusCode;
+                    }
+                    reject(new Error(baseErrorMessage));
                 });
             } catch (err) {
                 const errorMessage = 'Unable to retrieve VSTS User Activity. Error details: ';

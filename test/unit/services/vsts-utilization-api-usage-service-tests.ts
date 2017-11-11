@@ -36,7 +36,9 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
     const invalidTokenErrorMessage = 'Invalid access token.';
     const apiCallBaseErrorMessage = 'Unable to retrieve VSTS User Activity. Error details: ';
     const requestErrorMessageDetails = 'fail';
-    const userApiCalledFailedErrorMessage = 'VSTS User Activity API Call Failed.';
+    const userApiCalledFailedErrorMessageBase = 'VSTS User Activity API Call Failed.';
+    const userApiCalledFailledStatusCodeErrorMessageSuffix = ' Response status code: ';
+    const userApiCalledFailedWithStatusCodeErrorMessage = userApiCalledFailedErrorMessageBase + userApiCalledFailledStatusCodeErrorMessageSuffix;
     const jsonParseErrorMessage = 'Invalid or unexpected JSON response from VSTS API. Unable to determine VSTS User Activity.';
     const expectedRequestThrownErrorMessage = apiCallBaseErrorMessage + requestErrorMessageDetails;
     const expectedUserIdErrorMessage = apiCallBaseErrorMessage + invalidUserIdErrorMessage;
@@ -1642,7 +1644,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             test('Should reject promise when the Request Get callback has an error', (done: () => void) => {
                 requestGetStub.yields(new Error(), {}, null);
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedErrorMessageBase);
                     done();
                 });
             });
@@ -1652,14 +1654,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedErrorMessageBase);
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 400', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http400Response, null);
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '400');
                     done();
                 });
             });
@@ -1669,14 +1671,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '400');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 401', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http401Response, null);
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '401');
                     done();
                 });
             });
@@ -1686,14 +1688,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '401');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 403', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http403Response, null);
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '403');
                     done();
                 });
             });
@@ -1703,14 +1705,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '403');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 404', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http404Response, null);
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '404');
                     done();
                 });
             });
@@ -1720,14 +1722,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '404');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 409', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http409Response, null);
                 vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '409');
                     done();
                 });
             });
@@ -1737,7 +1739,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '409');
                 }
             });
 
@@ -7224,7 +7226,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             test('Should reject promise when the Request Get callback has an error', (done: () => void) => {
                 requestGetStub.yields(new Error(), {}, null);
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedErrorMessageBase);
                     done();
                 });
             });
@@ -7234,14 +7236,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedErrorMessageBase);
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 400', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http400Response, null);
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '400');
                     done();
                 });
             });
@@ -7251,14 +7253,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '400');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 401', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http401Response, null);
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '401');
                     done();
                 });
             });
@@ -7268,14 +7270,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '401');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 403', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http403Response, null);
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '403');
                     done();
                 });
             });
@@ -7285,14 +7287,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '403');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 404', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http404Response, null);
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '404');
                     done();
                 });
             });
@@ -7302,14 +7304,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '404');
                 }
             });
 
             test('Should reject promise when the Request Get response status code is 409', (done: () => void) => {
                 requestGetStub.yields(null, testHelpers.http409Response, null);
                 vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '409');
                     done();
                 });
             });
@@ -7319,7 +7321,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 try {
                     await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, userApiCalledFailedErrorMessage);
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '409');
                 }
             });
 
