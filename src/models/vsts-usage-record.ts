@@ -27,6 +27,8 @@ class VstsUsageRecord {
     public startTime: string;
     public usage: number;
     public userAgent: string;
+    public authenticationMechanism: string;
+    public status: string;
 }
 
 export = VstsUsageRecord;

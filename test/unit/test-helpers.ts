@@ -112,7 +112,7 @@ export const fifthValidIpAddress = '255.255.255.249';
 export const validIpRange = '255.255.255.248/29';
 export const allowedIpRanges = [ validIpRange, fourthValidIpAddress ];
 
-export const firstUsageRecord: VstsUsageRecord = {
+export const firstUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     application: 'Web Access',
     command: 'Account.Home',
     count: 2,
@@ -121,10 +121,11 @@ export const firstUsageRecord: VstsUsageRecord = {
     ipAddress: firstValidIpAddress,
     startTime: isoFormatStartTime,
     usage: 1,
-    userAgent: 'Mozilla something'
+    userAgent: 'Mozilla something',
+    authenticationMechanism: 'FedAuth'
 };
 
-export const secondUsageRecord: VstsUsageRecord = {
+export const secondUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     application: 'Framework',
     command: 'Projects.GetProjects',
     count: 3,
@@ -133,7 +134,8 @@ export const secondUsageRecord: VstsUsageRecord = {
     ipAddress: secondValidIpAddress,
     startTime: isoFormatStartTime,
     usage: 1,
-    userAgent: 'Mozilla/5.0'
+    userAgent: 'Mozilla/5.0',
+    authenticationMechanism: 'Pat'
 };
 
 export const usageRecords: VstsUsageRecord[] = [ firstUsageRecord, secondUsageRecord ];
@@ -144,7 +146,7 @@ export const usageRecordsJson = JSON.stringify({
 
 export const emptyUsageRecords: VstsUsageRecord[] = [];
 
-export const nullIpUsageRecord: VstsUsageRecord = {
+export const nullIpUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     application: 'Web Access',
     command: 'Account.Foo',
     count: 1,
@@ -156,7 +158,7 @@ export const nullIpUsageRecord: VstsUsageRecord = {
     userAgent: 'Mozilla clouds'
 };
 
-export const internalVstsServiceUsageRecord: VstsUsageRecord = {
+export const internalVstsServiceUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     application: 'Framework',
     command: 'Projects.GetProjects',
     count: 3,
