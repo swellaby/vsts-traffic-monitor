@@ -183,6 +183,6 @@ export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken:
         headers: {
             'Authorization': 'basic ' + auth
         },
-        timeout: 7500
+        timeout: 1000
     };
 };
