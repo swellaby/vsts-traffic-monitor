@@ -138,7 +138,7 @@ export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: 
 
     let url = buildUtilizationApiUrl(accountName) + 'usagesummary';
     url += '?queryCriteria[userId]=' + userId + '&queryCriteria[startTime]=' + dateRange.isoStartTime + '&queryCriteria[endTime]=' + dateRange.isoEndTime;
-    url += '&queryCriteria[timeBucket]=00:05:00&queryCriteria[columns]=user&queryCriteria[columns]=userAgent&queryCriteria[columns]=ipAddress';
+    url += '&queryCriteria[columns]=user&queryCriteria[columns]=userAgent&queryCriteria[columns]=ipAddress';
     url += '&queryCriteria[columns]=startTime&queryCriteria[columns]=application&queryCriteria[columns]=command&queryCriteria[columns]=status';
     url += '&queryCriteria[columns]=authenticationMechanism';
 
@@ -182,7 +182,6 @@ export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken:
         url: apiUrl,
         headers: {
             'Authorization': 'basic ' + auth
-        },
-        timeout: 1000
+        }
     };
 };

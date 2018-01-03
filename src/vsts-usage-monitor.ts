@@ -225,9 +225,15 @@ const scanUsersActivityForOutOfRangeIpAddresses = async (scanRequest: IpAddressS
     scanReport.completedSuccessfully = true;
 
     if (scanRequest.scanTimePeriod === vstsUsageScanTimePeriod.last24Hours) {
-        await Promise.all(users.map(async user => { await scanUserActivityFromLast24Hours(user, scanRequest, scanReport); }));
+        for (const user of users) {
+            await scanUserActivityFromLast24Hours(user, scanRequest, scanReport);
+        }
+        // await Promise.all(users.map(async user => { await scanUserActivityFromLast24Hours(user, scanRequest, scanReport); }));
     } else if (scanRequest.scanTimePeriod === vstsUsageScanTimePeriod.priorDay) {
-        await Promise.all(users.map(async user => { await scanIpAddressesFromYesterday(user, scanRequest, scanReport); }));
+        for (const user of users) {
+            await scanIpAddressesFromYesterday(user, scanRequest, scanReport);
+        }
+        // await Promise.all(users.map(async user => { await scanIpAddressesFromYesterday(user, scanRequest, scanReport); }));
     } else {
         scanReport.completedSuccessfully = false;
         scanReport.errorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';

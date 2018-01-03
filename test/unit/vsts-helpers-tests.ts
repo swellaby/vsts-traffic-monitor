@@ -488,7 +488,7 @@ suite('VSTS Helpers Suite:', () => {
             const dateRange = testHelpers.validIsoDateRange;
             const baseUrl = expectedUtilizationApiUrl + 'usagesummary?queryCriteria[userId]=';
             let expectedUrl = baseUrl + testHelpers.sampleGuid + '&queryCriteria[startTime]=' + dateRange.isoStartTime + '&queryCriteria[endTime]=' + dateRange.isoEndTime;
-            expectedUrl += '&queryCriteria[timeBucket]=00:05:00&queryCriteria[columns]=user&queryCriteria[columns]=userAgent&queryCriteria[columns]=ipAddress';
+            expectedUrl += '&queryCriteria[columns]=user&queryCriteria[columns]=userAgent&queryCriteria[columns]=ipAddress';
             expectedUrl += '&queryCriteria[columns]=startTime&queryCriteria[columns]=application&queryCriteria[columns]=command&queryCriteria[columns]=status';
             expectedUrl += '&queryCriteria[columns]=authenticationMechanism';
 

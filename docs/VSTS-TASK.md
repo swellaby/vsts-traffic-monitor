@@ -8,4 +8,4 @@
 [icon-author-url]: http://www.freepik.com
 [flaticon-url]: http://www.flaticon.com
 [cc3-url]: http://creativecommons.org/licenses/by/3.0
-[logo-image]: docs/images/task-swell-blue-128.png
+[logo-image]: images/task-swell-blue-128.png
