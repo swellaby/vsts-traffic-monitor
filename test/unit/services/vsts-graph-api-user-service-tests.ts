@@ -22,22 +22,30 @@ suite('VSTS Graph API User Service Suite:', () => {
     let vstsHelpersBuildGraphApiUsersUrlStub: Sinon.SinonStub;
     let vstsHelpersBuildRestApiBasicAuthRequestOptionsStub: Sinon.SinonStub;
     let vstsHelpersBuildStorageKeyApiUrlStub: Sinon.SinonStub;
+    let vstsHelpersAppendContinuationTokenStub: Sinon.SinonStub;
     const accountName = 'awesomeness';
     const pat = '1234567890abcdefghijklmnop';
-    const errorMessageBase = 'Encountered an error while retrieving VSTS users. Error details: ';
+    const apiCallErrorMessageBase = 'Encountered an error while retrieving VSTS users. Error details: ';
+    const errorMessageBase = 'Encountered a fatal error while retrieving the complete set of VSTS users. ';
     const errorMessageDetails = 'Specific details of information';
     const vstsHelpersErrorMessageDetails = 'invalid arg';
     const errorMessage = errorMessageBase + errorMessageDetails;
+    const graphApiThrownErrorMessage = errorMessageBase + apiCallErrorMessageBase + errorMessageDetails;
     const vstsHelpersErrorMessage = errorMessageBase + vstsHelpersErrorMessageDetails;
-    const apiCallFailedErrorMessage = 'VSTS User API Call Failed.';
-    const jsonParseErrorMessage = 'Invalid or unexpected JSON encountered. Unable to determine VSTS Users.';
+    const apiCallFailedErrorMessageSuffix = 'VSTS User API Call Failed.';
+    const apiCallFailedErrorMessage = errorMessageBase + apiCallFailedErrorMessageSuffix;
+    const jsonParseErrorMessageSuffix = 'Invalid or unexpected JSON encountered. Unable to determine VSTS Users.';
+    const jsonParseErrorMessage = errorMessageBase + jsonParseErrorMessageSuffix;
 
     setup(() => {
         requestGetStub = sandbox.stub(request, 'get');
         vstsGraphApiUserService = new VstsGraphApiUserService();
         vstsHelpersBuildGraphApiUsersUrlStub = sandbox.stub(VstsHelpers, 'buildGraphApiUsersUrl');
-        vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions');
+        vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
+            return { url: testHelpers.sampleUsageSummaryApiUrl };
+        });
         vstsHelpersBuildStorageKeyApiUrlStub = sandbox.stub(VstsHelpers, 'buildStorageKeyApiUrl');
+        vstsHelpersAppendContinuationTokenStub = sandbox.stub(VstsHelpers, 'appendContinuationToken');
     });
 
     teardown(() => {
@@ -109,7 +117,7 @@ suite('VSTS Graph API User Service Suite:', () => {
             (done: () => void) => {
                 requestGetStub.throws(new Error(errorMessageDetails));
                 vstsGraphApiUserService.getAADUsers(accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, errorMessage);
+                    assert.deepEqual(err.message, graphApiThrownErrorMessage);
                     done();
                 });
         });
@@ -120,7 +128,7 @@ suite('VSTS Graph API User Service Suite:', () => {
                 try {
                     await vstsGraphApiUserService.getAADUsers(accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, errorMessage);
+                    assert.deepEqual(err.message, graphApiThrownErrorMessage);
                 }
         });
 
@@ -318,6 +326,31 @@ suite('VSTS Graph API User Service Suite:', () => {
                 });
         });
 
+        test('Should make subsequent calls when the HTTP response headers include a continuation token',
+            async () => {
+                vstsHelpersBuildStorageKeyApiUrlStub.callsFake(() => {
+                    return testHelpers.sampleStorageKeyUrl;
+                });
+                vstsHelpersBuildGraphApiUsersUrlStub.callsFake(() => {
+                    return testHelpers.sampleUsageSummaryApiUrl;
+                });
+                const httpResponse = {
+                    statusCode: testHelpers.http200Response.statusCode,
+                    headers: {
+                        'x-ms-continuationtoken': testHelpers.continuationToken
+                    }
+                };
+                requestGetStub.onFirstCall().yields(null, httpResponse, testHelpers.allAddOriginVstsGraphUsersApiJson);
+                requestGetStub.onCall(4).yields(null, testHelpers.http200Response, testHelpers.allVstsOriginUsersGraphUsersApiJson);
+                requestGetStub.yields(null, testHelpers.http200Response, testHelpers.storageKeyApiJson);
+                const users = await vstsGraphApiUserService.getAADUsers(accountName, pat);
+                assert.deepEqual(users, testHelpers.mixedOriginUsers);
+                users.forEach(u => {
+                    assert.deepEqual(u.storageKey, testHelpers.sampleStorageKey);
+                });
+                assert.isTrue(vstsHelpersAppendContinuationTokenStub.calledWith(testHelpers.sampleUsageSummaryApiUrl, testHelpers.continuationToken));
+        });
+
         test('Should specify a AAD filter value for subjectTypes parameter to default to all subjectTypes', async () => {
             vstsHelpersBuildStorageKeyApiUrlStub.callsFake(() => {
                 return testHelpers.sampleStorageKeyUrl;
@@ -393,7 +426,7 @@ suite('VSTS Graph API User Service Suite:', () => {
             (done: () => void) => {
                 requestGetStub.throws(new Error(errorMessageDetails));
                 vstsGraphApiUserService.getAllUsers(accountName, pat).catch((err: Error) => {
-                    assert.deepEqual(err.message, errorMessage);
+                    assert.deepEqual(err.message, graphApiThrownErrorMessage);
                     done();
                 });
         });
@@ -404,7 +437,7 @@ suite('VSTS Graph API User Service Suite:', () => {
                 try {
                     await vstsGraphApiUserService.getAllUsers(accountName, pat);
                 } catch (err) {
-                    assert.deepEqual(err.message, errorMessage);
+                    assert.deepEqual(err.message, graphApiThrownErrorMessage);
                 }
         });
 
@@ -600,6 +633,31 @@ suite('VSTS Graph API User Service Suite:', () => {
                 users.forEach(u => {
                     assert.deepEqual(u.storageKey, testHelpers.sampleStorageKey);
                 });
+        });
+
+        test('Should make subsequent calls when the HTTP response headers include a continuation token',
+            async () => {
+                vstsHelpersBuildStorageKeyApiUrlStub.callsFake(() => {
+                    return testHelpers.sampleStorageKeyUrl;
+                });
+                vstsHelpersBuildGraphApiUsersUrlStub.callsFake(() => {
+                    return testHelpers.sampleUsageSummaryApiUrl;
+                });
+                const httpResponse = {
+                    statusCode: testHelpers.http200Response.statusCode,
+                    headers: {
+                        'x-ms-continuationtoken': testHelpers.continuationToken
+                    }
+                };
+                requestGetStub.onFirstCall().yields(null, httpResponse, testHelpers.allAddOriginVstsGraphUsersApiJson);
+                requestGetStub.onCall(4).yields(null, testHelpers.http200Response, testHelpers.allVstsOriginUsersGraphUsersApiJson);
+                requestGetStub.yields(null, testHelpers.http200Response, testHelpers.storageKeyApiJson);
+                const users = await vstsGraphApiUserService.getAllUsers(accountName, pat);
+                assert.deepEqual(users, testHelpers.mixedOriginUsers);
+                users.forEach(u => {
+                    assert.deepEqual(u.storageKey, testHelpers.sampleStorageKey);
+                });
+                assert.isTrue(vstsHelpersAppendContinuationTokenStub.calledWith(testHelpers.sampleUsageSummaryApiUrl, testHelpers.continuationToken));
         });
 
         test('Should specify a undefined value for subjectTypes parameter to default to all subjectTypes', async () => {

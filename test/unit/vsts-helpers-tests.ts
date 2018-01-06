@@ -723,4 +723,93 @@ suite('VSTS Helpers Suite:', () => {
             assert.deepEqual(storageKeyApiUrl, expectedStorageKeyUrl);
         });
     });
+
+    suite('vstsApiContinuationTokenHeader Suite', () => {
+        test('Should have the correct continuationToken HTTP header value', () => {
+            assert.deepEqual(vstsHelpers.vstsApiContinuationTokenHeader, 'x-ms-continuationtoken');
+        });
+    });
+
+    suite('vstsApiContinuationTokenQueryParameter Suite:', () => {
+        test('Should have the correct continuationToken Query Parameter value', () => {
+            assert.deepEqual(vstsHelpers.vstsApiContinuationTokenQueryParameter, 'continuationToken');
+        });
+    });
+
+    suite('appendContinuationToken Suite:', () => {
+        const invalidApiUrlErrorMessage = 'Invalid API url and/or continuationToken.';
+        const apiUrlBase = 'https://awesomeness.visualstudio.com/_apis/utilization/usagesummary';
+        const existingParamApiUrl = apiUrlBase + '?queryCriteria[userId]=&queryCriteria[columns]=ipAddress';
+        const queryParameterSuffix = 'continuationToken=' + testHelpers.continuationToken;
+        const expectedExistingParamsApiUrl = existingParamApiUrl + '&' + queryParameterSuffix;
+        const expectedNoExistingParamsApiUrl = apiUrlBase + '?' + queryParameterSuffix;
+
+        test('Should throw an error when url is null and continuationToken is null', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(null, null), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is null and continuationToken is undefined', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(null, undefined), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is null and continuationToken is empty', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(null, testHelpers.emptyString), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is null and continuationToken is valid', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(null, testHelpers.continuationToken), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is undefined and continuationToken is null', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(undefined, null), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is undefined and continuationToken is undefined', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(undefined, undefined), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is undefined and continuationToken is empty', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(undefined, testHelpers.emptyString), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is undefined and continuationToken is valid', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(undefined, testHelpers.continuationToken), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is empty and continuationToken is null', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(testHelpers.emptyString, null), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is empty and continuationToken is undefined', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(testHelpers.emptyString, undefined), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is empty and continuationToken is empty', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(testHelpers.emptyString, testHelpers.emptyString), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is empty and continuationToken is valid', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(testHelpers.emptyString, testHelpers.continuationToken), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is valid and continuationToken is null', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(apiUrlBase, null), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is valid and continuationToken is undefined', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(apiUrlBase, undefined), invalidApiUrlErrorMessage);
+        });
+
+        test('Should throw an error when url is valid and continuationToken is empty', () => {
+            assert.throws(() => vstsHelpers.appendContinuationToken(apiUrlBase, testHelpers.emptyString), invalidApiUrlErrorMessage);
+        });
+
+        test('Should return correct url with valid continuationToken and apiUrl with existing query params', () => {
+            assert.deepEqual(vstsHelpers.appendContinuationToken(existingParamApiUrl, testHelpers.continuationToken), expectedExistingParamsApiUrl);
+        });
+
+        test('Should return correct url with valid continuationToken and apiUrl without existing query params', () => {
+            assert.deepEqual(vstsHelpers.appendContinuationToken(apiUrlBase, testHelpers.continuationToken), expectedNoExistingParamsApiUrl);
+        });
+    });
 });

@@ -71,6 +71,16 @@ export const vstsGraphApiUrlSegment = '.vssps' + vstsCoreApiUrlSegment + 'graph/
 export const vstsUtilizationApiUrlSegment = vstsCoreApiUrlSegment + 'utilization/';
 
 /**
+ * The HTTP header VSTS uses to provide a Continuation Token on APIs.
+ */
+export const vstsApiContinuationTokenHeader = 'x-ms-continuationtoken';
+
+/**
+ * The HTTP query parameter for a VSTS API Continuation Token.
+ */
+export const vstsApiContinuationTokenQueryParameter = 'continuationToken';
+
+/**
  * Helper for forming REST API Urls.
  *
  * @param accountName
@@ -184,4 +194,31 @@ export const buildRestApiBasicAuthRequestOptions = (apiUrl: string, accessToken:
             'Authorization': 'basic ' + auth
         }
     };
+};
+
+/**
+ * Creates an updated version of the specified API url that includes the Continuation Token
+ * as a query parameter on the url.
+ *
+ * @param apiUrl
+ * @param continuationToken
+ * @throws {InvalidArgumentException} Will throw an error if the accessToken is null or undefined.
+ *
+ * @returns a string representing an updated API url.
+ */
+export const appendContinuationToken = (apiUrl: string, continuationToken: string): string => {
+    if (!apiUrl || !continuationToken) {
+        throw new Error('Invalid API url and/or continuationToken.');
+    }
+
+    const queryParameter = vstsApiContinuationTokenQueryParameter + '=' + continuationToken;
+    let parameterSeparator;
+
+    if (apiUrl.indexOf('?') < 0) {
+        parameterSeparator = '?';
+    } else {
+        parameterSeparator = '&';
+    }
+
+    return apiUrl + parameterSeparator + queryParameter;
 };

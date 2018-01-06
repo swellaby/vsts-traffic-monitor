@@ -75,13 +75,26 @@ export const mixedOriginVstsGraphUsersApiJson = JSON.stringify({
     value: mixedOriginUsers
 });
 
+export const allAddOriginVstsGraphUsersApiJson = JSON.stringify({
+    count: allAADOriginUsers.length,
+    value: allAADOriginUsers
+});
+
+export const allVstsOriginUsersGraphUsersApiJson = JSON.stringify({
+    count: allVstsOriginUsers.length,
+    value: allVstsOriginUsers
+});
+
 /**
  * Helper function to build the response object provided to the Request module's
  * callback function on get and post requests.
  * @param httpStatusCode
  */
 const buildResponseObject = (httpStatusCode: number) => {
-    return { statusCode: httpStatusCode };
+    return {
+        statusCode: httpStatusCode,
+        headers: {}
+    };
 };
 
 export const invalidJson = '{[]';
@@ -215,3 +228,6 @@ export const secondFlaggedUserActivityReport = baileyFlaggedUserActivityReport;
 export const unscannedUserActivityReport = calebUnscannedActivityReport;
 
 export const flaggedUserActivityReports = [ normFlaggedUserActivityReport, baileyFlaggedUserActivityReport ];
+
+export const continuationToken = 'asdklfhasdi7ftasid7ft6audf8iw873rrykuUGSAgfFASDG079087fgfkasdUinfoFYYKSDFPOJ234986234MFFNSDO2348ur9SDAFHhj23nfFOHENCCMNWO';
+export const sampleUsageSummaryApiUrl = 'https://awesomeness.visualstudio.com/_apis/utilization/usagesummary';
