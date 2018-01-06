@@ -220,4 +220,106 @@ suite('Helpers Suite:', () => {
             assert.deepEqual(isoDateRange.isoEndTime, testHelpers.isoFormatEndTime);
         });
     });
+
+    suite('sleepAsync Suite:', () => {
+        const invalidParamErrorMessage = 'Invalid parameter. Parameter ms must be a valid, positive number.';
+        let clock: Sinon.SinonFakeTimers;
+        let setTimeoutStub: Sinon.SinonStub;
+        const ms = 1500;
+
+        setup(() => {
+            clock = sandbox.useFakeTimers();
+            setTimeoutStub = sandbox.stub(clock, 'setTimeout').callsFake((resolve, ms) => { resolve(); });
+        });
+
+        teardown(() => {
+            clock.restore();
+        });
+
+        test('Should reject the promise when the ms parameter is null', (done: () => void) => {
+            helpers.sleepAsync(null).catch((err: Error) => {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+                done();
+            });
+        });
+
+        test('Should throw an error when awaited and the ms parameter is null', async () => {
+            try {
+                await helpers.sleepAsync(null);
+            } catch (err) {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+            }
+        });
+
+        test('Should reject the promise when the ms parameter is undefined', (done: () => void) => {
+            helpers.sleepAsync(undefined).catch((err: Error) => {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+                done();
+            });
+        });
+
+        test('Should throw an error when awaited and the ms parameter is undefined', async () => {
+            try {
+                await helpers.sleepAsync(undefined);
+            } catch (err) {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+            }
+        });
+
+        test('Should reject the promise when the ms parameter is negative', (done: () => void) => {
+            helpers.sleepAsync(-50).catch((err: Error) => {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+                done();
+            });
+        });
+
+        test('Should throw an error when awaited and the ms parameter is negative', async () => {
+            try {
+                await helpers.sleepAsync(-25);
+            } catch (err) {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+            }
+        });
+
+        test('Should reject the promise when the ms parameter is zero', (done: () => void) => {
+            helpers.sleepAsync(0).catch((err: Error) => {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+                done();
+            });
+        });
+
+        test('Should throw an error when awaited and the ms parameter is zero', async () => {
+            try {
+                await helpers.sleepAsync(0);
+            } catch (err) {
+                assert.deepEqual(err.message, invalidParamErrorMessage);
+                assert.isFalse(setTimeoutStub.called);
+            }
+        });
+
+        test('Should resolve the promise and call setTimeout with the specified amount of milliseconds', (done: () => void) => {
+            helpers.sleepAsync(ms).then(() => {
+                assert.isTrue(setTimeoutStub.called);
+                assert.deepEqual(setTimeoutStub.firstCall.args[1], ms);
+                done();
+            });
+        });
+
+        test('Should call setTimeout with the specified amount of ms when the ms parameter is valid', async () => {
+            try {
+                await helpers.sleepAsync(ms);
+                assert.isTrue(setTimeoutStub.called);
+                assert.deepEqual(setTimeoutStub.firstCall.args[1], ms);
+            } catch (err) {
+                assert.isTrue(false);
+            }
+        });
+    });
 });

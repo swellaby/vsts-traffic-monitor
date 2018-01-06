@@ -85,6 +85,37 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
     }
 
     /**
+     *
+     *
+     * @private
+     * @param {request.RequestResponse} httpResponse
+     *
+     * @returns
+     */
+    private buildBaseErrorMessage(httpResponse: request.RequestResponse): string {
+        let baseErrorMessage = 'VSTS User Activity API Call Failed.';
+        if (httpResponse && httpResponse.statusCode) {
+            baseErrorMessage += ' Response status code: ' + httpResponse.statusCode;
+        }
+        return baseErrorMessage;
+    }
+
+    /**
+     * Helper function that aides client-side throttling in
+     * calling the UsageSummary API based on the HTTP Response Headers.
+     *
+     * @private
+     * @param {request.RequestResponse} httpResponse
+     * @memberof VstsUtilizationApiUsageService
+     */
+    private async pauseForThrottlingDelay(httpResponse: request.RequestResponse) {
+        const retryDelay = +httpResponse.headers[VstsHelpers.vstsApiRetryAfterHeader];
+        if (retryDelay) {
+            await helpers.sleepAsync(retryDelay * 1000);
+        }
+    }
+
+    /**
      * Retrieves the VSTS usage records for the specified user on the specified account.
      *
      * @param {string} userId - The Id of the user in VSTS.
@@ -97,7 +128,6 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
      *
      * @returns {Promise<VstsUsageRecord[]>}
      */
-    // tslint:disable-next-line
     private getUserActivityInRange(userId: string, isoDateRange: IsoDateRange, vstsAccountName: string, accessToken: string)
         : Promise<VstsUsageRecord[]> {
         return new Promise<VstsUsageRecord[]>((resolve, reject) => {
@@ -105,20 +135,18 @@ class VstsUtilizationApiUsageService implements IVstsUsageService {
                 const url = VstsHelpers.buildUtilizationUsageSummaryApiUrl(vstsAccountName, userId, isoDateRange);
                 const options = VstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);
 
-                request.get(options, (err, response, data: string) => {
+                request.get(options, async (err, response: request.RequestResponse, data: string) => {
                     if (!err && response.statusCode === 200) {
                         try {
                             const apiResponse: IVstsUsageSummaryApiResponse = JSON.parse(data);
+                            await this.pauseForThrottlingDelay(response);
+
                             resolve(apiResponse.value);
                         } catch (err) {
                             reject(new Error('Invalid or unexpected JSON response from VSTS API. Unable to determine VSTS User Activity.'));
                         }
                     }
-                    let baseErrorMessage = 'VSTS User Activity API Call Failed.';
-                    if (response && response.statusCode) {
-                        baseErrorMessage += ' Response status code: ' + response.statusCode;
-                    }
-                    reject(new Error(baseErrorMessage));
+                    reject(new Error(this.buildBaseErrorMessage(response)));
                 });
             } catch (err) {
                 const errorMessage = 'Unable to retrieve VSTS User Activity. Error details: ';

@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "ip-address-scanner",
-    "version": "0.0.25",
+    "version": "0.0.26",
     "name": "IP Address Scanner",
     "publisher": "Swellaby",
     "description": "A build/release task for scanning the IP Addresses from the activity of your users on VSTS and comparing those addresses against a known/allowed range of addresses.",

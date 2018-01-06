@@ -812,4 +812,10 @@ suite('VSTS Helpers Suite:', () => {
             assert.deepEqual(vstsHelpers.appendContinuationToken(apiUrlBase, testHelpers.continuationToken), expectedNoExistingParamsApiUrl);
         });
     });
+
+    suite('vstsApiRetryAfterHeader Suite', () => {
+        test('Should have the correct retry-after HTTP header value', () => {
+            assert.deepEqual(vstsHelpers.vstsApiRetryAfterHeader, 'retry-after');
+        });
+    });
 });

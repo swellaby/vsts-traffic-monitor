@@ -22,6 +22,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
     let vstsUtilizationApiUsageService: VstsUtilizationApiUsageService;
     let vstsHelpersbuildUtilizationUsageSummaryApiUrlStub: Sinon.SinonStub;
     let vstsHelpersBuildRestApiBasicAuthRequestOptionsStub: Sinon.SinonStub;
+    let helpersSleepAsyncStub: Sinon.SinonStub;
     const accountName = 'excellence';
     const empty = testHelpers.emptyString;
     const invalidAccountName = ')123*&^&$ 78587@#!$6-';
@@ -44,6 +45,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
     const expectedUserIdErrorMessage = apiCallBaseErrorMessage + invalidUserIdErrorMessage;
     const expectedAccountErrorMessage = apiCallBaseErrorMessage + invalidAccountErrorMessage;
     const expectedTokenErrorMessage = apiCallBaseErrorMessage + invalidTokenErrorMessage;
+    const throttlePeriodSeconds = 20;
+    const throttlePeriodMilliseconds = throttlePeriodSeconds * 1000;
+    const httpResponseWithThrottleHeader = {
+        statusCode: testHelpers.http200Response.statusCode,
+        headers: {
+            'retry-after': throttlePeriodSeconds
+        }
+    };
 
     setup(() => {
         vstsUtilizationApiUsageService = new VstsUtilizationApiUsageService();
@@ -53,6 +62,9 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         });
         vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
             throw new Error(invalidTokenErrorMessage);
+        });
+        helpersSleepAsyncStub = sandbox.stub(helpers, 'sleepAsync').callsFake((ms: number) => {
+            return Promise.resolve();
         });
     });
 
@@ -1774,6 +1786,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 const usageRecords = await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
                 assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
                 assert.deepEqual(usageRecords, testHelpers.usageRecords);
+            });
+
+            test('Should throttle for the specified time when the HTTP Response requests throttling', async () => {
+                requestGetStub.yields(null, httpResponseWithThrottleHeader, testHelpers.usageRecordsJson);
+                const usageRecords = await vstsUtilizationApiUsageService.getUserActivityFromYesterday(validUserId, accountName, pat);
+                assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
+                assert.deepEqual(usageRecords, testHelpers.usageRecords);
+                assert.isTrue(helpersSleepAsyncStub.calledWith(throttlePeriodMilliseconds));
             });
         });
     });
@@ -4735,7 +4755,6 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         });
 
         suite('Invalid userId Suite:', () => {
-
             suite('Null date Suite:', () => {
                 test('Should reject the promise when userId is invalid, date is null, accountName is null, and accessToken is null', (done: () => void) => {
                     vstsUtilizationApiUsageService.getUserActivityOnDate(invalidUserId, null, null, null).catch((err: Error) => {
@@ -7356,6 +7375,14 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 const usageRecords = await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
                 assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
                 assert.deepEqual(usageRecords, testHelpers.usageRecords);
+            });
+
+            test('Should throttle for the specified time when the HTTP Response requests throttling', async () => {
+                requestGetStub.yields(null, httpResponseWithThrottleHeader, testHelpers.usageRecordsJson);
+                const usageRecords = await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
+                assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
+                assert.deepEqual(usageRecords, testHelpers.usageRecords);
+                assert.isTrue(helpersSleepAsyncStub.calledWith(throttlePeriodMilliseconds));
             });
         });
     });

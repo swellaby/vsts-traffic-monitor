@@ -84,3 +84,25 @@ export const getLast24HoursUtcDateRange = (): IsoDateRange => {
 
     return new IsoDateRange(startTime, endTime);
 };
+
+/**
+ * An awaitable function that allows for pausing/sleeping without blocking
+ * the main Node.js event loop.
+ *
+ * @param {number} ms - The amount of milliseconds to wait/pause for.
+ * @returns {Promise<void>} - An awaitable promise.
+ */
+export const sleepAsync = (ms: number) => {
+    return new Promise((resolve, reject) => {
+        if (!ms || ms <= 0) {
+            reject(new Error('Invalid parameter. Parameter ms must be a valid, positive number.'));
+        } else {
+            // The below disable is temporary due to a bug in the latest stable release (v5.0.1) of TSLint Microsoft Contrib.
+            // See PR #402 @ https://github.com/Microsoft/tslint-microsoft-contrib/pull/402 and
+            // Issue #355 @ https://github.com/Microsoft/tslint-microsoft-contrib/issues/355. This can be removed once
+            // v5.0.2 is released.
+            // tslint:disable-next-line:no-string-based-set-timeout
+            setTimeout(resolve, ms);
+        }
+    });
+};

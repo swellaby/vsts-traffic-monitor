@@ -81,6 +81,12 @@ export const vstsApiContinuationTokenHeader = 'x-ms-continuationtoken';
 export const vstsApiContinuationTokenQueryParameter = 'continuationToken';
 
 /**
+ * The HTTP header VSTS uses when an account is being throttled to
+ * inform the client how long to wait before making subsequent API calls.
+ */
+export const vstsApiRetryAfterHeader = 'retry-after';
+
+/**
  * Helper for forming REST API Urls.
  *
  * @param accountName
