@@ -29,7 +29,7 @@ suite('VSTS Graph API User Service Suite:', () => {
     const errorMessageBase = 'Encountered a fatal error while retrieving the complete set of VSTS users. ';
     const errorMessageDetails = 'Specific details of information';
     const vstsHelpersErrorMessageDetails = 'invalid arg';
-    const errorMessage = errorMessageBase + errorMessageDetails;
+    // const errorMessage = errorMessageBase + errorMessageDetails;
     const graphApiThrownErrorMessage = errorMessageBase + apiCallErrorMessageBase + errorMessageDetails;
     const vstsHelpersErrorMessage = errorMessageBase + vstsHelpersErrorMessageDetails;
     const apiCallFailedErrorMessageSuffix = 'VSTS User API Call Failed.';
@@ -358,6 +358,7 @@ suite('VSTS Graph API User Service Suite:', () => {
             requestGetStub.onFirstCall().yields(null, testHelpers.http200Response, testHelpers.mixedOriginVstsGraphUsersApiJson);
             requestGetStub.yields(null, testHelpers.http200Response, testHelpers.storageKeyApiJson);
             const users = await vstsGraphApiUserService.getAADUsers(accountName, pat);
+            assert.isNotNull(users);
             assert.isTrue(vstsHelpersBuildGraphApiUsersUrlStub.calledWith(accountName, [ vstsConstants.aadGraphSubjectType ]));
         });
     });
@@ -667,6 +668,7 @@ suite('VSTS Graph API User Service Suite:', () => {
             requestGetStub.onFirstCall().yields(null, testHelpers.http200Response, testHelpers.mixedOriginVstsGraphUsersApiJson);
             requestGetStub.yields(null, testHelpers.http200Response, testHelpers.storageKeyApiJson);
             const users = await vstsGraphApiUserService.getAllUsers(accountName, pat);
+            assert.isNotNull(users);
             assert.isTrue(vstsHelpersBuildGraphApiUsersUrlStub.calledWith(accountName, undefined));
         });
     });

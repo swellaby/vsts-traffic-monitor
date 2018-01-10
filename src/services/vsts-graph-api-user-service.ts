@@ -59,7 +59,7 @@ class VstsGraphApiUserService implements IVstsUserService {
      * @memberof VstsGraphApiUserService
      */
     private getUserStorageKey(user: VstsUser, vstsAccountName: string, accessToken: string): Promise<VstsStorageKey> {
-        return new Promise<VstsStorageKey>((resolve, reject) => {
+        return new Promise<VstsStorageKey>((resolve) => {
             try {
                 const url = VstsHelpers.buildStorageKeyApiUrl(vstsAccountName, user);
                 const options = VstsHelpers.buildRestApiBasicAuthRequestOptions(url, accessToken);

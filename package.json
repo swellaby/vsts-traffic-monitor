@@ -1,7 +1,7 @@
 {
   "name": "vsts-traffic-monitor",
   "description": "Monitors traffic on a VS Team Services account ",
-  "version": "0.4.7-beta",
+  "version": "0.7.2-beta",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/swellaby/vsts-traffic-monitor",

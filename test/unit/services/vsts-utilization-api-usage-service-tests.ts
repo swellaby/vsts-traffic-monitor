@@ -63,7 +63,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
             throw new Error(invalidTokenErrorMessage);
         });
-        helpersSleepAsyncStub = sandbox.stub(helpers, 'sleepAsync').callsFake((ms: number) => {
+        helpersSleepAsyncStub = sandbox.stub(helpers, 'sleepAsync').callsFake(() => {
             return Promise.resolve();
         });
     });

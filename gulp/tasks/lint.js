@@ -9,8 +9,7 @@ const tslint = require('tslint');
 const gulpConfig = require('./../gulp-config');
 
 gulp.task('eslint', ['transpile'], function () {
-    return gulp.src('./gulp/gulp-config.js')
-    // return gulp.src(gulpConfig.allJavascript)
+    return gulp.src(gulpConfig.allJavascript)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());

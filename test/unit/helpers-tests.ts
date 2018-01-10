@@ -229,6 +229,7 @@ suite('Helpers Suite:', () => {
 
         setup(() => {
             clock = sandbox.useFakeTimers();
+            // eslint-disable-next-line no-unused-vars
             setTimeoutStub = sandbox.stub(clock, 'setTimeout').callsFake((resolve, ms) => { resolve(); });
         });
 
