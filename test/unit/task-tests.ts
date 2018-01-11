@@ -61,6 +61,7 @@ suite('Task Suite:', () => {
         'This is not supposed to happen :) Please open an issue on GitHub at https://github.com/swellaby/vsts-traffic-monitor/issues.';
     const scanFailureErrorMessageBase = 'An error occurred while attempting to execute the scan. Error details: ';
     const scanFailureTaskFailureMessage = 'Failing the task because the scan was not successfully executed.';
+    const scanStartedInfoMessage = 'Starting the scan. Note that the scan may take a while if you have a large number of users in your VSTS account';
 
     /**
      * Helper function for initializing stubs.
@@ -108,6 +109,7 @@ suite('Task Suite:', () => {
             assert.isTrue(tlGetInputStub.calledWith(userOriginKey, true));
             assert.isTrue(tlGetDelimitedInputStub.calledWith('ipRange', '\n', true));
             assert.isTrue(tlGetBoolInput.calledWith(includeInternalVstsServicesKey, true));
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
         });
 
         test('Should handle fatal scan error correctly', async () => {
@@ -123,6 +125,7 @@ suite('Task Suite:', () => {
         test('Should still print scan parameters when fatal error occurs', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(vstsAccountParamDisplayMessageBase + accountName));
             assert.isTrue(taskLoggerLogStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod]));
             assert.isTrue(taskLoggerLogStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin]));
@@ -132,6 +135,7 @@ suite('Task Suite:', () => {
         test('Should display correct error message when internal VSTS traffic is excluded', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(excludeInternalVstsDisplayMessage));
         });
 
@@ -139,12 +143,14 @@ suite('Task Suite:', () => {
             tlGetBoolInput.withArgs(includeInternalVstsServicesKey, true).callsFake(() => true);
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => { throw new Error(); });
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(includeInternalVstsDisplayMessage));
         });
 
         test('Should correctly handle when undefined scan report is returned', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => undefined);
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(vstsAccountParamDisplayMessageBase + accountName));
             assert.isTrue(taskLoggerLogStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod]));
             assert.isTrue(taskLoggerLogStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin]));
@@ -158,6 +164,7 @@ suite('Task Suite:', () => {
         test('Should correctly handle when null scan report is returned', async () => {
             vstsUsageMonitorScanForOutOfRangeIpAddressesStub.callsFake(() => null);
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(vstsAccountParamDisplayMessageBase + accountName));
             assert.isTrue(taskLoggerLogStub.calledWith(scanPeriodParamDisplayMessageBase + vstsUsageScanTimePeriod[scanPeriod]));
             assert.isTrue(taskLoggerLogStub.calledWith(userOriginParamDisplayMessageBase + vstsUserOrigin[userOrigin]));
@@ -175,6 +182,7 @@ suite('Task Suite:', () => {
             scanReport.errorMessage = scanErrorMessage;
             scanReport.debugErrorMessage = scanDebugErrorMessage;
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(tlErrorStub.calledWith(scanFailureErrorMessageBase + scanErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));
             assert.isTrue(tlDebugStub.calledWith(scanDebugErrorMessage));
@@ -189,6 +197,7 @@ suite('Task Suite:', () => {
             const errorMessage = 'Failed to retrieve usage records for 1 user(s).';
             scanReport.usageRetrievalErrorUsers.push(unscannedUser);
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(tlErrorStub.calledWith(errorMessage));
             assert.isTrue(tlErrorStub.calledWith(retrievalErrorMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, scanFailureTaskFailureMessage));
@@ -262,6 +271,7 @@ suite('Task Suite:', () => {
 
         test('Should display correct usage details when the report contains flagged activity', async () => {
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.deepEqual(scanReport.numUsersWithFlaggedRecords, 2);
             assert.isTrue(tlErrorStub.calledWith(2 + flaggedUsersErrorMessageSuffix));
             assert.isTrue(taskLoggerLogStub.calledWith(normTotalRecordsErrorMessage));
@@ -275,6 +285,7 @@ suite('Task Suite:', () => {
         test('Should display correct usage details when the report contains unscanned activity', async () => {
             addUnscannedUserRecordsToScanReport();
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.deepEqual(scanReport.unscannedUserActivityReports.length, 1);
             assert.isTrue(tlErrorStub.calledWith('Unable to scan the usage records for: 1 user(s).'));
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));
@@ -286,11 +297,13 @@ suite('Task Suite:', () => {
 
         test('Should fail the task when there are flagged records but no failed scan records', async () => {
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, failedTaskErrorMessage));
         });
 
         test('Should fail the task when there are flagged records and failed scan records', async () => {
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, failedTaskErrorMessage));
         });
 
@@ -298,12 +311,14 @@ suite('Task Suite:', () => {
             removeFlaggedUserRecordsFromScanReport();
             addUnscannedUserRecordsToScanReport();
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, failedTaskErrorMessage));
         });
 
         test('Should display usage metrics when scan completes successfully', async () => {
             removeFlaggedUserRecordsFromScanReport();
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(displayUserCountMessagePrefix + 3 + displayUserCountMessageSuffix));
             assert.isTrue(taskLoggerLogStub.calledWith(displayNumRecordsScannedPrefix + 128 + displayNumRecordsScannedSuffix));
         });
@@ -311,6 +326,7 @@ suite('Task Suite:', () => {
         test('Should set the final task result to succeeded when there are no flagged nor failed user scan results', async () => {
             removeFlaggedUserRecordsFromScanReport();
             await task.run();
+            assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.isTrue(taskLoggerLogStub.calledWith(taskSuccededMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Succeeded, null));
         });

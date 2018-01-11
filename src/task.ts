@@ -246,7 +246,7 @@ export const run = async () => {
     try {
         initialize();
         const requestParams = buildScanRequest();
-        taskLogger.log('Scan process has begun. Note that the scan may take a while if you have a large number of users in your VSTS account');
+        taskLogger.log('Starting the scan. Note that the scan may take a while if you have a large number of users in your VSTS account');
         const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(requestParams);
         reviewScanReport(scanReport);
     } catch (err) {
