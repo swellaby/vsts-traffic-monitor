@@ -11,6 +11,7 @@ import vstsUsageScanTimePeriod = require('./enums/vsts-usage-scan-time-period');
 import VstsUsageRecord = require('./models/vsts-usage-record');
 import VstsUserActivityReport = require('./models/vsts-user-activity-report');
 import vstsUserOrigin = require('./enums/vsts-user-origin');
+import { scanRecords } from './vsts-usage-scanner-engine';
 
 const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses.';
 const enableDebuggingMessage = 'Enable debugging to receive more detailed error information.';
@@ -211,7 +212,7 @@ const reviewUserScanResults = (scanReport: IpAddressScanReport) => {
         displayUnscannedUserInformation(scanReport.unscannedUserActivityReports);
     }
 
-    if (scanPassed) {
+    if (scanPassed && scanReport.completedSuccessfully) {
         taskLogger.log('All activity originated from within the specified range(s) of IP Addresses.');
         tl.setResult(tl.TaskResult.Succeeded, null);
     } else {
@@ -232,7 +233,7 @@ const reviewScanReport = (scanReport: IpAddressScanReport) => {
     }
 
     if (!scanReport.completedSuccessfully) {
-        return handleScanFailure(scanReport);
+        handleScanFailure(scanReport);
     }
 
     displayUsageMetrics(scanReport);
