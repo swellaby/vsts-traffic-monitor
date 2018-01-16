@@ -11,7 +11,6 @@ import vstsUsageScanTimePeriod = require('./enums/vsts-usage-scan-time-period');
 import VstsUsageRecord = require('./models/vsts-usage-record');
 import VstsUserActivityReport = require('./models/vsts-user-activity-report');
 import vstsUserOrigin = require('./enums/vsts-user-origin');
-import { scanRecords } from './vsts-usage-scanner-engine';
 
 const fatalErrorMessage = 'Fatal error encountered. Unable to scan IP Addresses.';
 const enableDebuggingMessage = 'Enable debugging to receive more detailed error information.';
@@ -87,18 +86,27 @@ const handleUnscannedUserErrors = (scanReport: IpAddressScanReport) => {
 };
 
 /**
- * Handles execution when the scan report shows a fatal error occurred.
+ * Handles any users that were unabled to be scanned.
  *
  * @param {IpAddressScanReport} scanReport - The report of object with details of the completed scan.
  * @private
  */
-const handleScanFailure = (scanReport: IpAddressScanReport) => {
-    tl.error('An error occurred while attempting to execute the scan. Error details: ' + scanReport.errorMessage);
+const handleUnscannedUsers = (scanReport: IpAddressScanReport) => {
     const unscannedUsers = scanReport.usageRetrievalErrorUsers;
     if (unscannedUsers.length > 0) {
         tl.error('Failed to retrieve usage records for ' + unscannedUsers.length + ' user(s).');
         handleUnscannedUserErrors(scanReport);
     }
+};
+
+/**
+ * Handles execution when the scan report shows a fatal error occurred.
+ *
+ * @param {IpAddressScanReport} scanReport - The report of object with details of the completed scan.
+ * @private
+ */
+const handleScanError = (scanReport: IpAddressScanReport) => {
+    tl.error('An error occurred while attempting to execute the scan. Error details: ' + scanReport.errorMessage);
     tl.error(enableDebuggingMessage);
     tl.debug(scanReport.debugErrorMessage);
     failTask('Failing the task because the scan was not successfully executed.');
@@ -127,8 +135,8 @@ const printScanParameters = () => {
  * @private
  */
 const displayUsageMetrics = (scanReport: IpAddressScanReport) => {
-    taskLogger.log('There were: ' + scanReport.numUsersActive + ' user(s) from the specified user origin that were active during the specified period.');
-    taskLogger.log('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage records were analyzed.');
+    taskLogger.log('The usage records of: ' + scanReport.numUsersActive + ' user(s) were analyzed.');
+    taskLogger.log('A total of: ' + scanReport.totalUsageRecordsScanned + ' usage record(s) were analyzed.');
 };
 
 /**
@@ -199,7 +207,7 @@ const displayUnscannedUserInformation = (unscannedUserActivityReports: VstsUserA
  * @param {IpAddressScanReport} scanReport - The report with details of the completed scan.
  * @private
  */
-const reviewUserScanResults = (scanReport: IpAddressScanReport) => {
+const determineUserScanResult = (scanReport: IpAddressScanReport): boolean => {
     let scanPassed = true;
 
     if (scanReport.flaggedUserActivityReports.length > 0) {
@@ -212,12 +220,7 @@ const reviewUserScanResults = (scanReport: IpAddressScanReport) => {
         displayUnscannedUserInformation(scanReport.unscannedUserActivityReports);
     }
 
-    if (scanPassed && scanReport.completedSuccessfully) {
-        taskLogger.log('All activity originated from within the specified range(s) of IP Addresses.');
-        tl.setResult(tl.TaskResult.Succeeded, null);
-    } else {
-        failTask('Scan result included matched/invalid records. The user and traffic details are in the output.');
-    }
+    return scanPassed;
 };
 
 /**
@@ -232,12 +235,20 @@ const reviewScanReport = (scanReport: IpAddressScanReport) => {
         return handleInvalidScanReport();
     }
 
+    displayUsageMetrics(scanReport);
+    handleUnscannedUsers(scanReport);
+    const scanPassed = determineUserScanResult(scanReport);
+
     if (!scanReport.completedSuccessfully) {
-        handleScanFailure(scanReport);
+       return handleScanError(scanReport);
     }
 
-    displayUsageMetrics(scanReport);
-    reviewUserScanResults(scanReport);
+    if (scanPassed) {
+        taskLogger.log('All activity originated from within the specified range(s) of IP Addresses.');
+        tl.setResult(tl.TaskResult.Succeeded, null);
+    } else {
+        failTask('Scan result included matched/invalid records. The user and traffic details are in the output.');
+    }
 };
 
 /**

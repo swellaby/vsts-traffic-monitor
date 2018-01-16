@@ -62,6 +62,13 @@ suite('Task Suite:', () => {
     const scanFailureErrorMessageBase = 'An error occurred while attempting to execute the scan. Error details: ';
     const scanFailureTaskFailureMessage = 'Failing the task because the scan was not successfully executed.';
     const scanStartedInfoMessage = 'Starting the scan. Note that the scan may take a while if you have a large number of users in your VSTS account';
+    const failedTaskErrorMessage = 'Scan result included matched/invalid records. The user and traffic details are in the output.';
+    const displayUserCountMessagePrefix = 'The usage records of: ';
+    const displayUserCountMessageSuffix = ' user(s) were analyzed.';
+    const displayNumRecordsScannedPrefix = 'A total of: ';
+    const displayNumRecordsScannedSuffix = ' usage record(s) were analyzed.';
+    const zeroUsersScannedDisplayMessage = displayUserCountMessagePrefix + '0' + displayUserCountMessageSuffix;
+    const zeroUsageRecordsScannedDisplayMessage = displayNumRecordsScannedPrefix + '0' + displayNumRecordsScannedSuffix;
 
     /**
      * Helper function for initializing stubs.
@@ -187,6 +194,8 @@ suite('Task Suite:', () => {
             assert.isTrue(tlErrorStub.calledWith(enableDebuggingMessage));
             assert.isTrue(tlDebugStub.calledWith(scanDebugErrorMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, scanFailureTaskFailureMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(zeroUsersScannedDisplayMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(zeroUsageRecordsScannedDisplayMessage));
         });
 
         test('Should correctly handle usage retrieval errors', async () => {
@@ -201,15 +210,12 @@ suite('Task Suite:', () => {
             assert.isTrue(tlErrorStub.calledWith(errorMessage));
             assert.isTrue(tlErrorStub.calledWith(retrievalErrorMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Failed, scanFailureTaskFailureMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(zeroUsersScannedDisplayMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(zeroUsageRecordsScannedDisplayMessage));
         });
     });
 
     suite('scanCompletedSuccessfully Suite:', () => {
-        const failedTaskErrorMessage = 'Scan result included matched/invalid records. The user and traffic details are in the output.';
-        const displayUserCountMessagePrefix = 'There were: ';
-        const displayUserCountMessageSuffix = ' user(s) from the specified user origin that were active during the specified period.';
-        const displayNumRecordsScannedPrefix = 'A total of: ';
-        const displayNumRecordsScannedSuffix = ' usage records were analyzed.';
         const taskSuccededMessage = 'All activity originated from within the specified range(s) of IP Addresses.';
         const flaggedUsersErrorMessageSuffix = ' user(s) accessed the VSTS account from an unallowed IP Address that was outside the specified range.';
         const flaggedUserRecordsErrorMessagePrefix = 'User: ';
