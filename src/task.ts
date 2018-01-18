@@ -175,8 +175,8 @@ const displayFlaggedUserInformation = (flaggedUserActivityReports: VstsUserActiv
         const user = userActivityReport.user;
         const numFlaggedRecords = userActivityReport.matchedUsageRecords.length;
         const totalUsageRecords = userActivityReport.allUsageRecords.length;
-        taskLogger.log('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage entries during the scan period.');
-        tl.error('User: ' + user.displayName + ' had: ' + numFlaggedRecords + ' usage entries from an unallowed IP Address.');
+        taskLogger.log('User: ' + user.displayName + ' had: ' + totalUsageRecords + ' total usage record(s) during the scan period.');
+        tl.error('User: ' + user.displayName + ' had: ' + numFlaggedRecords + ' usage record(s) from an unallowed IP Address.');
         writeTaskErrorMessageForUsageRecords(userActivityReport.matchedUsageRecords);
     });
 };
