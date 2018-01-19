@@ -299,6 +299,8 @@ suite('Task Suite:', () => {
             assert.isTrue(tlDebugStub.calledWith('Error details: '));
             assert.isTrue(tlDebugStub.calledWith('woops'));
             assert.isTrue(tlDebugStub.calledWith('ouch'));
+            assert.isTrue(taskLoggerLogStub.calledWith(displayUserCountMessagePrefix + 3 + displayUserCountMessageSuffix));
+            assert.isTrue(taskLoggerLogStub.calledWith(displayNumRecordsScannedPrefix + 128 + displayNumRecordsScannedSuffix));
         });
 
         test('Should fail the task when there are flagged records but no failed scan records', async () => {
