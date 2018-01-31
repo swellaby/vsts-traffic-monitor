@@ -9,8 +9,7 @@ Provides capabilities that allow you to scan, analyze and monitor user traffic o
 
 ## Use Cases
 - Analyze the IP addresses that have accessed your VSTS account(s)
-- Make sure your users are accessing your VSTS account(s) from specific machines/networks
-- Make sure no strangers are accessing your VSTS account(s) :) 
+- Make sure your users are accessing your VSTS account(s) only from known machines/networks
   
 ## How to Use
 The capabilities are currently exposed as:
