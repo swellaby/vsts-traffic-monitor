@@ -8,11 +8,13 @@ Provides capabilities that allow you to scan, analyze and monitor user traffic o
 [![VSTS Badge][supercharge-vsts-badge]][vsts-url]
 
 ## Use Cases
-- Monitor which IP Addresses your users are using to access your VSTS account(s)
+- Analyze the IP addresses that have accessed your VSTS account(s)
+- Make sure your users are accessing your VSTS account(s) from specific machines/networks
+- Make sure no strangers are accessing your VSTS account(s) :) 
   
 ## How to Use
 The capabilities are currently exposed as:
-- A build/release task for VSTS
+- [A build/release task for VSTS][extension-doc] - *this will be available as a [Marketplace Extension][vsts-marketplace-url] shortly*
 
 Future:
 - Docker image
@@ -38,3 +40,5 @@ Initially created by this [swell generator][parent-generator-url]!
 [sonar-quality-gate-badge]: https://sonarcloud.io/api/badges/gate?key=swellaby:vsts-traffic-monitor
 [sonar-url]: https://sonarcloud.io/dashboard/index/swellaby:vsts-traffic-monitor
 [contributingmd]: CONTRIBUTING.md
+[extension-doc]: docs/VSTS-TASK.md
+[vsts-marketplace-url]: https://marketplace.visualstudio.com/vsts
