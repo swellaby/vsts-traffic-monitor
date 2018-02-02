@@ -6,7 +6,7 @@
 [![License Badge][marketplace-rating-badge]][ext-marketplace-url]
 
 
-<img src="images/TravisCI-Mascot-2.png" width="25" height="25" /> [![Travis CI Badge][travis-ci-build-status-badge]][travis-ci-url]
+[![Travis CI Badge][travis-ci-build-status-badge]][travis-ci-url]
 [![Coveralls Badge][coveralls-badge]][coveralls-url]
 [![Sonar Quality Gate Badge][sonar-quality-gate-badge]][sonar-url]
 [![License Badge][license-badge]][repo-url]  
@@ -15,6 +15,8 @@
 Provides capabilities that allow you to analyze the IP Addresses that have accessed your VSTS account, and cross-reference those IP Addresses against a known/whitelisted set of IP Addresses that you define. Some use cases:  
 - Analyze the IP addresses that have accessed your VSTS account(s)
 - Make sure your users are accessing your VSTS account(s) only from known machines/networks (such as your corporate network)
+
+*The intra-document navigation links below are working on the [GitHub Page][github-ref-url] but not on the [Marketplace hosted page][ext-marketplace-url]. You may want to use [GitHub Page][github-ref-url] for reviewing the more detailed documentation sections for easier navigation.*
 
 ## Usage
 The extension currently provides the ability to scan IP Addresses via a VSTS build/release task which is added to your VSTS account when you install the extension. The IP Address Scanner task will provide information about the scan results and will fail the build/release if anyone accessed the VSTS account from outside the IP range you define. [Why is the scanner provided in a Build/Release Task?][background-section]  
@@ -123,9 +125,6 @@ Here's a closer view that shows the details of the flagged usage records from th
 Account Admins also have the ability to manually review all of the information for all users under the `Usage` hub from the admin portal `https://{{account}}.visualstudio.com/_admin`
 
 
-
-
-  
 [Back to Task Configuration Section][task-config-section]
 
 ## Disclaimer !!!!!!!!!!!
@@ -192,3 +191,4 @@ Initially created by this [swell generator][parent-generator-url]!
 [tfx-url]: https://github.com/Microsoft/tfs-cli
 [vsts-azure-ad-doc-url]: https://docs.microsoft.com/en-us/vsts/accounts/connect-account-to-aad
 [msa-doc-url]: https://account.microsoft.com/account
+[github-ref-url]: https://github.com/swellaby/vsts-traffic-monitor/blob/master/docs/VSTS-TASK.md

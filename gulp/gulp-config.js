@@ -34,7 +34,7 @@ module.exports = {
     ],
     vstsExtensionManifest: vssExtensionManifest,
     vstsExtensionImages: [
-        'docs/images/task-swell-green-128.png',
+        'docs/images/**/*',
     ],
     vstsPublishImageRoot: vstsPublishImageRoot,
     allJavascript: [

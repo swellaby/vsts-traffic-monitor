@@ -1,9 +1,10 @@
 {
     "manifestVersion": 1,
     "id": "ip-address-scanner",
-    "version": "0.8.2",
+    "version": "0.8.7",
     "name": "IP Address Scanner",
     "publisher": "Swellaby",
+    "public": true,
     "description": "A build/release task for scanning the IP Addresses from the activity of your users on VSTS and comparing those addresses against a known/allowed range of addresses.",
     "targets": [
         {
@@ -28,7 +29,8 @@
         "Build and release"
     ],
     "gallery-flags": [
-        "Preview"
+        "Preview",
+        "Public"
     ],
     "branding": {
         "color": "rgb(44, 62, 80)",
