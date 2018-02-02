@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "ip-address-scanner",
-    "version": "0.0.28",
+    "version": "0.8.2",
     "name": "IP Address Scanner",
     "publisher": "Swellaby",
     "description": "A build/release task for scanning the IP Addresses from the activity of your users on VSTS and comparing those addresses against a known/allowed range of addresses.",
@@ -11,10 +11,11 @@
         }
     ],
     "icons": {
-        "default": "images/task-swell-green-128.png"
+        "default": "images/icons/task-swell-green-128.png"
     },
     "scopes": [
-        ""
+        "vso.extension",
+        "vso.profile"
     ],
     "tags": [
         "security",

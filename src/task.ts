@@ -151,11 +151,10 @@ const writeTaskErrorMessageForUsageRecords = (flaggedUsageRecords: VstsUsageReco
         const command = flaggedRecord.command;
         const ipAddress = flaggedRecord.ipAddress;
         const startTime = flaggedRecord.startTime;
-        const endTime = flaggedRecord.endTime;
         const userAgent = flaggedRecord.userAgent;
         const authMechanism = flaggedRecord.authenticationMechanism;
         const recordErrorMessage = 'IP Address: ' + ipAddress + ' Application: ' + application +
-            ' Command: ' + command + ' Start: ' + startTime + ' End: ' + endTime + ' UserAgent: ' + userAgent +
+            ' Command: ' + command + ' Start: ' + startTime + ' UserAgent: ' + userAgent +
             ' AuthenticationMechanism: ' + authMechanism;
 
         tl.error(recordErrorMessage);

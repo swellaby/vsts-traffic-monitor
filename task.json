@@ -14,7 +14,7 @@
   "version": {
     "Major": "0",
     "Minor": "8",
-    "Patch": "1"
+    "Patch": "3"
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "Scan IP Addresses",
@@ -33,7 +33,7 @@
       "label": "Personal Access Token",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "A personal Access Token (PAT) that has access to make REST API calls to the specified VSTS Account"
+      "helpMarkDown": "A personal Access Token (PAT) that has access to make REST API calls to the specified VSTS Account."
     },
     {
       "name": "ipRange",

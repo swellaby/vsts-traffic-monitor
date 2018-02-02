@@ -236,18 +236,18 @@ suite('Task Suite:', () => {
         const recordDetailApplicationMessage = ' Application: ';
         const recordDetailCommandMessage = ' Command: ';
         const recordDetailStartMessage = ' Start: ';
-        const recordDetailEndMessage = ' End: ';
+        // const recordDetailEndMessage = ' End: ';
         const recordDetailUserAgentMessage = ' UserAgent: ';
         const recordDetailAuthenticationMechanismAgentMessage = ' AuthenticationMechanism: ';
         const firstFlaggedUsageRecord = testHelpers.firstUsageRecord;
         const firstRecordDetailsMessage = recordDetailIpAddressMessage + firstFlaggedUsageRecord.ipAddress + recordDetailApplicationMessage +
             firstFlaggedUsageRecord.application + recordDetailCommandMessage + firstFlaggedUsageRecord.command + recordDetailStartMessage +
-            firstFlaggedUsageRecord.startTime + recordDetailEndMessage + firstFlaggedUsageRecord.endTime + recordDetailUserAgentMessage +
+            firstFlaggedUsageRecord.startTime + recordDetailUserAgentMessage +
             firstFlaggedUsageRecord.userAgent + recordDetailAuthenticationMechanismAgentMessage + firstFlaggedUsageRecord.authenticationMechanism;
         const secondFlaggedUsageRecord = testHelpers.secondUsageRecord;
         const secondRecordDetailsMessage = recordDetailIpAddressMessage + secondFlaggedUsageRecord.ipAddress + recordDetailApplicationMessage +
             secondFlaggedUsageRecord.application + recordDetailCommandMessage + secondFlaggedUsageRecord.command + recordDetailStartMessage +
-            secondFlaggedUsageRecord.startTime + recordDetailEndMessage + secondFlaggedUsageRecord.endTime + recordDetailUserAgentMessage +
+            secondFlaggedUsageRecord.startTime + recordDetailUserAgentMessage +
             secondFlaggedUsageRecord.userAgent + recordDetailAuthenticationMechanismAgentMessage + secondFlaggedUsageRecord.authenticationMechanism;
 
         /**
