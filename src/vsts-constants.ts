@@ -37,3 +37,5 @@ export const ipAddressIndiaSouth = '104.211.227.29';
 export const ipAddressWestEurope = '40.68.34.220';
 
 export const authMechanismValueForServiceToServiceCall = 'S2S_ServicePrincipal';
+
+export const userAgentPrefixValueForServiceToServiceCall = 'VSServices';

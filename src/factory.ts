@@ -9,8 +9,10 @@ import IUsageRecordOriginValidator = require('./interfaces/usage-record-origin-v
 import IVstsUsageService = require('./interfaces/vsts-usage-service');
 import IVstsUserService = require('./interfaces/vsts-user-service');
 import OutOfRangeIpAddressScannerRule = require('./scanner-rules/out-of-range-ip-address-scanner-rule');
+import VstsAuthMechanismUsageRecordOriginValidator = require('./validators/vsts-auth-mechanism-usage-record-origin-validator');
 import VstsIpAddressUsageRecordOriginValidator = require('./validators/vsts-ip-address-usage-record-origin-validator');
 import VstsGraphApiUserService = require('./services/vsts-graph-api-user-service');
+import VstsUserAgentUsageRecordOriginValidator = require('./validators/vsts-user-agent-usage-record-origin-validator');
 import VstsUtilizationApiUsageService = require('./services/vsts-utilization-api-usage-service');
 
 /**
@@ -32,13 +34,16 @@ export const getVstsUserService = (): IVstsUserService => {
 };
 
 /**
- *
+ * Provides the set of UsageRecordOriginValidators (@see {@link IUsageRecordOriginValidator}) to
+ * be used in analyzing and validating the origin of VSTS Usage Records.
  */
 export const getUsageRecordOriginValidators = (): IUsageRecordOriginValidator[] => {
-    const internalVstsCallAttributes: IUsageRecordOriginValidator[] = [];
-    internalVstsCallAttributes.push(new VstsIpAddressUsageRecordOriginValidator());
+    const usageRecordOriginValidators: IUsageRecordOriginValidator[] = [];
+    usageRecordOriginValidators.push(new VstsIpAddressUsageRecordOriginValidator());
+    usageRecordOriginValidators.push(new VstsAuthMechanismUsageRecordOriginValidator());
+    usageRecordOriginValidators.push(new VstsUserAgentUsageRecordOriginValidator());
 
-    return internalVstsCallAttributes;
+    return usageRecordOriginValidators;
 };
 
 /**

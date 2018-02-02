@@ -60,4 +60,8 @@ suite('VstsConstants Suite:', () => {
     test('Should have correct AuthenticationMechanism value for Internal VSTS Service-To-Service call', () => {
         assert.deepEqual(vstsConstants.authMechanismValueForServiceToServiceCall, 'S2S_ServicePrincipal');
     });
+
+    test('Should have correct UserAgent prefix value for Internal VSTS Service-To-Service call', () => {
+        assert.deepEqual(vstsConstants.userAgentPrefixValueForServiceToServiceCall, 'VSServices');
+    });
 });
