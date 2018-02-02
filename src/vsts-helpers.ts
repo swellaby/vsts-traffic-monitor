@@ -2,6 +2,8 @@
 
 import formatValidator = require('./format-validator');
 import IsoDateRange = require('./models/iso-date-range');
+import IUsageRecordOriginValidator = require('./interfaces/usage-record-origin-validator');
+import VstsUsageRecord = require('./models/vsts-usage-record');
 import VstsUser = require('./models/vsts-user');
 
 /**
@@ -227,4 +229,27 @@ export const appendContinuationToken = (apiUrl: string, continuationToken: strin
     }
 
     return apiUrl + parameterSeparator + queryParameter;
+};
+
+/**
+ * Determines whether the specified usageRecord is representative of
+ * an internal VSTS service-to-service call.
+ *
+ * @param {VstsUsageRecord} usageRecord - The usage record to review.
+ * @returns {boolean}
+ */
+export const isInternalVstsServiceToServiceCall = (usageRecord: VstsUsageRecord, usageRecordOriginValidators: IUsageRecordOriginValidator[]): boolean => {
+    if (!usageRecord || !usageRecordOriginValidators) {
+        throw new Error('Invalid parameter(s). Must specify a valid usageRecord and usageRecordOriginValidators');
+    }
+
+    for (const usageRecordOriginValidator of usageRecordOriginValidators) {
+        const isInternalVstsApiCall = usageRecordOriginValidator.isInternalVstsServiceToServiceCallOrigin(usageRecord);
+
+        if (isInternalVstsApiCall) {
+            return true;
+        }
+    }
+
+    return false;
 };

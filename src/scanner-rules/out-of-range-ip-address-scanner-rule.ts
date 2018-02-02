@@ -1,13 +1,16 @@
 'use strict';
 
 import IOutOfRangeIpAddressScannerRule = require('./../interfaces/out-of-range-ip-address-scanner-rule');
+import IUsageRecordOriginValidator = require('./../interfaces/usage-record-origin-validator');
+import vstsHelpers = require('./../vsts-helpers');
 import VstsUsageRecord = require('./../models/vsts-usage-record');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
 
 /**
- * Implementation of the @see {@link }
+ * Implementation of the @see {@link IOutOfRangeIpAddressScannerRule} interface
+ * that uses the range_check library.
  *
  * @class OutOfRangeIpAddressScannerRule
  * @implements {IOutOfRangeIpAddressScannerRule}
@@ -15,6 +18,7 @@ const ipRangeHelper = require('range_check'); // There is not a typedefinition f
 class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule {
     private allowedIpRanges: string[];
     private includeInternalVstsServices: boolean;
+    private usageRecordOriginValidators: IUsageRecordOriginValidator[];
 
     /**
      * Creates a new instance
@@ -24,15 +28,16 @@ class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule 
      *
      * @throws {Error} - Will throw an error on invalid input.
      */
-    constructor (allowedIpRanges: string[], includeInternalVstsServices: boolean) {
-        if (!allowedIpRanges || allowedIpRanges.length === 0) {
-            throw new Error('Invalid constructor parameters. allowedIpRanges parameter must be a non-empty array of valid values.');
+    constructor (allowedIpRanges: string[], includeInternalVstsServices: boolean, usageRecordOriginValidators?: IUsageRecordOriginValidator[]) {
+        if (!allowedIpRanges || allowedIpRanges.length === 0 || !usageRecordOriginValidators) {
+            throw new Error('Invalid constructor parameters. allowedIpRanges parameter must be a non-empty array of valid values and usageRecordValidators must be specified.');
         }
 
         this.validateIpRangeValues(allowedIpRanges);
 
         this.allowedIpRanges = allowedIpRanges;
         this.includeInternalVstsServices = includeInternalVstsServices;
+        this.usageRecordOriginValidators = usageRecordOriginValidators;
     }
 
     /**
@@ -56,7 +61,9 @@ class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule 
 
         const ipAddress = usageRecord.ipAddress;
         if (ipAddress && !ipRangeHelper.inRange(ipAddress, this.allowedIpRanges)) {
-            if (usageRecord.userAgent.indexOf('VSServices') === 0) {
+            // This usageRecord came from an IP outside the expected range. Check to see if it was created by VSTS itself before flagging it.
+            if (vstsHelpers.isInternalVstsServiceToServiceCall(usageRecord, this.usageRecordOriginValidators)) {
+            // if (usageRecord.userAgent.indexOf('VSServices') === 0) {
                 if (this.includeInternalVstsServices) {
                     return true;
                 }

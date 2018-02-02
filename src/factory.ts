@@ -5,9 +5,11 @@
  */
 
 import IOutOfRangeIpAddressScannerRule = require('./interfaces/out-of-range-ip-address-scanner-rule');
+import IUsageRecordOriginValidator = require('./interfaces/usage-record-origin-validator');
 import IVstsUsageService = require('./interfaces/vsts-usage-service');
 import IVstsUserService = require('./interfaces/vsts-user-service');
 import OutOfRangeIpAddressScannerRule = require('./scanner-rules/out-of-range-ip-address-scanner-rule');
+import VstsIpAddressUsageRecordOriginValidator = require('./validators/vsts-ip-address-usage-record-origin-validator');
 import VstsGraphApiUserService = require('./services/vsts-graph-api-user-service');
 import VstsUtilizationApiUsageService = require('./services/vsts-utilization-api-usage-service');
 
@@ -30,6 +32,16 @@ export const getVstsUserService = (): IVstsUserService => {
 };
 
 /**
+ *
+ */
+export const getUsageRecordOriginValidators = (): IUsageRecordOriginValidator[] => {
+    const internalVstsCallAttributes: IUsageRecordOriginValidator[] = [];
+    internalVstsCallAttributes.push(new VstsIpAddressUsageRecordOriginValidator());
+
+    return internalVstsCallAttributes;
+};
+
+/**
  * Provides a new instance of a @see {@link IOutOfRangeIpAddressScannerRule} implementation.
  *
  * @param {string[]} allowedIpRanges - The allowed set of IP Addresses or ranges.
@@ -40,5 +52,6 @@ export const getVstsUserService = (): IVstsUserService => {
  */
 export const getOutOfRangeIpAddressScannerRule =
     (allowedIpRanges: string[], includeInternalVstsServices: boolean): IOutOfRangeIpAddressScannerRule => {
-        return new OutOfRangeIpAddressScannerRule(allowedIpRanges, includeInternalVstsServices);
+        const usageRecordOriginValidators = getUsageRecordOriginValidators();
+        return new OutOfRangeIpAddressScannerRule(allowedIpRanges, includeInternalVstsServices, usageRecordOriginValidators);
 };

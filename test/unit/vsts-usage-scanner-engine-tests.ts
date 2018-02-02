@@ -29,7 +29,7 @@ suite('VstsUsageScannerEngine Suite:', () => {
         let ruleScanRecordForMatchStub: Sinon.SinonStub;
 
         setup(() => {
-            ruleStub = new OutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false);
+            ruleStub = new OutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false, testHelpers.usageRecordOriginValidators);
             ruleScanRecordForMatchStub = sandbox.stub(ruleStub, 'scanRecordForMatch').callsFake(() => {
                 return false;
             });

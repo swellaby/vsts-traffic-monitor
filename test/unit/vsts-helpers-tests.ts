@@ -3,6 +3,7 @@
 import Chai = require('chai');
 import Sinon = require('sinon');
 
+import IUsageRecordOriginValidator = require('./../../src/interfaces/usage-record-origin-validator');
 import IVstsGraphLink = require('./../../src/interfaces/vsts-graph-link');
 import IVstsUserGraphLinks = require('./../../src/interfaces/vsts-user-graph-links');
 import formatValidator = require('./../../src/format-validator');
@@ -816,6 +817,82 @@ suite('VSTS Helpers Suite:', () => {
     suite('vstsApiRetryAfterHeader Suite', () => {
         test('Should have the correct retry-after HTTP header value', () => {
             assert.deepEqual(vstsHelpers.vstsApiRetryAfterHeader, 'retry-after');
+        });
+    });
+
+    suite('isInternalVstsServiceToServiceCall Suite:', () => {
+        const firstUsageRecordOriginValidator = <IUsageRecordOriginValidator> {
+            isInternalVstsServiceToServiceCallOrigin: (): boolean => { return true; }
+        };
+        const invalidParamErrorMessage = 'Invalid parameter(s). Must specify a valid usageRecord and usageRecordOriginValidators';
+        const usageRecordOriginValidators: IUsageRecordOriginValidator[] = [];
+        let isInternalVstsServiceToServiceCallOriginStub: Sinon.SinonStub;
+
+        setup(() => {
+            isInternalVstsServiceToServiceCallOriginStub = sandbox.stub(firstUsageRecordOriginValidator, 'isInternalVstsServiceToServiceCallOrigin').callsFake(() => {
+                return false;
+            });
+            usageRecordOriginValidators.push(firstUsageRecordOriginValidator);
+        });
+
+        teardown(() => {
+            usageRecordOriginValidators.length = 0;
+        });
+
+        test('Should throw an error when usageRecord is null and originValidators array is null', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(null, null), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is null and originValidators array is undefined', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(null, undefined), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is null and originValidators array is empty', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(null, []), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is null and originValidators array is valid', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(null, usageRecordOriginValidators), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is undefined and originValidators array is null', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(undefined, null), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is undefined and originValidators array is undefined', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(undefined, undefined), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is undefined and originValidators array is empty', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(undefined, []), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is undefined and originValidators array is valid', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(undefined, usageRecordOriginValidators), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is valid and originValidators array is null', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(testHelpers.firstUsageRecord, null), invalidParamErrorMessage);
+        });
+
+        test('Should throw an error when usageRecord is valid and originValidators array is undefined', () => {
+            assert.throws(() => vstsHelpers.isInternalVstsServiceToServiceCall(testHelpers.firstUsageRecord, undefined), invalidParamErrorMessage);
+        });
+
+        test('Should return false when usageRecord is valid and originValidators array is empty', () => {
+            assert.isFalse(vstsHelpers.isInternalVstsServiceToServiceCall(testHelpers.firstUsageRecord, []));
+        });
+
+        test('Should return false usageRecord is valid and originValidators do not match the record origin', () => {
+            const isInternalVstsCall = vstsHelpers.isInternalVstsServiceToServiceCall(testHelpers.firstUsageRecord, usageRecordOriginValidators);
+            assert.isFalse(isInternalVstsCall);
+        });
+
+        test('Should return false usageRecord is valid and an originValidator does match the record origin', () => {
+            isInternalVstsServiceToServiceCallOriginStub.onSecondCall().callsFake(() => true);
+            usageRecordOriginValidators.push(firstUsageRecordOriginValidator);
+            const isInternalVstsCall = vstsHelpers.isInternalVstsServiceToServiceCall(testHelpers.firstUsageRecord, usageRecordOriginValidators);
+            assert.isTrue(isInternalVstsCall);
         });
     });
 });

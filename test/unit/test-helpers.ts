@@ -3,6 +3,7 @@
 import IOutOfRangeIpAddressScannerRule = require('./../../src/interfaces/out-of-range-ip-address-scanner-rule');
 import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
 import IsoDateRange = require('./../../src/models/iso-date-range');
+import IUsageRecordOriginValidator = require('./../../src/interfaces/usage-record-origin-validator');
 import IVstsGraphLink = require('./../../src/interfaces/vsts-graph-link');
 import IVstsGraphUsersApiResponse = require('./../../src/interfaces/vsts-graph-api-user-response');
 import IVstsUsageService = require('./../../src/interfaces/vsts-usage-service');
@@ -183,8 +184,22 @@ export const internalVstsServiceUsageRecord: VstsUsageRecord = <VstsUsageRecord>
     userAgent: 'VSServices/15.119.26629.2 (w3wp.exe) (Service=vsspsextprodch1su1)'
 };
 
+/**
+ * Helper function for creating some stub validators.
+ */
+const createUsageRecordOriginValidatorStub = (): IUsageRecordOriginValidator => {
+    return <IUsageRecordOriginValidator> {
+        isInternalVstsServiceToServiceCallOrigin: (): boolean => { return true; }
+    };
+};
+
+export const usageRecordOriginValidators: IUsageRecordOriginValidator[] = [
+    createUsageRecordOriginValidatorStub(),
+    createUsageRecordOriginValidatorStub()
+];
+
 export const buildOutOfRangeIpAddressScannerRule = (): IOutOfRangeIpAddressScannerRule => {
-    return new OutOfRangeIpAddressScannerRule(allowedIpRanges, false);
+    return new OutOfRangeIpAddressScannerRule(allowedIpRanges, false, usageRecordOriginValidators);
 };
 
 export const buildUsageServiceInstance = (): IVstsUsageService => {
