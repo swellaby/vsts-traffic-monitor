@@ -35,3 +35,5 @@ export const ipAddressEastAsia = '52.175.28.40';
 export const ipAddressIndiaSouth = '104.211.227.29';
 
 export const ipAddressWestEurope = '40.68.34.220';
+
+export const authMechanismValueForServiceToServiceCall = 'S2S_ServicePrincipal';

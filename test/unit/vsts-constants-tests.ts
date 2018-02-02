@@ -56,4 +56,8 @@ suite('VstsConstants Suite:', () => {
     test('Should have the correct ipAddress value for West Europe region', () => {
         assert.deepEqual(vstsConstants.ipAddressWestEurope, '40.68.34.220');
     });
+
+    test('Should have correct AuthenticationMechanism value for Internal VSTS Service-To-Service call', () => {
+        assert.deepEqual(vstsConstants.authMechanismValueForServiceToServiceCall, 'S2S_ServicePrincipal');
+    });
 });

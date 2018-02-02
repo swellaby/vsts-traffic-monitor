@@ -10,6 +10,7 @@ import IVstsUsageService = require('./../../src/interfaces/vsts-usage-service');
 import IVstsUserGraphLinks = require('./../../src/interfaces/vsts-user-graph-links');
 import IVstsUserService = require('./../../src/interfaces/vsts-user-service');
 import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
+import vstsConstants = require('./../../src/vsts-constants');
 import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
 import VstsStorageKey = require('./../../src/models/vsts-storage-key');
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
@@ -181,7 +182,8 @@ export const internalVstsServiceUsageRecord: VstsUsageRecord = <VstsUsageRecord>
     ipAddress: thirdValidIpAddress,
     startTime: isoFormatStartTime,
     usage: 1,
-    userAgent: 'VSServices/15.119.26629.2 (w3wp.exe) (Service=vsspsextprodch1su1)'
+    userAgent: 'VSServices/15.119.26629.2 (w3wp.exe) (Service=vsspsextprodch1su1)',
+    authenticationMechanism: vstsConstants.authMechanismValueForServiceToServiceCall
 };
 
 /**

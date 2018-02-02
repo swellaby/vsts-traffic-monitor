@@ -9,26 +9,27 @@ import VstsUsageRecord = require('./../models/vsts-usage-record');
  * the known list of IP addresses associated with the VSTS ecosystem to provide usageRecord
  * origin validation.
  *
- * @class IpAddressAttribute
- * @implements {IpAddressAttribute}
+ * @class VstsIpAddressUsageRecordOriginValidator
+ * @implements {IUsageRecordOriginValidator}
  */
 class VstsIpAddressUsageRecordOriginValidator implements IUsageRecordOriginValidator {
     private knownVstsIpAddresses: string[] = [];
 
     /**
-     * Creates an instance of IpAddressAttribute.
-     * @memberof IpAddressAttribute
+     * Creates an instance of VstsIpAddressUsageRecordOriginValidator.
+     * @memberof VstsIpAddressUsageRecordOriginValidator
      */
     constructor() {
         this.getKnownVstsIpAddresses();
     }
+
     /**
      * Determines whether or not the specfied usageRecord @see {@link VstsUsageRecord} originated
      * from an internal VSTS service-to-service API call.
      *
      * @param {VstsUsageRecord} usageRecord - The usageRecord to review
      * @returns {boolean}
-     * @memberof IInternalVstsApiCallAttribute
+     * @memberof IUsageRecordOriginValidator
      */
     public isInternalVstsServiceToServiceCallOrigin(usageRecord: VstsUsageRecord): boolean {
         if (!usageRecord) {
@@ -39,10 +40,12 @@ class VstsIpAddressUsageRecordOriginValidator implements IUsageRecordOriginValid
     }
 
     /**
-     * Retrieves the known list of VSTS IP Addresses.
+     * Retrieves the known list of VSTS IP Addresses. This is deliberately a small,
+     * subset of the known public IP addresses (which are themselves a small subset of
+     * the entire VSTS ecosystem IP addresses) for the sake of maintainability.
      *
      * @private
-     * @memberof IpAddressAttribute
+     * @memberof VstsIpAddressUsageRecordOriginValidator
      */
     private getKnownVstsIpAddresses() {
         this.knownVstsIpAddresses.push(vstsConstants.ipAddressAustraliaEast);
