@@ -38,6 +38,7 @@
     "package-vsts-task": "gulp package-vsts-task-src package-vsts-task-files",
     "upload-vsts-task": "tfx build tasks upload --task-path .vsts-publish/task",
     "pack-up-vsts-task": "npm run package-vsts-task && npm run upload-vsts-task",
+    "bundle-vsts-task-ext-files": "gulp package-vsts-task-extension-files",
     "package-vsts-task-extension": "gulp package-vsts-task-extension-files && cd .vsts-publish && tfx extension create",
     "publish-vsts-task-extension": "cd .vsts-publish && tfx extension publish",
     "pack-pub-vsts-task-extension": "gulp package-vsts-task-extension-files && cd .vsts-publish && tfx extension publish"
