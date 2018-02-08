@@ -23,7 +23,7 @@ module.exports = {
     vstsTaskContent: [
         './task.json',
         './package.json',
-        'docs/images/icon.png',
+        'docs/images/icons/icon.png',
         './task-wrapper.js'
     ],
     vstsExtensionContent: [
