@@ -137,6 +137,9 @@ If you have a *relatively* large number of total users (more than ~100-150) in y
 [Back to Usage and Quick Start Section][usage-section]  
 [Back to Tips Section][usage-tips-section]  
 
+## Contact Us
+You can reach us with any questions, issues, requests, etc. by opening an issue in our [GitHub repo][repo-url] or you can send us an email at opensource@swellaby.com if you'd prefer to communicate in private.
+
 
 ## Task Background
 Why a task you ask? Some of our requirements included being able to schedule recurring scans, recieve email notifications, and to have storage for scan results. Fortunately, the VSTS Build/Release system provides all those capabilities without having to write a single line of code, so we started with the task and will expose these capabilities in other in the future.  
