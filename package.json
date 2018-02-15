@@ -1,7 +1,7 @@
 {
   "name": "vsts-traffic-monitor",
   "description": "Monitors traffic on a VS Team Services account ",
-  "version": "0.8.10-beta",
+  "version": "0.8.13",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/swellaby/vsts-traffic-monitor",
@@ -63,6 +63,7 @@
     "gulp-bump": "^2.8.0",
     "gulp-eslint": "^4.0.0",
     "gulp-istanbul": "^1.1.2",
+    "gulp-json-modify": "^1.0.2",
     "gulp-mocha": "^3.0.1",
     "gulp-nsp": "^2.4.2",
     "gulp-open": "^2.0.0",

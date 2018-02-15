@@ -14,7 +14,7 @@
   "version": {
     "Major": "0",
     "Minor": "8",
-    "Patch": "10"
+    "Patch": "13"
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "Scan IP Addresses",
@@ -55,8 +55,8 @@
       "required": true,
       "helpMarkDown": "Controls which time period of activity will be scanned (UTC Standard).",
       "options": {
-          "priorDay": "Yesterday",
-          "last24Hours": "The most recent 24 hour period"
+        "priorDay": "Yesterday",
+        "last24Hours": "The most recent 24 hour period"
       }
     },
     {
@@ -67,8 +67,8 @@
       "required": true,
       "helpMarkDown": "Controls which set of users will have their traffic scanned. Specifying Azure Active Directory means the scanner will only scan traffic from user accounts that come from your AAD tenant. 'All' will result in scanning the traffic for every single user identity that has access to your VSTS acount, which includes several internal/non-user VSTS accounts.",
       "options": {
-          "aad": "Azure Active Directory",
-          "all": "All"
+        "aad": "Azure Active Directory",
+        "all": "All"
       }
     },
     {

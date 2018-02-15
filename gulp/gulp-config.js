@@ -62,5 +62,6 @@ module.exports = {
     appTypescript: [
         srcRoot + '/**/*.ts',
     ],
-    typescriptCompilerOptions: path.resolve(tsconfig)
+    typescriptCompilerOptions: path.resolve(tsconfig),
+    taskManifestFile: path.resolve('./task.json')
 };
