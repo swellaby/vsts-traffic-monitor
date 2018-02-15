@@ -46,7 +46,7 @@ Initially created by this [swell generator][parent-generator-url]!
 [supercharge-vsts-badge]: https://img.shields.io/badge/Supercharged%20By-VS%20Team%20Services-blue.svg
 [coveralls-badge]: https://coveralls.io/repos/github/swellaby/vsts-traffic-monitor/badge.svg
 [coveralls-url]: https://coveralls.io/github/swellaby/vsts-traffic-monitor
-[sonar-quality-gate-badge]: https://sonarcloud.io/api/badges/gate?key=swellaby:vsts-traffic-monitor
+[sonar-quality-gate-badge]: https://sonarcloud.io/api/project_badges/measure?project=swellaby%3Avsts-traffic-monitor&metric=alert_status
 [sonar-url]: https://sonarcloud.io/dashboard/index/swellaby:vsts-traffic-monitor
 [license-badge]: https://img.shields.io/github/license/swellaby/vsts-traffic-monitor.svg
 [ext-marketplace-url]: https://marketplace.visualstudio.com/items?itemName=swellaby.ip-address-scanner
