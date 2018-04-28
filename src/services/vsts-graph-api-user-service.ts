@@ -153,6 +153,7 @@ class VstsGraphApiUserService implements IVstsUserService {
      * @returns {Promise<VstsUser[]>}
      */
     private getAllVstsUsers(vstsAccountName: string, accessToken: string, subjectTypes?: string[]): Promise<VstsUser[]> {
+        // eslint-disable-next-line max-statements
         return new Promise<VstsUser[]>(async (resolve, reject) => {
             try {
                 const url = VstsHelpers.buildGraphApiUsersUrl(vstsAccountName, subjectTypes);

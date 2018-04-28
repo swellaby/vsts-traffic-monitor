@@ -1,4 +1,7 @@
-node_modules
-.coverage
-.testresults
-.vsts-publish
+node_modules/
+.coverage/
+.testresults/
+.vsts-publish/
+.vscode/
+docs/
+.github/

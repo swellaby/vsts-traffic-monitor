@@ -410,9 +410,9 @@ suite('VSTS Helpers Suite:', () => {
         });
 
         test('Should throw an error when account name is invalid, user id is valid, and dateRange is valid', () => {
-            assert.throws(
-                () => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, testHelpers.sampleGuid, testHelpers.validIsoDateRange),
-                invalidAccountNameErrorMessage);
+            const userId = testHelpers.sampleGuid;
+            const dateRange = testHelpers.validIsoDateRange;
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryApiUrl(invalidAccountName, userId, dateRange), invalidAccountNameErrorMessage);
         });
 
         test('Should throw an error when account name is valid, user id is null, and dateRange is null', () => {

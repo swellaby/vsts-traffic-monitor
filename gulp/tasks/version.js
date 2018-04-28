@@ -1,5 +1,3 @@
-/*eslint quotes: ["error", "single"]*/
-// Related to: https://github.com/Microsoft/TypeScript/issues/13270
 'use strict';
 
 const bump = require('gulp-bump');
@@ -19,7 +17,7 @@ gulp.task('bump-task-version', function () {
     const bumpedPatch = (parseInt(taskManifest.version.Patch) + 1).toString();
 
     return gulp.src(gulpConfig.taskManifestFile)
-        .pipe(jsonModify({ 
+        .pipe(jsonModify({
             key: 'version.Patch',
             value: bumpedPatch
         }))
