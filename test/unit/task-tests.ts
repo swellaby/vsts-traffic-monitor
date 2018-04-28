@@ -9,7 +9,7 @@ import tl = require('vsts-task-lib/task');
 
 import helpers = require('./../../src/helpers');
 import IpAddressScanReport = require('./../../src/models/ip-address-scan-report');
-import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
+// import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
 import task = require('./../../src/task');
 import taskLogger = require('./../../src/task-logger');
 import testHelpers = require('./test-helpers');
@@ -279,7 +279,7 @@ suite('Task Suite:', () => {
             await task.run();
             assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
             assert.deepEqual(scanReport.numUsersWithFlaggedRecords, 2);
-            assert.isTrue(tlErrorStub.calledWith(2 + flaggedUsersErrorMessageSuffix));
+            assert.isTrue(tlErrorStub.calledWith('2' + flaggedUsersErrorMessageSuffix));
             assert.isTrue(taskLoggerLogStub.calledWith(normTotalRecordsErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(normFlaggedRecordsErrorMessage));
             assert.isTrue(tlErrorStub.calledWith(secondRecordDetailsMessage));

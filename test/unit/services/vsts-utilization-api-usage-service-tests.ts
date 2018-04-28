@@ -1778,6 +1778,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
                     assert.deepEqual(usageRecords, testHelpers.usageRecords);
                     done();
+                }).catch((err: Error) => {
+                    throw err;
                 });
             });
 
@@ -7367,6 +7369,8 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                     assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
                     assert.deepEqual(usageRecords, testHelpers.usageRecords);
                     done();
+                }).catch((err: Error) => {
+                    throw err;
                 });
             });
 

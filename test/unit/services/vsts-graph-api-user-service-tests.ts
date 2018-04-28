@@ -271,6 +271,8 @@ suite('VSTS Graph API User Service Suite:', () => {
                 vstsGraphApiUserService.getAADUsers(accountName, pat).then((users: VstsUser[]) => {
                     assert.deepEqual(users.length, testHelpers.mixedOriginUsers.length);
                     done();
+                }).catch((err: Error) => {
+                    throw err;
                 });
         });
 
@@ -581,6 +583,8 @@ suite('VSTS Graph API User Service Suite:', () => {
                 vstsGraphApiUserService.getAllUsers(accountName, pat).then((users: VstsUser[]) => {
                     assert.deepEqual(users.length, testHelpers.mixedOriginUsers.length);
                     done();
+                }).catch((err: Error) => {
+                    throw err;
                 });
         });
 

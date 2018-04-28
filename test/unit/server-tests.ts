@@ -1,8 +1,8 @@
 'use strict';
 
 import Chai = require('chai');
-import server = require('./../../src/server');
-import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
+// import server = require('./../../src/server');
+// import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
 
 const assert = Chai.assert;
 

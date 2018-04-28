@@ -1,7 +1,6 @@
 'use strict';
 
 import chai = require('chai');
-import mocha = require('mocha');
 
 import VstsUser = require('./../../../src/models/vsts-user');
 

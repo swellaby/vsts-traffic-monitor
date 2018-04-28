@@ -2,7 +2,6 @@
 
 import request = require('request');
 import helpers = require('./../helpers');
-import IVstsGraphApiUserResponse = require('./../interfaces/vsts-graph-api-user-response');
 import IVstsUserService = require('./../interfaces/vsts-user-service');
 import vstsConstants = require('./../vsts-constants');
 import VstsGraphApiUserListResponse = require('./../models/vsts-graph-api-user-list-response');

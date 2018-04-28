@@ -1,7 +1,6 @@
 'use strict';
 
 import chai = require('chai');
-import mocha = require('mocha');
 
 import VstsStorageKey = require('./../../../src/models/vsts-storage-key');
 

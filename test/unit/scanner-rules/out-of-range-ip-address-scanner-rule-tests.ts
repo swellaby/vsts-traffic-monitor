@@ -3,7 +3,6 @@
 import Chai = require('chai');
 import Sinon = require('sinon');
 
-import IUsageRecordOriginValidator = require('./../../../src/interfaces/usage-record-origin-validator');
 import OutOfRangeIpAddressScannerRule = require('./../../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import testHelpers = require('./../test-helpers');
 import vstsHelpers = require('./../../../src/vsts-helpers');

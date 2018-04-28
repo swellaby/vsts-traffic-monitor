@@ -6,7 +6,6 @@ import testHelpers = require('./../test-helpers');
 import VstsUsageScanReport = require('./../../../src/models/vsts-usage-scan-report');
 import vstsUsageScanTimePeriod = require('./../../../src/enums/vsts-usage-scan-time-period');
 import VstsUser = require('./../../../src/models/vsts-user');
-import VstsUserActivityReport = require('./../../../src/models/vsts-user-activity-report');
 import vstsUserOrigin = require('./../../../src/enums/vsts-user-origin');
 
 const assert = Chai.assert;

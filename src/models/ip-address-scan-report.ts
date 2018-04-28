@@ -1,7 +1,6 @@
 'use strict';
 
 import VstsUsageScanReport = require('./vsts-usage-scan-report');
-import VstsUser = require('./vsts-user');
 import VstsUserActivityReport = require('./vsts-user-activity-report');
 
 /**

@@ -1,9 +1,7 @@
 'use strict';
 
-import VstsUsageRecord = require('./vsts-usage-record');
 import vstsUsageScanTimePeriod = require('./../enums/vsts-usage-scan-time-period');
 import VstsUser = require('./vsts-user');
-import VstsUserActivityReport = require('./../models/vsts-user-activity-report');
 import vstsUserOrigin = require('./../enums/vsts-user-origin');
 
 /**

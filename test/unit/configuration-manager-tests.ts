@@ -2,7 +2,6 @@
 
 import Chai = require('chai');
 import nconf = require('nconf');
-import request = require('request');
 import Sinon = require('sinon');
 
 import testHelpers = require('./test-helpers');

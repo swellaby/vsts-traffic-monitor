@@ -310,6 +310,8 @@ suite('Helpers Suite:', () => {
                 assert.isTrue(setTimeoutStub.called);
                 assert.deepEqual(setTimeoutStub.firstCall.args[1], ms);
                 done();
+            }).catch((err: Error) => {
+                throw err;
             });
         });
 

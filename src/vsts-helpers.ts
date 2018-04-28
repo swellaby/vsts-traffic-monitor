@@ -220,13 +220,7 @@ export const appendContinuationToken = (apiUrl: string, continuationToken: strin
     }
 
     const queryParameter = vstsApiContinuationTokenQueryParameter + '=' + continuationToken;
-    let parameterSeparator;
-
-    if (apiUrl.indexOf('?') < 0) {
-        parameterSeparator = '?';
-    } else {
-        parameterSeparator = '&';
-    }
+    const parameterSeparator = apiUrl.indexOf('?') < 0 ? '?' : '&';
 
     return apiUrl + parameterSeparator + queryParameter;
 };
