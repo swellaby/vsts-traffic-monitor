@@ -164,6 +164,27 @@ export const buildUtilizationUsageSummaryApiUrl = (accountName: string, userId: 
 };
 
 /**
+ * Builds the full url for the top level UsageSummary VSTS Rest API that simply lists the set of
+ * users that accessed the VSTS account during that time period.
+ *
+ * @param accountName
+ * @throws {InvalidArgumentException} Will throw an error if the account name is null, undefined,
+ * or does not match the VSTS account naming standards, if the user identifier is null, undefined or invalid,
+ * or if the dateRange is not a valid instance of the IsoDateRange class.
+ */
+export const buildUtilizationUsageSummaryActiveUsersApiUrl = (accountName: string, dateRange: IsoDateRange) => {
+    if (!dateRange) {
+        throw new Error('Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.');
+    }
+
+    let url = buildUtilizationApiUrl(accountName) + 'usagesummary';
+    url += '?queryCriteria[userId]=&queryCriteria[startTime]=' + dateRange.isoStartTime + '&queryCriteria[endTime]=' + dateRange.isoEndTime;
+    url += '&queryCriteria[columns]=user';
+
+    return url;
+};
+
+/**
  * Builds the URL for making Storage Key API calls.
  * @param {string} accountName - The name of the VSTS account.
  * @param {VstsUser} user - The target user for the desired storage key.

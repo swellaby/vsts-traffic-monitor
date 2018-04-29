@@ -137,7 +137,9 @@ export const firstUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     startTime: isoFormatStartTime,
     usage: 1,
     userAgent: 'Mozilla something',
-    authenticationMechanism: 'FedAuth'
+    authenticationMechanism: 'FedAuth',
+    user: aadUserCaleb.displayName,
+    vsid: aadUserCaleb.storageKey.value
 };
 
 export const secondUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
@@ -150,7 +152,9 @@ export const secondUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     startTime: isoFormatStartTime,
     usage: 1,
     userAgent: 'Mozilla/5.0',
-    authenticationMechanism: 'Pat'
+    authenticationMechanism: 'Pat',
+    user: aadUserBailey.displayName,
+    vsid: aadUserBailey.storageKey.value
 };
 
 export const usageRecords: VstsUsageRecord[] = [ firstUsageRecord, secondUsageRecord ];
@@ -160,6 +164,15 @@ export const usageRecordsJson = JSON.stringify({
 });
 
 export const emptyUsageRecords: VstsUsageRecord[] = [];
+
+const activeCalebVstsUser = new VstsUser();
+activeCalebVstsUser.displayName = aadUserCaleb.displayName;
+activeCalebVstsUser.storageKey = <VstsStorageKey> { value: sampleGuid };
+const activeBaileyVstsUser = new VstsUser();
+activeBaileyVstsUser.displayName = aadUserBailey.displayName;
+activeBaileyVstsUser.storageKey = <VstsStorageKey> { value: sampleGuid };
+
+export const activeVstsUsersFromUsageRecords: VstsUser[] = [ activeCalebVstsUser, activeBaileyVstsUser ];
 
 export const nullIpUsageRecord: VstsUsageRecord = <VstsUsageRecord> {
     application: 'Web Access',

@@ -498,6 +498,70 @@ suite('VSTS Helpers Suite:', () => {
         });
     });
 
+    suite('buildUtilizationUsageSummaryActiveUsersApiUrl Suite:', () => {
+        const dateRangeErrorMessage = 'Invalid value supplied for dateRange parameter. Must be a valid IsoDateRange instance.';
+
+        test('Should throw an error when account name is null and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(null, null), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is null and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(null, undefined), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is null, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(null, testHelpers.validIsoDateRange),
+                invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(undefined, null), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(undefined, undefined), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is undefined, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(undefined, testHelpers.validIsoDateRange),
+                invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(invalidAccountName, null), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(invalidAccountName, undefined), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is invalid, and dateRange is valid', () => {
+            assert.throws(
+                () => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(invalidAccountName, testHelpers.validIsoDateRange),
+                invalidAccountNameErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid and dateRange is null', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(accountName, null), dateRangeErrorMessage);
+        });
+
+        test('Should throw an error when account name is valid and dateRange is undefined', () => {
+            assert.throws(() => vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(accountName, undefined), dateRangeErrorMessage);
+        });
+
+        test('Should return correct url when account name is valid, and dateRange is valid', () => {
+            const dateRange = testHelpers.validIsoDateRange;
+            const baseUrl = expectedUtilizationApiUrl + 'usagesummary?queryCriteria[userId]=';
+            let expectedUrl = baseUrl + '&queryCriteria[startTime]=' + dateRange.isoStartTime + '&queryCriteria[endTime]=' + dateRange.isoEndTime;
+            expectedUrl += '&queryCriteria[columns]=user';
+
+            const actualUrl = vstsHelpers.buildUtilizationUsageSummaryActiveUsersApiUrl(accountName, testHelpers.validIsoDateRange);
+            assert.deepEqual(actualUrl, expectedUrl);
+        });
+    });
+
     suite('buildRestApiBasicAuthRequestOptions Suite:', () => {
         const url = expectedUtilizationApiUrl + 'notimportant';
         const expectedAuthValue = 'basic ' + expectedBase64AccessToken;

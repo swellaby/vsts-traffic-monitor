@@ -36,15 +36,21 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
     const invalidUserIdErrorMessage = 'Invalid user id';
     const invalidTokenErrorMessage = 'Invalid access token.';
     const apiCallBaseErrorMessage = 'Unable to retrieve VSTS User Activity. Error details: ';
+    const summaryApiCallBaseErrorMessage = 'Unable to retrieve list of active VSTS Users. Error details: ';
     const requestErrorMessageDetails = 'fail';
     const userApiCalledFailedErrorMessageBase = 'VSTS User Activity API Call Failed.';
     const userApiCalledFailledStatusCodeErrorMessageSuffix = ' Response status code: ';
     const userApiCalledFailedWithStatusCodeErrorMessage = userApiCalledFailedErrorMessageBase + userApiCalledFailledStatusCodeErrorMessageSuffix;
     const jsonParseErrorMessage = 'Invalid or unexpected JSON response from VSTS API. Unable to determine VSTS User Activity.';
+    const activeUsersJsonParseErrorMessage = 'Invalid or unexpected JSON response from VSTS API. Unable to determine list of active VSTS Users.';
     const expectedRequestThrownErrorMessage = apiCallBaseErrorMessage + requestErrorMessageDetails;
+    const expectedActiveUsersRequestThrownErrorMessage = summaryApiCallBaseErrorMessage + requestErrorMessageDetails;
     const expectedUserIdErrorMessage = apiCallBaseErrorMessage + invalidUserIdErrorMessage;
     const expectedAccountErrorMessage = apiCallBaseErrorMessage + invalidAccountErrorMessage;
     const expectedTokenErrorMessage = apiCallBaseErrorMessage + invalidTokenErrorMessage;
+    const expectedActiveUsersBaseErrorMessage = 'Unable to retrieve list of active VSTS Users. Error details: ';
+    const expectedActiveUsersAccountErrorMessage = expectedActiveUsersBaseErrorMessage + invalidAccountErrorMessage;
+    const expectedActiveUsersAccessTokenErrorMessage = expectedActiveUsersBaseErrorMessage + invalidTokenErrorMessage;
     const throttlePeriodSeconds = 20;
     const throttlePeriodMilliseconds = throttlePeriodSeconds * 1000;
     const httpResponseWithThrottleHeader = {
@@ -5686,30 +5692,30 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
     });
 
     suite('getUserActivityOverLast24Hours Suite:', () => {
-        let helpersgetLast24HoursUtcDateRangeStub: Sinon.SinonStub;
+        let helpersGetLast24HoursUtcDateRangeStub: Sinon.SinonStub;
         const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve VSTS User Activity ' +
             'over the last 24 hours. Error details: ';
         const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
 
         setup(() => {
-            helpersgetLast24HoursUtcDateRangeStub = sandbox.stub(helpers, 'getLast24HoursUtcDateRange');
+            helpersGetLast24HoursUtcDateRangeStub = sandbox.stub(helpers, 'getLast24HoursUtcDateRange');
         });
 
         test('Should reject the promise when the getLast24HoursUtcDateRange call throws an exception', (done: () => void) => {
-            helpersgetLast24HoursUtcDateRangeStub.callsFake(() => { throw new Error(helpersErrorMessageDetails); });
+            helpersGetLast24HoursUtcDateRangeStub.callsFake(() => { throw new Error(helpersErrorMessageDetails); });
             vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat).catch((err: Error) => {
                 assert.deepEqual(err.message, expectedDateRangeErrorMesage);
-                assert.isTrue(helpersgetLast24HoursUtcDateRangeStub.called);
+                assert.isTrue(helpersGetLast24HoursUtcDateRangeStub.called);
                 done();
             });
         });
 
         test('Should throw error when awaited when the getLast24HoursUtcDateRange call throws an exception', async () => {
-            helpersgetLast24HoursUtcDateRangeStub.callsFake(() => { throw new Error(helpersErrorMessageDetails); });
+            helpersGetLast24HoursUtcDateRangeStub.callsFake(() => { throw new Error(helpersErrorMessageDetails); });
             try {
                 await vstsUtilizationApiUsageService.getUserActivityOverLast24Hours(validUserId, accountName, pat);
             } catch (err) {
-                assert.isTrue(helpersgetLast24HoursUtcDateRangeStub.called);
+                assert.isTrue(helpersGetLast24HoursUtcDateRangeStub.called);
                 assert.deepEqual(err.message, expectedDateRangeErrorMesage);
             }
         });
@@ -7387,6 +7393,566 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
                 assert.deepEqual(usageRecords.length, testHelpers.usageRecords.length);
                 assert.deepEqual(usageRecords, testHelpers.usageRecords);
                 assert.isTrue(helpersSleepAsyncStub.calledWith(throttlePeriodMilliseconds));
+            });
+        });
+    });
+
+    suite('getActiveUsersFromLast24Hours Suite:', () => {
+        let helpersGetLast24HoursUtcDateRangeStub: Sinon.SinonStub;
+        let vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub: Sinon.SinonStub;
+        const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve the set of VSTS users active ' +
+        'within the last 24 hours. Error details: ';
+        const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
+
+        setup(() => {
+            helpersGetLast24HoursUtcDateRangeStub = sandbox.stub(helpers, 'getLast24HoursUtcDateRange');
+            vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub =
+                sandbox.stub(VstsHelpers, 'buildUtilizationUsageSummaryActiveUsersApiUrl').callsFake(() => {
+                    throw new Error(invalidAccountErrorMessage);
+                });
+        });
+
+        test('Should throw error when the getLast24HoursUtcDateRange call throws an exception', async () => {
+            helpersGetLast24HoursUtcDateRangeStub.callsFake(() => { throw new Error(helpersErrorMessageDetails); });
+            try {
+                await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+            } catch (err) {
+                assert.isTrue(helpersGetLast24HoursUtcDateRangeStub.called);
+                assert.deepEqual(err.message, expectedDateRangeErrorMesage);
+            }
+        });
+
+        suite('param validation Suite:', () => {
+            test('Should throw error when awaited when accountName is null, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(null, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is null, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(null, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is null, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(null, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is null, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(null, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(undefined, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(undefined, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(undefined, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(undefined, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(empty, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(empty, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(empty, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(empty, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is valid, and accessToken is null', async () => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { throw new Error(invalidTokenErrorMessage); });
+
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccessTokenErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is valid, and accessToken is undefined', async () => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { throw new Error(invalidTokenErrorMessage); });
+
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccessTokenErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is valid, and accessToken is empty', async () => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { throw new Error(invalidTokenErrorMessage); });
+
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(invalidAccountName, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccessTokenErrorMessage);
+                }
+            });
+        });
+
+        suite('request Get Suite:', () => {
+            setup(() => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                setBuildRestApiRequestOptionsStubToReturnValidValue();
+            });
+
+            test('Should throw error when the Request Get call throws an exception', async () => {
+                setRequestGetStubToThrowError();
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersRequestThrownErrorMessage);
+                }
+            });
+
+            test('Should throw error when the Request Get callback has an error', async () => {
+                requestGetStub.yields(new Error(), {}, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedErrorMessageBase);
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 400', async () => {
+                requestGetStub.yields(null, testHelpers.http400Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '400');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 401', async () => {
+                requestGetStub.yields(null, testHelpers.http401Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '401');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 403', async () => {
+                requestGetStub.yields(null, testHelpers.http403Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '403');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 404', async () => {
+                requestGetStub.yields(null, testHelpers.http404Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '404');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 409', async () => {
+                requestGetStub.yields(null, testHelpers.http409Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '409');
+                }
+            });
+
+            test('Should throw error when the Request Get response is invalid json', async () => {
+                requestGetStub.yields(null, testHelpers.http200Response, testHelpers.invalidJson);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, activeUsersJsonParseErrorMessage);
+                }
+            });
+
+            test('Should return correct user list when the Request Get call is successful', async () => {
+                requestGetStub.yields(null, testHelpers.http200Response, testHelpers.usageRecordsJson);
+                const users = await vstsUtilizationApiUsageService.getActiveUsersFromLast24Hours(accountName, pat);
+                assert.deepEqual(users.length, testHelpers.activeVstsUsersFromUsageRecords.length);
+                assert.deepEqual(users, testHelpers.activeVstsUsersFromUsageRecords);
+            });
+        });
+    });
+
+    suite('getActiveUsersFromYesterday Suite:', () => {
+        let helpersGetYesterdayUtcDateRangeStub: Sinon.SinonStub;
+        let vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub: Sinon.SinonStub;
+        const baseErrorMessage = 'Encountered an error while attempting to build inputs to retrieve the set of VSTS users active ' +
+        'yesterday. Error details: ';
+        const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
+
+        setup(() => {
+            helpersGetYesterdayUtcDateRangeStub = sandbox.stub(helpers, 'getYesterdayUtcDateRange');
+            vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub =
+                sandbox.stub(VstsHelpers, 'buildUtilizationUsageSummaryActiveUsersApiUrl').callsFake(() => {
+                    throw new Error(invalidAccountErrorMessage);
+                });
+        });
+
+        test('Should throw error when the getYesterdayUtcDateRange call throws an exception', async () => {
+            helpersGetYesterdayUtcDateRangeStub.callsFake(() => { throw new Error(helpersErrorMessageDetails); });
+            try {
+                await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+            } catch (err) {
+                assert.isTrue(helpersGetYesterdayUtcDateRangeStub.called);
+                assert.deepEqual(err.message, expectedDateRangeErrorMesage);
+            }
+        });
+
+        suite('param validation Suite:', () => {
+            test('Should throw error when awaited when accountName is null, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(null, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is null, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(null, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is null, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(null, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is null, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(null, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(undefined, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(undefined, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(undefined, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is undefined, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(undefined, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(empty, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(empty, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(empty, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is empty, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(empty, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is null', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is undefined', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is empty', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is invalid, and accessToken is valid', async () => {
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccountErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is valid, and accessToken is null', async () => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { throw new Error(invalidTokenErrorMessage); });
+
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, null);
+                } catch (err) {
+                    assert.isTrue(vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.called);
+                    assert.deepEqual(err.message, expectedActiveUsersAccessTokenErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is valid, and accessToken is undefined', async () => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { throw new Error(invalidTokenErrorMessage); });
+
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, undefined);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccessTokenErrorMessage);
+                }
+            });
+
+            test('Should throw error when awaited when accountName is valid, and accessToken is empty', async () => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                vstsHelpersBuildRestApiBasicAuthRequestOptionsStub.callsFake(() => { throw new Error(invalidTokenErrorMessage); });
+
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(invalidAccountName, '');
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersAccessTokenErrorMessage);
+                }
+            });
+        });
+
+        suite('request Get Suite:', () => {
+            setup(() => {
+                vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub.callsFake(() => validUtilizationSummaryApiUrl);
+                setBuildRestApiRequestOptionsStubToReturnValidValue();
+            });
+
+            test('Should throw error when the Request Get call throws an exception', async () => {
+                setRequestGetStubToThrowError();
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, expectedActiveUsersRequestThrownErrorMessage);
+                }
+            });
+
+            test('Should throw error when the Request Get callback has an error', async () => {
+                requestGetStub.yields(new Error(), {}, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedErrorMessageBase);
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 400', async () => {
+                requestGetStub.yields(null, testHelpers.http400Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '400');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 401', async () => {
+                requestGetStub.yields(null, testHelpers.http401Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '401');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 403', async () => {
+                requestGetStub.yields(null, testHelpers.http403Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '403');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 404', async () => {
+                requestGetStub.yields(null, testHelpers.http404Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '404');
+                }
+            });
+
+            test('Should throw error when the Request Get response status code is 409', async () => {
+                requestGetStub.yields(null, testHelpers.http409Response, null);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, userApiCalledFailedWithStatusCodeErrorMessage + '409');
+                }
+            });
+
+            test('Should throw error when the Request Get response is invalid json', async () => {
+                requestGetStub.yields(null, testHelpers.http200Response, testHelpers.invalidJson);
+                try {
+                    await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                } catch (err) {
+                    assert.deepEqual(err.message, activeUsersJsonParseErrorMessage);
+                }
+            });
+
+            test('Should return correct user list when the Request Get call is successful', async () => {
+                requestGetStub.yields(null, testHelpers.http200Response, testHelpers.usageRecordsJson);
+                const users = await vstsUtilizationApiUsageService.getActiveUsersFromYesterday(accountName, pat);
+                assert.deepEqual(users.length, testHelpers.activeVstsUsersFromUsageRecords.length);
+                assert.deepEqual(users, testHelpers.activeVstsUsersFromUsageRecords);
             });
         });
     });

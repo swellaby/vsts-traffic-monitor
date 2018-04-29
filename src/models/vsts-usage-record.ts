@@ -29,6 +29,8 @@ class VstsUsageRecord {
     public userAgent: string;
     public authenticationMechanism: string;
     public status: string;
+    public vsid: string;
+    public user: string;
 }
 
 export = VstsUsageRecord;
