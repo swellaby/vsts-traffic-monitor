@@ -15,7 +15,8 @@ import vstsUsageScannerEngine = require('./../../src/vsts-usage-scanner-engine')
 import VstsUsageScanResult = require('./../../src/models/vsts-usage-scan-result');
 import vstsUsageScanTimePeriod = require('./../../src/enums/vsts-usage-scan-time-period');
 import vstsUserOrigin = require('./../../src/enums/vsts-user-origin');
-
+// tslint:disable-next-line
+/* eslint-disable */
 const assert = Chai.assert;
 
 /**
@@ -32,18 +33,20 @@ suite('VstsUsageMonitor Suite:', () => {
     let vstsUserServiceGetAADUsersStub: Sinon.SinonStub;
     let vstsUserServiceGetAllUsersStub: Sinon.SinonStub;
     let vstsUsageServiceGetUserActivityFromYesterdayStub: Sinon.SinonStub;
-    let vstsUsageServiceGetUserActivityOverLast24Hours: Sinon.SinonStub;
+    let vstsUsageServiceGetUserActivityOverLast24HoursStub: Sinon.SinonStub;
+    let vstsUsageServiceGetActiveUsersFromLast24HoursStub: Sinon.SinonStub;
+    let vstsUsageServiceGetActiveUsersFromYesterdayStub: Sinon.SinonStub;
     let factoryGetVstsUsageServiceStub: Sinon.SinonStub;
     let factoryGetVstsUserServiceStub: Sinon.SinonStub;
     let factoryGetOutOfRangeIpAddressScannerRuleStub: Sinon.SinonStub;
-    const userServiceFailedErrorMessage = 'Failed to retrieve the list of users from the specified VSTS account. ' +
-            'Please ensure that the Graph API is enabled on the account.';
+    const graphApiNotificationErrorMessage = 'Please ensure that the Graph API is enabled on the account.';
+    const userServiceFailedErrorMessage = 'Failed to retrieve the list of users from the specified VSTS account. ' + graphApiNotificationErrorMessage;
     const invalidUserOriginErrorMessage = 'Unable to retrieve user list from VSTS account. Unknown or unsupported user origin specified.';
     const debugErrorMessagePrefix = 'Error details: ';
     const emptyUserListErrorMessage = 'No users were found from the specified User Origin on the specified VSTS account.';
     const usageServiceFailedErrorMessage = 'Encountered a fatal error while trying to retrieve and analyze usage records for user: caleb. Error details: ';
-    const invalidTimePeriodErrorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';
-    const invalidTimePeriodDebugErrorMessageBase = 'Currently the only supported scan intervals are \'priorDay\' and \'last24Hours\'';
+    const activeUsersInvalidTimePeriodErrorMessageBase = 'Unable to retrieve active user list from VSTS account. Unknown or unsupported scan period specified.';
+    const activeUsersInvalidTimePeriodErrorMessage = debugErrorMessagePrefix + activeUsersInvalidTimePeriodErrorMessageBase;
 
     /**
      * Helper method to create stubs.
@@ -74,8 +77,14 @@ suite('VstsUsageMonitor Suite:', () => {
         vstsUsageServiceGetUserActivityFromYesterdayStub = sandbox.stub(vstsUsageService, 'getUserActivityFromYesterday').callsFake(() => {
             return Promise.resolve(testHelpers.usageRecords);
         });
-        vstsUsageServiceGetUserActivityOverLast24Hours = sandbox.stub(vstsUsageService, 'getUserActivityOverLast24Hours').callsFake(() => {
+        vstsUsageServiceGetUserActivityOverLast24HoursStub = sandbox.stub(vstsUsageService, 'getUserActivityOverLast24Hours').callsFake(() => {
             return Promise.resolve(testHelpers.usageRecords);
+        });
+        vstsUsageServiceGetActiveUsersFromLast24HoursStub = sandbox.stub(vstsUsageService, 'getActiveUsersFromLast24Hours').callsFake(() => {
+            return Promise.resolve(testHelpers.activeVstsUsersFromUsageRecords);
+        });
+        vstsUsageServiceGetActiveUsersFromYesterdayStub = sandbox.stub(vstsUsageService, 'getActiveUsersFromYesterday').callsFake(() => {
+            return Promise.resolve(testHelpers.activeVstsUsersFromUsageRecords);
         });
     };
 
@@ -227,12 +236,14 @@ suite('VstsUsageMonitor Suite:', () => {
                 ipAddressScanRequest.scanTimePeriod = undefined;
                 const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(ipAddressScanRequest);
                 assert.isFalse(scanReport.completedSuccessfully);
-                assert.isFalse(factoryGetVstsUsageServiceStub.called);
-                assert.deepEqual(scanReport.errorMessage, invalidTimePeriodErrorMessage);
-                assert.deepEqual(scanReport.debugErrorMessage, invalidTimePeriodDebugErrorMessageBase);
+                assert.isTrue(factoryGetVstsUsageServiceStub.called);
+                assert.deepEqual(scanReport.errorMessage, userServiceFailedErrorMessage);
+                assert.deepEqual(scanReport.debugErrorMessage, activeUsersInvalidTimePeriodErrorMessage);
                 assert.deepEqual(scanReport.vstsAccountName, testHelpers.vstsAccountName);
                 assert.deepEqual(scanReport.scanPeriod, undefined);
                 assert.deepEqual(scanReport.userOrigin, vstsUserOrigin.aad);
+                assert.isFalse(vstsUsageServiceGetActiveUsersFromLast24HoursStub.called);
+                assert.isFalse(vstsUsageServiceGetActiveUsersFromYesterdayStub.called);
             });
         });
 
@@ -252,7 +263,7 @@ suite('VstsUsageMonitor Suite:', () => {
 
         suite('last24Hours scan period Suite:', () => {
             test('Should return empty when no usage records are returned', async () => {
-                vstsUsageServiceGetUserActivityOverLast24Hours.callsFake(() => {
+                vstsUsageServiceGetUserActivityOverLast24HoursStub.callsFake(() => {
                     return testHelpers.emptyUsageRecords;
                 });
                 const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(ipAddressScanRequest);
@@ -284,7 +295,7 @@ suite('VstsUsageMonitor Suite:', () => {
             // eslint-disable-next-line max-statements
             test('Should return correct report when an error is encountered during usage retrieval', async () => {
                 const usageRetrievalErrorMessage = 'usage service crashed';
-                vstsUsageServiceGetUserActivityOverLast24Hours.onFirstCall().callsFake(() => {
+                vstsUsageServiceGetUserActivityOverLast24HoursStub.onFirstCall().callsFake(() => {
                     throw new Error(usageRetrievalErrorMessage);
                 });
                 const scanReport = await vstsUsageMonitor.scanForOutOfRangeIpAddresses(ipAddressScanRequest);

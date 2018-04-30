@@ -18,7 +18,7 @@ import VstsUserActivityReport = require('./models/vsts-user-activity-report');
 import vstsUserOrigin = require('./enums/vsts-user-origin');
 
 /**
- * Retrieves the set of users from the specified VSTS account.
+ * Retrieves the complete set of users from the specified VSTS account.
  *
  * @param {VstsUsageScanRequest} scanRequest - The parameters for the scan request.
  *
@@ -27,9 +27,8 @@ import vstsUserOrigin = require('./enums/vsts-user-origin');
  *
  * @private
  */
-const getUsers = async (scanRequest: VstsUsageScanRequest): Promise<VstsUser[]> => {
+const getAllUsers = async (scanRequest: VstsUsageScanRequest): Promise<VstsUser[]> => {
     const userService: IVstsUserService = factory.getVstsUserService();
-
     const vstsAccountName = scanRequest.vstsAccountName;
     const accessToken = scanRequest.vstsAccessToken;
     const userOrigin: vstsUserOrigin = scanRequest.vstsUserOrigin;
@@ -40,6 +39,33 @@ const getUsers = async (scanRequest: VstsUsageScanRequest): Promise<VstsUser[]> 
         return await userService.getAllUsers(vstsAccountName, accessToken);
     } else {
         throw new Error('Unable to retrieve user list from VSTS account. Unknown or unsupported user origin specified.');
+    }
+};
+
+/**
+ * Retrieves the set of users from the specified VSTS account that were active during the
+ * targetted scan period.
+ *
+ * @param {VstsUsageScanRequest} scanRequest - The parameters for the scan request.
+ *
+ * @throws {Error} - Throws an error if an unsupported or unrecognized VSTS user origin is specified.
+ * @returns {Promise<VstsUser[]>} - A promise containing the list of users of the VSTS account.
+ *
+ * @private
+ */
+// eslint-disable-next-line no-unused-vars
+const getActiveUsers = async (scanRequest: VstsUsageScanRequest): Promise<VstsUser[]> => {
+    const usageService: IVstsUsageService = factory.getVstsUsageService();
+    const vstsAccountName = scanRequest.vstsAccountName;
+    const accessToken = scanRequest.vstsAccessToken;
+    const timePeriod = scanRequest.scanTimePeriod;
+
+    if (timePeriod === vstsUsageScanTimePeriod.last24Hours) {
+        return await usageService.getActiveUsersFromLast24Hours(vstsAccountName, accessToken);
+    } else if (timePeriod === vstsUsageScanTimePeriod.priorDay) {
+        return await usageService.getActiveUsersFromYesterday(vstsAccountName, accessToken);
+    } else {
+        throw new Error('Unable to retrieve active user list from VSTS account. Unknown or unsupported scan period specified.');
     }
 };
 
@@ -229,16 +255,17 @@ const scanUsersActivityForOutOfRangeIpAddresses = async (scanRequest: IpAddressS
             await scanUserActivityFromLast24Hours(user, scanRequest, scanReport);
         }
         // await Promise.all(users.map(async user => { await scanUserActivityFromLast24Hours(user, scanRequest, scanReport); }));
-    } else if (scanRequest.scanTimePeriod === vstsUsageScanTimePeriod.priorDay) {
+    } else {
         for (const user of users) {
             await scanIpAddressesFromYesterday(user, scanRequest, scanReport);
         }
         // await Promise.all(users.map(async user => { await scanIpAddressesFromYesterday(user, scanRequest, scanReport); }));
-    } else {
-        scanReport.completedSuccessfully = false;
-        scanReport.errorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';
-        scanReport.debugErrorMessage = 'Currently the only supported scan intervals are \'priorDay\' and \'last24Hours\'';
     }
+    // else {
+    //     scanReport.completedSuccessfully = false;
+    //     scanReport.errorMessage = 'Unable to retrieve usage records from VSTS. Unrecognized or unsupported time period specified for scan.';
+    //     scanReport.debugErrorMessage = 'Currently the only supported scan intervals are \'priorDay\' and \'last24Hours\'';
+    // }
 
     setIpRangeScanFieldsOnReport(scanRequest, scanReport);
     return scanReport;
@@ -296,13 +323,17 @@ const buildScanReportOnFailedUserRetrieval = (error: Error, request: IpAddressSc
     }
 
     try {
-        const users = await getUsers(scanRequest);
+        const allUsers = await getAllUsers(scanRequest);
+        const activeUsers = await getActiveUsers(scanRequest);
+        const activeUserStorageKeys: string[] = activeUsers.map(u => u.storageKey.value);
 
-        if (users.length === 0) {
+        const targetUsers = allUsers.filter(u => activeUserStorageKeys.includes(u.storageKey.value));
+
+        if (targetUsers.length === 0) {
             return buildEmptyUserListScanReport(scanRequest);
         }
 
-        return await scanUsersActivityForOutOfRangeIpAddresses(scanRequest, users);
+        return await scanUsersActivityForOutOfRangeIpAddresses(scanRequest, targetUsers);
     } catch (err) {
         return buildScanReportOnFailedUserRetrieval(err, scanRequest);
     }

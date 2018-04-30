@@ -14,7 +14,7 @@
   "version": {
     "Major": 0,
     "Minor": 8,
-    "Patch": 22
+    "Patch": 23
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "Scan IP Addresses",
