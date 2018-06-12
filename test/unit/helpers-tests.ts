@@ -14,7 +14,6 @@ const assert = Chai.assert;
  * Contains unit tests for the functions defined in {@link ./src/helpers.ts}
  */
 suite('Helpers Suite:', () => {
-    const sandbox: Sinon.SinonSandbox = Sinon.sandbox.create();
     let momentUtcStub: Sinon.SinonStub;
     // eslint-disable-next-line no-unused-vars
     const momentStub: moment.Moment = <moment.Moment> {
@@ -31,17 +30,17 @@ suite('Helpers Suite:', () => {
     let formatValidatorIsValidIsoFormatStub: Sinon.SinonStub;
 
     setup(() => {
-        momentUtcStub = sandbox.stub(moment.prototype, 'utc').callsFake(() => {
+        momentUtcStub = Sinon.stub(moment.prototype, 'utc').callsFake(() => {
             return momentStub;
         });
-        momentSubtractStub = sandbox.stub(momentStub, 'subtract');
-        formatValidatorIsValidIsoFormatStub = sandbox.stub(formatValidator, 'isValidIsoFormat').callsFake(() => {
+        momentSubtractStub = Sinon.stub(momentStub, 'subtract');
+        formatValidatorIsValidIsoFormatStub = Sinon.stub(formatValidator, 'isValidIsoFormat').callsFake(() => {
             return true;
         });
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
     });
 
     suite('buildError Suite:', () => {
@@ -82,10 +81,10 @@ suite('Helpers Suite:', () => {
         let dateEndOfStub: Sinon.SinonStub;
 
         setup(() => {
-            dateStartOfStub = sandbox.stub(momentStub, 'startOf').callsFake(() => {
+            dateStartOfStub = Sinon.stub(momentStub, 'startOf').callsFake(() => {
                 return startOfStub;
             });
-            dateEndOfStub = sandbox.stub(momentStub, 'endOf').callsFake(() => {
+            dateEndOfStub = Sinon.stub(momentStub, 'endOf').callsFake(() => {
                 return endOfStub;
             });
         });
@@ -139,10 +138,10 @@ suite('Helpers Suite:', () => {
             momentSubtractStub.callsFake(() => {
                 return yesterdayStub;
             });
-            yesterdayStartOfStub = sandbox.stub(yesterdayStub, 'startOf').callsFake(() => {
+            yesterdayStartOfStub = Sinon.stub(yesterdayStub, 'startOf').callsFake(() => {
                 return startOfStub;
             });
-            yesterdayEndOfStub = sandbox.stub(yesterdayStub, 'endOf').callsFake(() => {
+            yesterdayEndOfStub = Sinon.stub(yesterdayStub, 'endOf').callsFake(() => {
                 return endOfStub;
             });
         });
@@ -186,10 +185,10 @@ suite('Helpers Suite:', () => {
             momentSubtractStub.callsFake(() => {
                 return beginningStub;
             });
-            nowFormatStub = sandbox.stub(momentStub, 'format').callsFake(() => {
+            nowFormatStub = Sinon.stub(momentStub, 'format').callsFake(() => {
                 return testHelpers.isoFormatEndTime;
             });
-            beginningFormatStub = sandbox.stub(beginningStub, 'format').callsFake(() => {
+            beginningFormatStub = Sinon.stub(beginningStub, 'format').callsFake(() => {
                 return testHelpers.isoFormatStartTime;
             });
         });
@@ -228,9 +227,9 @@ suite('Helpers Suite:', () => {
         const ms = 1500;
 
         setup(() => {
-            clock = sandbox.useFakeTimers();
+            clock = Sinon.useFakeTimers();
             // eslint-disable-next-line no-unused-vars
-            setTimeoutStub = sandbox.stub(clock, 'setTimeout').callsFake((resolve, ms) => { resolve(); });
+            setTimeoutStub = Sinon.stub(clock, 'setTimeout').callsFake((resolve, ms) => { resolve(); });
         });
 
         teardown(() => {

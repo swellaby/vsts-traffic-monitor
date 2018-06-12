@@ -16,11 +16,10 @@ const assert = Chai.assert;
  * defined in {@link ./src/vsts-usage-scanner-engine.ts}
  */
 suite('VstsUsageScannerEngine Suite:', () => {
-    const sandbox = Sinon.sandbox.create();
     const emptyUsageRecords: VstsUsageRecord[] = [];
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
     });
 
     suite('scanUserIpAddresses', () => {
@@ -30,7 +29,7 @@ suite('VstsUsageScannerEngine Suite:', () => {
 
         setup(() => {
             ruleStub = new OutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false, testHelpers.usageRecordOriginValidators);
-            ruleScanRecordForMatchStub = sandbox.stub(ruleStub, 'scanRecordForMatch').callsFake(() => {
+            ruleScanRecordForMatchStub = Sinon.stub(ruleStub, 'scanRecordForMatch').callsFake(() => {
                 return false;
             });
         });

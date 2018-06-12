@@ -30,10 +30,9 @@ suite('VSTS Helpers Suite:', () => {
     const expectedUtilizationApiUrl = protocol + accountName + utilizationApiUrlSgement;
     const accessToken = 'Hello World';
     const expectedBase64AccessToken = 'OkhlbGxvIFdvcmxk';
-    const sandbox = Sinon.sandbox.create();
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
     });
 
     suite('convertPatToApiHeader Suite:', () => {
@@ -101,7 +100,7 @@ suite('VSTS Helpers Suite:', () => {
         let formatValidatorIsValidGuidStub: Sinon.SinonStub;
 
         setup(() => {
-            formatValidatorIsValidGuidStub = sandbox.stub(formatValidator, 'isValidGuid').callsFake(() => { return false; });
+            formatValidatorIsValidGuidStub = Sinon.stub(formatValidator, 'isValidGuid').callsFake(() => { return false; });
         });
 
         test('Should throw an error when userId is null', () => {
@@ -893,7 +892,7 @@ suite('VSTS Helpers Suite:', () => {
         let isInternalVstsServiceToServiceCallOriginStub: Sinon.SinonStub;
 
         setup(() => {
-            isInternalVstsServiceToServiceCallOriginStub = sandbox.stub(firstUsageRecordOriginValidator, 'isInternalVstsServiceToServiceCallOrigin').callsFake(() => {
+            isInternalVstsServiceToServiceCallOriginStub = Sinon.stub(firstUsageRecordOriginValidator, 'isInternalVstsServiceToServiceCallOrigin').callsFake(() => {
                 return false;
             });
             usageRecordOriginValidators.push(firstUsageRecordOriginValidator);

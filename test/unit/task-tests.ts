@@ -23,7 +23,6 @@ const assert = Chai.assert;
  * Contains unit tests for the functions defined in {@link ./src/task.ts}
  */
 suite('Task Suite:', () => {
-    const sandbox = Sinon.sandbox.create();
     let vstsUsageMonitorScanForOutOfRangeIpAddressesStub: Sinon.SinonStub;
     let tlGetInputStub: Sinon.SinonStub;
     let tlGetDelimitedInputStub: Sinon.SinonStub;
@@ -74,36 +73,36 @@ suite('Task Suite:', () => {
      * Helper function for initializing stubs.
      */
     const setupInputStubs = () => {
-        tlGetInputStub = sandbox.stub(tl, 'getInput');
+        tlGetInputStub = Sinon.stub(tl, 'getInput');
         tlGetInputStub.withArgs(accountNameKey, true).callsFake(() => accountName);
         tlGetInputStub.withArgs(accessTokenKey, true).callsFake(() => sampleToken);
         tlGetInputStub.withArgs(timePeriodKey, true).callsFake(() => scanPeriodStr);
         tlGetInputStub.withArgs(userOriginKey, true).callsFake(() => userOriginStr);
-        tlGetDelimitedInputStub = sandbox.stub(tl, 'getDelimitedInput').callsFake(() => {
+        tlGetDelimitedInputStub = Sinon.stub(tl, 'getDelimitedInput').callsFake(() => {
             return allowedRanges;
         });
-        tlGetBoolInput = sandbox.stub(tl, 'getBoolInput');
+        tlGetBoolInput = Sinon.stub(tl, 'getBoolInput');
         tlGetBoolInput.withArgs(includeInternalVstsServicesKey, true).callsFake(() => false);
     };
 
     setup(() => {
-        tlErrorStub = sandbox.stub(tl, 'error').callsFake(() => null);
-        tlDebugStub = sandbox.stub(tl, 'debug').callsFake(() => null);
+        tlErrorStub = Sinon.stub(tl, 'error').callsFake(() => null);
+        tlDebugStub = Sinon.stub(tl, 'debug').callsFake(() => null);
         setupInputStubs();
         scanReport = new IpAddressScanReport();
-        vstsUsageMonitorScanForOutOfRangeIpAddressesStub = sandbox.stub(vstsUsageMonitor, 'scanForOutOfRangeIpAddresses').callsFake(() => {
+        vstsUsageMonitorScanForOutOfRangeIpAddressesStub = Sinon.stub(vstsUsageMonitor, 'scanForOutOfRangeIpAddresses').callsFake(() => {
             return scanReport;
         });
-        tlSetResultStub = sandbox.stub(tl, 'setResult').callsFake(() => null);
-        taskLoggerLogStub = sandbox.stub(taskLogger, 'log').callsFake(() => null);
-        helpersBuildErrorStub = sandbox.stub(helpers, 'buildError').callsFake(() => {
+        tlSetResultStub = Sinon.stub(tl, 'setResult').callsFake(() => null);
+        taskLoggerLogStub = Sinon.stub(taskLogger, 'log').callsFake(() => null);
+        helpersBuildErrorStub = Sinon.stub(helpers, 'buildError').callsFake(() => {
             return new Error(buildErrorMessage);
         });
     });
 
     teardown(() => {
         scanReport = null;
-        sandbox.restore();
+        Sinon.restore();
     });
 
     suite('scan error Suite:', () => {

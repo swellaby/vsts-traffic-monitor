@@ -15,17 +15,16 @@ const assert = chai.assert;
 suite('IsoDateRange Suite:', () => {
     let dateRange: IsoDateRange;
     const errorMessage = 'Invalid constructor inputs. Both start and end time must be valid ISO strings.';
-    const sandbox = Sinon.sandbox.create();
     let formatValidatorIsValidIsoFormatStub: Sinon.SinonStub;
 
     setup(() => {
-        formatValidatorIsValidIsoFormatStub = sandbox.stub(formatValidator, 'isValidIsoFormat');
+        formatValidatorIsValidIsoFormatStub = Sinon.stub(formatValidator, 'isValidIsoFormat');
         formatValidatorIsValidIsoFormatStub.onFirstCall().returns(false);
         formatValidatorIsValidIsoFormatStub.onSecondCall().returns(false);
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
         dateRange = null;
     });
 

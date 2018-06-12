@@ -24,7 +24,6 @@ const assert = Chai.assert;
  * defined in {@link ./src/vsts-usage-monitor.ts}
  */
 suite('VstsUsageMonitor Suite:', () => {
-    const sandbox = Sinon.sandbox.create();
     let outOfRangeIpAddressScannerRule: IOutOfRangeIpAddressScannerRule;
     let vstsUsageService: IVstsUsageService;
     let vstsUserService: IVstsUserService;
@@ -62,10 +61,10 @@ suite('VstsUsageMonitor Suite:', () => {
      * Helper method to create stubs.
      */
     const setVstsUserServiceStubs = () => {
-        vstsUserServiceGetAADUsersStub = sandbox.stub(vstsUserService, 'getAADUsers').callsFake(() => {
+        vstsUserServiceGetAADUsersStub = Sinon.stub(vstsUserService, 'getAADUsers').callsFake(() => {
             return Promise.resolve(testHelpers.allAADOriginUsers);
         });
-        vstsUserServiceGetAllUsersStub = sandbox.stub(vstsUserService, 'getAllUsers').callsFake(() => {
+        vstsUserServiceGetAllUsersStub = Sinon.stub(vstsUserService, 'getAllUsers').callsFake(() => {
             return Promise.resolve(testHelpers.allVstsOriginUsers);
         });
     };
@@ -74,16 +73,16 @@ suite('VstsUsageMonitor Suite:', () => {
      * Helper method to create stubs.
      */
     const setVstsUsageServiceStubs = () => {
-        vstsUsageServiceGetUserActivityFromYesterdayStub = sandbox.stub(vstsUsageService, 'getUserActivityFromYesterday').callsFake(() => {
+        vstsUsageServiceGetUserActivityFromYesterdayStub = Sinon.stub(vstsUsageService, 'getUserActivityFromYesterday').callsFake(() => {
             return Promise.resolve(testHelpers.usageRecords);
         });
-        vstsUsageServiceGetUserActivityOverLast24HoursStub = sandbox.stub(vstsUsageService, 'getUserActivityOverLast24Hours').callsFake(() => {
+        vstsUsageServiceGetUserActivityOverLast24HoursStub = Sinon.stub(vstsUsageService, 'getUserActivityOverLast24Hours').callsFake(() => {
             return Promise.resolve(testHelpers.usageRecords);
         });
-        vstsUsageServiceGetActiveUsersFromLast24HoursStub = sandbox.stub(vstsUsageService, 'getActiveUsersFromLast24Hours').callsFake(() => {
+        vstsUsageServiceGetActiveUsersFromLast24HoursStub = Sinon.stub(vstsUsageService, 'getActiveUsersFromLast24Hours').callsFake(() => {
             return Promise.resolve(testHelpers.activeVstsUsersFromUsageRecords);
         });
-        vstsUsageServiceGetActiveUsersFromYesterdayStub = sandbox.stub(vstsUsageService, 'getActiveUsersFromYesterday').callsFake(() => {
+        vstsUsageServiceGetActiveUsersFromYesterdayStub = Sinon.stub(vstsUsageService, 'getActiveUsersFromYesterday').callsFake(() => {
             return Promise.resolve(testHelpers.activeVstsUsersFromUsageRecords);
         });
     };
@@ -92,14 +91,14 @@ suite('VstsUsageMonitor Suite:', () => {
      * Helper method to create stubs.
      */
     const setFactoryStubs = () => {
-        factoryGetVstsUsageServiceStub = sandbox.stub(factory, 'getVstsUsageService').callsFake(() => {
+        factoryGetVstsUsageServiceStub = Sinon.stub(factory, 'getVstsUsageService').callsFake(() => {
             return vstsUsageService;
         });
-        factoryGetVstsUserServiceStub = sandbox.stub(factory, 'getVstsUserService').callsFake(() => {
+        factoryGetVstsUserServiceStub = Sinon.stub(factory, 'getVstsUserService').callsFake(() => {
             return vstsUserService;
         });
         factoryGetOutOfRangeIpAddressScannerRuleStub =
-            sandbox.stub(factory, 'getOutOfRangeIpAddressScannerRule').callsFake(() => {
+        Sinon.stub(factory, 'getOutOfRangeIpAddressScannerRule').callsFake(() => {
                 return outOfRangeIpAddressScannerRule;
             });
     };
@@ -109,13 +108,13 @@ suite('VstsUsageMonitor Suite:', () => {
         setVstsUserServiceStubs();
         setVstsUsageServiceStubs();
         setFactoryStubs();
-        vstsUsageScannerEngineScanUserIpAddressStub = sandbox.stub(vstsUsageScannerEngine, 'scanUserIpAddresses').callsFake(() => {
+        vstsUsageScannerEngineScanUserIpAddressStub = Sinon.stub(vstsUsageScannerEngine, 'scanUserIpAddresses').callsFake(() => {
             return scanResult;
         });
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
         outOfRangeIpAddressScannerRule = null;
         vstsUsageService = null;
         vstsUserService = null;

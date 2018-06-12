@@ -17,7 +17,6 @@ const assert = Chai.assert;
  * defined in {@link ./src/services/vsts-utilization-api-usage-service.ts}
  */
 suite('VstsUtilizationApiUsageService Suite:', () => {
-    const sandbox: Sinon.SinonSandbox = Sinon.sandbox.create();
     let requestGetStub: Sinon.SinonStub;
     let vstsUtilizationApiUsageService: VstsUtilizationApiUsageService;
     let vstsHelpersbuildUtilizationUsageSummaryApiUrlStub: Sinon.SinonStub;
@@ -62,20 +61,20 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
 
     setup(() => {
         vstsUtilizationApiUsageService = new VstsUtilizationApiUsageService();
-        requestGetStub = sandbox.stub(request, 'get');
-        vstsHelpersbuildUtilizationUsageSummaryApiUrlStub = sandbox.stub(VstsHelpers, 'buildUtilizationUsageSummaryApiUrl').callsFake(() => {
+        requestGetStub = Sinon.stub(request, 'get');
+        vstsHelpersbuildUtilizationUsageSummaryApiUrlStub = Sinon.stub(VstsHelpers, 'buildUtilizationUsageSummaryApiUrl').callsFake(() => {
             throw new Error(invalidUserIdErrorMessage);
         });
-        vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
+        vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = Sinon.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
             throw new Error(invalidTokenErrorMessage);
         });
-        helpersSleepAsyncStub = sandbox.stub(helpers, 'sleepAsync').callsFake(() => {
+        helpersSleepAsyncStub = Sinon.stub(helpers, 'sleepAsync').callsFake(() => {
             return Promise.resolve();
         });
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
         vstsUtilizationApiUsageService = null;
     });
 
@@ -107,7 +106,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
 
         setup(() => {
-            helpersGetYesterdayUtcDateRangeStub = sandbox.stub(helpers, 'getYesterdayUtcDateRange').callsFake(() => { return dateRange; });
+            helpersGetYesterdayUtcDateRangeStub = Sinon.stub(helpers, 'getYesterdayUtcDateRange').callsFake(() => { return dateRange; });
         });
 
         test('Should reject the promise when the getYesterdayUtcDateRange call throws an exception', (done: () => void) => {
@@ -1814,7 +1813,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         const validDate = new Date();
 
         setup(() => {
-            helpersBuildUtcIsoDateRangeStub = sandbox.stub(helpers, 'buildUtcIsoDateRange').callsFake((date: Date) => {
+            helpersBuildUtcIsoDateRangeStub = Sinon.stub(helpers, 'buildUtcIsoDateRange').callsFake((date: Date) => {
                 if (!date) {
                     throw new Error(helpersErrorMessageDetails);
                 }
@@ -5698,7 +5697,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
 
         setup(() => {
-            helpersGetLast24HoursUtcDateRangeStub = sandbox.stub(helpers, 'getLast24HoursUtcDateRange');
+            helpersGetLast24HoursUtcDateRangeStub = Sinon.stub(helpers, 'getLast24HoursUtcDateRange');
         });
 
         test('Should reject the promise when the getLast24HoursUtcDateRange call throws an exception', (done: () => void) => {
@@ -7405,9 +7404,9 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
 
         setup(() => {
-            helpersGetLast24HoursUtcDateRangeStub = sandbox.stub(helpers, 'getLast24HoursUtcDateRange');
+            helpersGetLast24HoursUtcDateRangeStub = Sinon.stub(helpers, 'getLast24HoursUtcDateRange');
             vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub =
-                sandbox.stub(VstsHelpers, 'buildUtilizationUsageSummaryActiveUsersApiUrl').callsFake(() => {
+            Sinon.stub(VstsHelpers, 'buildUtilizationUsageSummaryActiveUsersApiUrl').callsFake(() => {
                     throw new Error(invalidAccountErrorMessage);
                 });
         });
@@ -7685,9 +7684,9 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
         const expectedDateRangeErrorMesage = baseErrorMessage + helpersErrorMessageDetails;
 
         setup(() => {
-            helpersGetYesterdayUtcDateRangeStub = sandbox.stub(helpers, 'getYesterdayUtcDateRange');
+            helpersGetYesterdayUtcDateRangeStub = Sinon.stub(helpers, 'getYesterdayUtcDateRange');
             vstsHelpersBuildUtilizationUsageSummaryActiveUsersApiUrlStub =
-                sandbox.stub(VstsHelpers, 'buildUtilizationUsageSummaryActiveUsersApiUrl').callsFake(() => {
+                Sinon.stub(VstsHelpers, 'buildUtilizationUsageSummaryActiveUsersApiUrl').callsFake(() => {
                     throw new Error(invalidAccountErrorMessage);
                 });
         });

@@ -16,7 +16,6 @@ const assert = Chai.assert;
  * Contains unit tests for the @see {@link VstsGraphApiUserService} class defined in {@link ./src/services/vsts-graph-api-user-service.ts}
  */
 suite('VSTS Graph API User Service Suite:', () => {
-    const sandbox: Sinon.SinonSandbox = Sinon.sandbox.create();
     let requestGetStub: Sinon.SinonStub;
     let vstsGraphApiUserService: VstsGraphApiUserService;
     let vstsHelpersBuildGraphApiUsersUrlStub: Sinon.SinonStub;
@@ -38,18 +37,18 @@ suite('VSTS Graph API User Service Suite:', () => {
     const jsonParseErrorMessage = errorMessageBase + jsonParseErrorMessageSuffix;
 
     setup(() => {
-        requestGetStub = sandbox.stub(request, 'get');
+        requestGetStub = Sinon.stub(request, 'get');
         vstsGraphApiUserService = new VstsGraphApiUserService();
-        vstsHelpersBuildGraphApiUsersUrlStub = sandbox.stub(VstsHelpers, 'buildGraphApiUsersUrl');
-        vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = sandbox.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
+        vstsHelpersBuildGraphApiUsersUrlStub = Sinon.stub(VstsHelpers, 'buildGraphApiUsersUrl');
+        vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = Sinon.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
             return { url: testHelpers.sampleUsageSummaryApiUrl };
         });
-        vstsHelpersBuildStorageKeyApiUrlStub = sandbox.stub(VstsHelpers, 'buildStorageKeyApiUrl');
-        vstsHelpersAppendContinuationTokenStub = sandbox.stub(VstsHelpers, 'appendContinuationToken');
+        vstsHelpersBuildStorageKeyApiUrlStub = Sinon.stub(VstsHelpers, 'buildStorageKeyApiUrl');
+        vstsHelpersAppendContinuationTokenStub = Sinon.stub(VstsHelpers, 'appendContinuationToken');
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
         vstsGraphApiUserService = null;
     });
 

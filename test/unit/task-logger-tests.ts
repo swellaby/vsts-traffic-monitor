@@ -10,15 +10,14 @@ const assert = Chai.assert;
  * Contains unit tests for the functions defined in {@link ./src/task-logger.ts}
  */
 suite('TaskLogger Suite:', () => {
-    const sandbox = Sinon.sandbox.create();
     let consoleLogSpy: Sinon.SinonSpy;
 
     setup(() => {
-        consoleLogSpy = sandbox.spy(console, 'log');
+        consoleLogSpy = Sinon.spy(console, 'log');
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
     });
 
     test('Should log content to console', () => {

@@ -17,11 +17,10 @@ const assert = Chai.assert;
  * defined in {@link ./src/scanner-rules/out-of-range-ip-address-scanner-rule.ts}
  */
 suite('OutOfRangeIpAddressScannerRule Tests:', () => {
-    const sandbox = Sinon.sandbox.create();
     const emptyIpRange: string[] = [];
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
     });
 
     suite('Constructor Suite:', () => {
@@ -29,11 +28,11 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
         let ipRangeHelperIsRangeStub: Sinon.SinonStub;
 
         setup(() => {
-            ipRangeHelperIsIPStub = sandbox.stub(ipRangeHelper, 'isIP').callsFake(() => {
+            ipRangeHelperIsIPStub = Sinon.stub(ipRangeHelper, 'isIP').callsFake(() => {
                 return true;
             });
 
-            ipRangeHelperIsRangeStub = sandbox.stub(ipRangeHelper, 'isRange').callsFake(() => {
+            ipRangeHelperIsRangeStub = Sinon.stub(ipRangeHelper, 'isRange').callsFake(() => {
                 return true;
             });
         });
@@ -262,12 +261,12 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
         let vstsHelpersIsInternalVstsServiceToServiceCallStub: Sinon.SinonStub;
 
         setup(() => {
-            ipRangeHelperInRangeStub = sandbox.stub(ipRangeHelper, 'inRange').callsFake(() => {
+            ipRangeHelperInRangeStub = Sinon.stub(ipRangeHelper, 'inRange').callsFake(() => {
                 return false;
             });
 
             rule = new OutOfRangeIpAddressScannerRule([ testHelpers.validIpRange, testHelpers.fifthValidIpAddress ], false, testHelpers.usageRecordOriginValidators);
-            vstsHelpersIsInternalVstsServiceToServiceCallStub = sandbox.stub(vstsHelpers, 'isInternalVstsServiceToServiceCall').callsFake(() => {
+            vstsHelpersIsInternalVstsServiceToServiceCallStub = Sinon.stub(vstsHelpers, 'isInternalVstsServiceToServiceCall').callsFake(() => {
                 return false;
             });
         });

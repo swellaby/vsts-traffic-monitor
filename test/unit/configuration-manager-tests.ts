@@ -13,22 +13,21 @@ const assert = Chai.assert;
  * Contains unit tests for the functions defined in {@link ./src/configuration-manager.ts}
  */
 suite('ConfigurationManager Suite:', () => {
-    const sandbox = Sinon.sandbox.create();
     let nconfGetStub: Sinon.SinonStub;
     let nconfSetStub: Sinon.SinonStub;
     const allowedIpRangesKey = 'allowedIpRanges';
 
     setup(() => {
-        nconfGetStub = sandbox.stub(nconf, 'get').callsFake(() => {
+        nconfGetStub = Sinon.stub(nconf, 'get').callsFake(() => {
             return testHelpers.emptyString;
         });
-        nconfSetStub = sandbox.stub(nconf, 'set').callsFake(() => {
+        nconfSetStub = Sinon.stub(nconf, 'set').callsFake(() => {
             return;
         });
     });
 
     teardown(() => {
-        sandbox.restore();
+        Sinon.restore();
     });
 
     test('Should return the correct value of allowed ip ranges', () => {
