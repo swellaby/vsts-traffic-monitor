@@ -18,7 +18,7 @@ export const convertPatToApiHeader = (accessToken: string) => {
     if (!accessToken) {
         throw new Error('Invalid access token.');
     }
-    return new Buffer('' + ':' + accessToken).toString('base64');
+    return Buffer.from('' + ':' + accessToken).toString('base64');
 };
 
 /**

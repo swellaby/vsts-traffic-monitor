@@ -6,6 +6,7 @@
         ".vsts-publish": true,
         ".coverage": true,
         ".testresults": true,
+        ".nyc_output": true,
         "node_modules": true,
         ".taskkey": true
     }
