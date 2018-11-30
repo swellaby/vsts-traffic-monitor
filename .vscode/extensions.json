@@ -1,12 +1,14 @@
 {
     "recommendations": [
         "GuardRex.status-bar-tasks",
-        "ms-vsts.team",
-        "christian-kohler.path-intellisense",
-        "christian-kohler.npm-intellisense",
         "joelday.docthis",
         "eg2.tslint",
-        "dbaumer.vscode-eslint",
+        "dbaeumer.vscode-eslint",
+        "christian-kohler.path-intellisense",
+        "christian-kohler.npm-intellisense",
+        "eamodio.gitlens",
+        "pflannery.vscode-versionlens",
+        "ms-vsts.team",
         "brunomartens.bma-coverage",
         "alexdima.vscode-lcov",
         "ryanluker.vscode-coverage-gutters",

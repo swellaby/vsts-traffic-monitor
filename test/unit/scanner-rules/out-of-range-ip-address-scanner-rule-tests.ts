@@ -1,7 +1,6 @@
 'use strict';
 
 import Chai = require('chai');
-import Sinon = require('sinon');
 
 import OutOfRangeIpAddressScannerRule = require('./../../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import testHelpers = require('./../test-helpers');
@@ -9,6 +8,8 @@ import vstsHelpers = require('./../../../src/vsts-helpers');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
+// tslint:disable-next-line:variable-name
+const Sinon = require('sinon');
 
 const assert = Chai.assert;
 
@@ -24,14 +25,11 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
     });
 
     suite('Constructor Suite:', () => {
-        let ipRangeHelperIsIPStub: Sinon.SinonStub;
-        let ipRangeHelperIsRangeStub: Sinon.SinonStub;
+        let ipRangeHelperIsIPStub;
+        let ipRangeHelperIsRangeStub;
 
         setup(() => {
-            ipRangeHelperIsIPStub = Sinon.stub(ipRangeHelper, 'isIP').callsFake(() => {
-                return true;
-            });
-
+            ipRangeHelperIsIPStub = Sinon.stub(ipRangeHelper, 'isIP').callsFake(() => true);
             ipRangeHelperIsRangeStub = Sinon.stub(ipRangeHelper, 'isRange').callsFake(() => {
                 return true;
             });
@@ -257,8 +255,8 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
     suite('scanRecordForMatch Suite:', () => {
         const invalidUsageRecordErrorMessage = 'Invalid parameter. usageRecord cannot be null nor undefined';
         let rule: OutOfRangeIpAddressScannerRule;
-        let ipRangeHelperInRangeStub: Sinon.SinonStub;
-        let vstsHelpersIsInternalVstsServiceToServiceCallStub: Sinon.SinonStub;
+        let ipRangeHelperInRangeStub;
+        let vstsHelpersIsInternalVstsServiceToServiceCallStub;
 
         setup(() => {
             ipRangeHelperInRangeStub = Sinon.stub(ipRangeHelper, 'inRange').callsFake(() => {

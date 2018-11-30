@@ -91,7 +91,7 @@ suite('Task Suite:', () => {
         setupInputStubs();
         scanReport = new IpAddressScanReport();
         vstsUsageMonitorScanForOutOfRangeIpAddressesStub = Sinon.stub(vstsUsageMonitor, 'scanForOutOfRangeIpAddresses').callsFake(() => {
-            return scanReport;
+            return Promise.resolve(scanReport);
         });
         tlSetResultStub = Sinon.stub(tl, 'setResult').callsFake(() => null);
         taskLoggerLogStub = Sinon.stub(taskLogger, 'log').callsFake(() => null);
