@@ -69,7 +69,7 @@ suite('VstsUtilizationApiUsageService Suite:', () => {
             throw new Error(invalidTokenErrorMessage);
         });
         helpersSleepAsyncStub = Sinon.stub(helpers, 'sleepAsync').callsFake(() => {
-            return Promise.resolve();
+            return Promise.resolve({});
         });
     });
 

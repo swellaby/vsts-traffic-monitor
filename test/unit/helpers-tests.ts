@@ -30,7 +30,8 @@ suite('Helpers Suite:', () => {
     let formatValidatorIsValidIsoFormatStub: Sinon.SinonStub;
 
     setup(() => {
-        momentUtcStub = Sinon.stub(moment.prototype, 'utc').callsFake(() => {
+        // moment.
+        momentUtcStub = Sinon.stub(moment, 'utc').callsFake(() => {
             return momentStub;
         });
         momentSubtractStub = Sinon.stub(momentStub, 'subtract');
@@ -71,11 +72,11 @@ suite('Helpers Suite:', () => {
 
     suite('buildUtcIsoDateRange Suite:', () => {
         const errorMessage = 'Invalid date specified.';
-        const startOfStub = {
-            format: () => { return testHelpers.isoFormatStartTime; }
+        const startOfStub = <moment.Moment>{
+            format: () => testHelpers.isoFormatStartTime
         };
-        const endOfStub = {
-            format: () => { return testHelpers.isoFormatEndTime; }
+        const endOfStub = <moment.Moment>{
+            format: () => testHelpers.isoFormatEndTime
         };
         let dateStartOfStub: Sinon.SinonStub;
         let dateEndOfStub: Sinon.SinonStub;
@@ -224,12 +225,15 @@ suite('Helpers Suite:', () => {
         const invalidParamErrorMessage = 'Invalid parameter. Parameter ms must be a valid, positive number.';
         let clock: Sinon.SinonFakeTimers;
         let setTimeoutStub: Sinon.SinonStub;
-        const ms = 1500;
+        const ms: Sinon.SinonTimerId = 1500;
 
         setup(() => {
             clock = Sinon.useFakeTimers();
             // eslint-disable-next-line no-unused-vars
-            setTimeoutStub = Sinon.stub(clock, 'setTimeout').callsFake((resolve, ms) => { resolve(); });
+            setTimeoutStub = Sinon.stub(clock, 'setTimeout').callsFake((resolve, ms) => {
+                resolve();
+                return ms;
+            });
         });
 
         teardown(() => {

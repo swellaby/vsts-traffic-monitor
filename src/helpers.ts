@@ -53,8 +53,8 @@ export const buildUtcIsoDateRange = (targetDate: Date): IsoDateRange => {
     if (!targetDate) {
         throw new Error('Invalid date specified.');
     }
-
-    const utcDate = moment(targetDate).utc();
+    const utcDate = moment.utc(targetDate);
+    // const utcDate = moment(targetDate).utc();
     return getFullDayIsoDateRange(utcDate);
 };
 

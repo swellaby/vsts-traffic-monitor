@@ -41,7 +41,7 @@ suite('VSTS Graph API User Service Suite:', () => {
         vstsGraphApiUserService = new VstsGraphApiUserService();
         vstsHelpersBuildGraphApiUsersUrlStub = Sinon.stub(VstsHelpers, 'buildGraphApiUsersUrl');
         vstsHelpersBuildRestApiBasicAuthRequestOptionsStub = Sinon.stub(VstsHelpers, 'buildRestApiBasicAuthRequestOptions').callsFake(() => {
-            return { url: testHelpers.sampleUsageSummaryApiUrl };
+            return { url: testHelpers.sampleUsageSummaryApiUrl, headers: { Authorization: '' } };
         });
         vstsHelpersBuildStorageKeyApiUrlStub = Sinon.stub(VstsHelpers, 'buildStorageKeyApiUrl');
         vstsHelpersAppendContinuationTokenStub = Sinon.stub(VstsHelpers, 'appendContinuationToken');
