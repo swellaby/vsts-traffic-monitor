@@ -64,7 +64,7 @@
     "@types/mocha": "^5.2.5",
     "@types/nconf": "0.0.37",
     "@types/request": "2.48.1",
-    "@types/sinon": "^5.0.7",
+    "@types/sinon": "^7.0.0",
     "chai": "^4.2.0",
     "copy-node-modules": "^1.0.8",
     "eslint": "^5.9.0",
