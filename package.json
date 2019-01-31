@@ -62,7 +62,7 @@
     "@swellaby/tslint-config": "^2.0.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.5",
-    "@types/nconf": "0.0.37",
+    "@types/nconf": "0.10.0",
     "@types/request": "2.48.1",
     "@types/sinon": "^7.0.0",
     "chai": "^4.2.0",
