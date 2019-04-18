@@ -2,18 +2,15 @@
 
 import Chai = require('chai');
 
-import formatValidator = require('./../../src/format-validator');
+import formatValidator = require('../../src/format-validator');
 import testHelpers = require('./test-helpers');
 
 const assert = Chai.assert;
 
-/**
- * Contains unit tests for the functions defined in {@link ./src/format-validator.ts}
- */
 suite('Format Validator Suite:', () => {
     suite('isValidGuid Suite:', () => {
         test('Should return false when the input is null', () => {
-            assert.deepEqual(formatValidator.isValidGuid(null), false);
+            assert.isFalse(formatValidator.isValidGuid(null));
         });
 
         test('Should return false when the input is undefined', () => {

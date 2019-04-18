@@ -4,13 +4,13 @@ FORCE="y"
 usage() {
   cat <<EOF
 
-Usage: $0 
+Usage: $0
           -n <build-number>  - The resulting image will be tagged, W.X.Y.Z; W.X.Y coming from package.json and Z coming from this arg
           -f <force> - If anything other than "y", the build will stop if unit tests fail. Defaults to "y"
 EOF
 }
 
-unset BUILD_NUMBER 
+unset BUILD_NUMBER
 while getopts "n:f:h" opt ; do
   case $opt in
     n) BUILD_NUMBER=$OPTARG;;
