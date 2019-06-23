@@ -1,13 +1,13 @@
 {
   "files.exclude": {
-    "**/*.2js": { "when": "$(basename).ts" },
-    "**/*.2map": { "when": "$(basename).map" },
+    "**/*.js": { "when": "$(basename).ts" },
+    "**/*.map": { "when": "$(basename).map" },
     "npm-debug.log": true,
     ".vsts-publish": false,
     ".coverage": true,
     ".testresults": true,
     ".nyc_output": true,
-    "node_modules": false,
+    "node_modules": true,
     ".taskkey": true
   }
 }

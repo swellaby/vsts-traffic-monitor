@@ -121,6 +121,8 @@ class VstsGraphApiUserService implements IVstsUserService {
                             const users = JSON.parse(data).value;
 
                             await Promise.all(users.map(async u => {
+                                // https://github.com/eslint/eslint/issues/11723
+                                // eslint-disable-next-line require-atomic-updates
                                 u.storageKey = await this.getUserStorageKey(u, vstsAccountName, accessToken);
                                 if (u.storageKey) {
                                     graphApiUserListResponse.vstsUsers.push(u);
