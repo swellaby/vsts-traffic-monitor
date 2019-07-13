@@ -1,7 +1,13 @@
 {
   "extends": "@swellaby/nyc-config",
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "src/interfaces/**/*"
+  ],
+  "extension": [
+    ".ts"
   ],
   "all": false,
   "report-dir": ".coverage/unit"
