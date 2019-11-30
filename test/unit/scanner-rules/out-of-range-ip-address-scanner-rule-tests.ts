@@ -6,6 +6,8 @@ import OutOfRangeIpAddressScannerRule = require('./../../../src/scanner-rules/ou
 import testHelpers = require('./../test-helpers');
 import vstsHelpers = require('./../../../src/vsts-helpers');
 import IpAddressScanRequest = require('../../../src/models/ip-address-scan-request');
+import AuthMechanism = require('../../../src/enums/auth-mechanism');
+import VstsUsageRecord = require('../../../src/models/vsts-usage-record');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
@@ -182,7 +184,8 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
         });
 
         test('Should throw an error when allowedIpRanges is empty, and originValidator array is valid', () => {
-            assert.throws(() => new OutOfRangeIpAddressScannerRule(<IpAddressScanRequest> { allowedIpRanges: emptyIpRange }, testHelpers.usageRecordOriginValidators), invalidAllowedIpAddressParamErrorMessage);
+            const scanRequest = <IpAddressScanRequest> { allowedIpRanges: emptyIpRange };
+            assert.throws(() => new OutOfRangeIpAddressScannerRule(scanRequest, testHelpers.usageRecordOriginValidators), invalidAllowedIpAddressParamErrorMessage);
         });
 
         // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is undefined, and originValidator array is null', () => {
@@ -306,9 +309,39 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
             assert.isFalse(isFlagged);
         });
 
-        test('Should return true when record has an invalid IP', () => {
+        test('Should return true when record has an invalid IP and authMechanism is any', () => {
+            const scanRequest = <IpAddressScanRequest> {
+                allowedIpRanges: [ testHelpers.validIpRange, testHelpers.fifthValidIpAddress ],
+                includeInternalVstsServices: true,
+                targetAuthMechanism: AuthMechanism.any
+            };
+            rule = new OutOfRangeIpAddressScannerRule(scanRequest, testHelpers.usageRecordOriginValidators);
             const isFlagged = rule.scanRecordForMatch(testHelpers.secondUsageRecord);
             assert.isTrue(isFlagged);
+        });
+
+        test('Should return true when record has an invalid IP with PAT auth and authMechanism is pat', () => {
+            const scanRequest = <IpAddressScanRequest> {
+                allowedIpRanges: [ testHelpers.validIpRange, testHelpers.fifthValidIpAddress ],
+                includeInternalVstsServices: true,
+                targetAuthMechanism: AuthMechanism.pat
+            };
+            rule = new OutOfRangeIpAddressScannerRule(scanRequest, testHelpers.usageRecordOriginValidators);
+            const isFlagged = rule.scanRecordForMatch(testHelpers.secondUsageRecord);
+            assert.isTrue(isFlagged);
+        });
+
+        test('Should return false when record has an invalid IP with non-PAT auth and authMechanism is pat', () => {
+            const scanRequest = <IpAddressScanRequest> {
+                allowedIpRanges: [ testHelpers.validIpRange, testHelpers.fifthValidIpAddress ],
+                includeInternalVstsServices: true,
+                targetAuthMechanism: AuthMechanism.pat
+            };
+            const usageRecord: VstsUsageRecord = JSON.parse(JSON.stringify(testHelpers.secondUsageRecord));
+            usageRecord.authenticationMechanism = 'UserAuthToken';
+            rule = new OutOfRangeIpAddressScannerRule(scanRequest, testHelpers.usageRecordOriginValidators);
+            const isFlagged = rule.scanRecordForMatch(usageRecord);
+            assert.isFalse(isFlagged);
         });
 
         test('Should return true on internal VSTS service record with invalid IP when configured to include', () => {

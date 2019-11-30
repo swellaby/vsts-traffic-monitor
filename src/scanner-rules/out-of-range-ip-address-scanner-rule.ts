@@ -5,6 +5,7 @@ import IOutOfRangeIpAddressScannerRule = require('./../interfaces/out-of-range-i
 import IUsageRecordOriginValidator = require('./../interfaces/usage-record-origin-validator');
 import vstsHelpers = require('./../vsts-helpers');
 import VstsUsageRecord = require('./../models/vsts-usage-record');
+import AuthMechanism = require('../enums/auth-mechanism');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
@@ -29,7 +30,7 @@ class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule 
      * @throws {Error} - Will throw an error on invalid input.
      */
     constructor (
-        scanRequest,
+        scanRequest: IpAddressScanRequest,
         usageRecordOriginValidators?: IUsageRecordOriginValidator[]
     ) {
         if (!scanRequest || !usageRecordOriginValidators) {
@@ -66,11 +67,20 @@ class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule 
         if (!usageRecord) {
             throw new Error('Invalid parameter. usageRecord cannot be null nor undefined');
         }
-        const { allowedIpRanges, includeInternalVstsServices } = this.scanRequest;
+        const { allowedIpRanges, includeInternalVstsServices, targetAuthMechanism } = this.scanRequest;
 
-        const ipAddress = usageRecord.ipAddress;
+        const { ipAddress, authenticationMechanism } = usageRecord;
         if (ipAddress && !ipRangeHelper.inRange(ipAddress, allowedIpRanges)) {
             // This usageRecord came from an IP outside the expected range. Check to see if it was created by VSTS itself before flagging it.
+            switch (targetAuthMechanism) {
+                case AuthMechanism.any: break;
+                case AuthMechanism.pat:
+                    if (!authenticationMechanism.toLowerCase().startsWith('pat')) {
+                        return false;
+                    }
+
+            }
+
             if (vstsHelpers.isInternalVstsServiceToServiceCall(usageRecord, this.usageRecordOriginValidators)) {
             // if (usageRecord.userAgent.indexOf('VSServices') === 0) {
                 if (includeInternalVstsServices) {
