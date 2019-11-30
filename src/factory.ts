@@ -5,6 +5,7 @@
  */
 
 import IOutOfRangeIpAddressScannerRule = require('./interfaces/out-of-range-ip-address-scanner-rule');
+import IpAddressScanRequest = require('./models/ip-address-scan-request');
 import IUsageRecordOriginValidator = require('./interfaces/usage-record-origin-validator');
 import IVstsUsageService = require('./interfaces/vsts-usage-service');
 import IVstsUserService = require('./interfaces/vsts-user-service');
@@ -56,7 +57,7 @@ export const getUsageRecordOriginValidators = (): IUsageRecordOriginValidator[] 
  * @returns {IOutOfRangeIpAddressScannerRule}
  */
 export const getOutOfRangeIpAddressScannerRule =
-    (allowedIpRanges: string[], includeInternalVstsServices: boolean): IOutOfRangeIpAddressScannerRule => {
+    (scanRequest: IpAddressScanRequest): IOutOfRangeIpAddressScannerRule => {
         const usageRecordOriginValidators = getUsageRecordOriginValidators();
-        return new OutOfRangeIpAddressScannerRule(allowedIpRanges, includeInternalVstsServices, usageRecordOriginValidators);
+        return new OutOfRangeIpAddressScannerRule(scanRequest, usageRecordOriginValidators);
 };

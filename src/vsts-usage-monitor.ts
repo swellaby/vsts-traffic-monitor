@@ -143,7 +143,7 @@ const scanUserUsageRecordsForOutOfRangeIpAddress =
         scanReport.numUsersActive += 1;
         userActivityReport.allUsageRecords = usageRecords;
         const scannerRule: IOutOfRangeIpAddressScannerRule =
-            factory.getOutOfRangeIpAddressScannerRule(scanRequest.allowedIpRanges, scanRequest.includeInternalVstsServices);
+            factory.getOutOfRangeIpAddressScannerRule(scanRequest);
         const scanResult = vstsUsageScannerEngine.scanUserIpAddresses(usageRecords, scannerRule);
         analyzeOutOfRangeIpAddressScanResult(scanResult, scanReport, userActivityReport);
     } catch (err) {

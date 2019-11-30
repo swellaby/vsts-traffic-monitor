@@ -3,6 +3,7 @@
 import Chai = require('chai');
 import Sinon = require('sinon');
 
+import IpAddressScanRequest = require('../../src/models/ip-address-scan-request');
 import OutOfRangeIpAddressScannerRule = require('./../../src/scanner-rules/out-of-range-ip-address-scanner-rule');
 import testHelpers = require('./test-helpers');
 import VstsUsageRecord = require('./../../src/models/vsts-usage-record');
@@ -28,7 +29,8 @@ suite('VstsUsageScannerEngine Suite:', () => {
         let ruleScanRecordForMatchStub: Sinon.SinonStub;
 
         setup(() => {
-            ruleStub = new OutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false, testHelpers.usageRecordOriginValidators);
+            const scanRequest = <IpAddressScanRequest> { allowedIpRanges: testHelpers.allowedIpRanges, includeInternalVstsServices: true };
+            ruleStub = new OutOfRangeIpAddressScannerRule(scanRequest, testHelpers.usageRecordOriginValidators);
             ruleScanRecordForMatchStub = Sinon.stub(ruleStub, 'scanRecordForMatch').callsFake(() => {
                 return false;
             });
