@@ -59,54 +59,6 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
             assert.throws(() => new OutOfRangeIpAddressScannerRule(null, testHelpers.usageRecordOriginValidators), invalidParamsErrorMessage);
         });
 
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is undefined, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, undefined, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is undefined, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, undefined, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is undefined, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, undefined, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is undefined, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, undefined, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is false, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, false, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is false, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, false, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is false, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, false, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is false, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, false, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is true, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, true, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is true, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, true, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is true, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, true, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is null, includeInternalVstsServices is true, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(null, true, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
         test('Should throw an error when allowedIpRanges is undefined, and originValidator array is null', () => {
             assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, null), invalidParamsErrorMessage);
         });
@@ -122,54 +74,6 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
         test('Should throw an error when allowedIpRanges is undefined, and originValidator array is valid', () => {
             assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, testHelpers.usageRecordOriginValidators), invalidParamsErrorMessage);
         });
-
-        // test('Should throw an error when allowedIpRanges is undefined, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is undefined, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, undefined, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is undefined, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, undefined, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is undefined, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, undefined, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is false, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, false, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is false, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, false, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is false, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, false, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is false, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, false, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is true, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, true, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is true, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, true, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is true, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, true, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is undefined, includeInternalVstsServices is true, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(undefined, true, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
 
         test('Should throw an error when allowedIpRanges is empty, and originValidator array is null', () => {
             assert.throws(() => new OutOfRangeIpAddressScannerRule(<IpAddressScanRequest> { allowedIpRanges: emptyIpRange }, null), invalidParamsErrorMessage);
@@ -187,54 +91,6 @@ suite('OutOfRangeIpAddressScannerRule Tests:', () => {
             const scanRequest = <IpAddressScanRequest> { allowedIpRanges: emptyIpRange };
             assert.throws(() => new OutOfRangeIpAddressScannerRule(scanRequest, testHelpers.usageRecordOriginValidators), invalidAllowedIpAddressParamErrorMessage);
         });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is undefined, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, undefined, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is undefined, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, undefined, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is undefined, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, undefined, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is undefined, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, undefined, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is false, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, false, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is false, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, false, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is false, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, false, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is false, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, false, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is true, and originValidator array is null', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, true, null), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is true, and originValidator array is undefined', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, true, undefined), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is true, and originValidator array is empty', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, true, []), errorMessage);
-        // });
-
-        // test('Should throw an error when allowedIpRanges is empty, includeInternalVstsServices is true, and originValidator array is valid', () => {
-        //     assert.throws(() => new OutOfRangeIpAddressScannerRule(emptyIpRange, true, testHelpers.usageRecordOriginValidators), errorMessage);
-        // });
 
         test('Should throw an error when allowedIpRanges contains an invalid value', () => {
             ipRangeHelperIsIPStub.callsFake(() => { return false; });
