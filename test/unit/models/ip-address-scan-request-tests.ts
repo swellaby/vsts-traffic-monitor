@@ -2,6 +2,7 @@
 
 import Chai = require('chai');
 
+import AuthMechanism = require('../../../src/enums/auth-mechanism');
 import IpAddressrequest = require('./../../../src/models/ip-address-scan-request');
 import testHelpers = require('./../test-helpers');
 import vstsUsageScanTimePeriod = require('./../../../src/enums/vsts-usage-scan-time-period');
@@ -77,5 +78,14 @@ suite('IpAddressrequest Suite:', () => {
     test('Should have modifiable property for scanTimePeriod', () => {
         request.scanTimePeriod = vstsUsageScanTimePeriod.last24Hours;
         assert.deepEqual(request.scanTimePeriod, vstsUsageScanTimePeriod.last24Hours);
+    });
+
+    test('Should have accessible property for targetAuthMechanism', () => {
+        assert.deepEqual(request.targetAuthMechanism, undefined);
+    });
+
+    test('Should have modifiable property for targetAuthMechanism', () => {
+        request.targetAuthMechanism = AuthMechanism.pat;
+        assert.deepEqual(request.targetAuthMechanism, AuthMechanism.pat);
     });
 });

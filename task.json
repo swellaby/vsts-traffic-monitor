@@ -13,8 +13,8 @@
   "demands": [],
   "version": {
     "Major": 0,
-    "Minor": 8,
-    "Patch": 24
+    "Minor": 9,
+    "Patch": 2
   },
   "minimumAgentVersion": "1.95.3",
   "instanceNameFormat": "Scan IP Addresses",
@@ -69,6 +69,18 @@
       "options": {
         "aad": "Azure Active Directory",
         "all": "All"
+      }
+    },
+    {
+      "name": "targetAuthMechanism",
+      "type": "picklist",
+      "label": "Target Authentication Mechanism",
+      "defaultValue": "pat",
+      "required": true,
+      "helpMarkDown": "Controls which authentication mechanisms to check.",
+      "options": {
+        "any": "Any",
+        "pat": "Personal Access Token"
       }
     },
     {

@@ -214,7 +214,8 @@ export const usageRecordOriginValidators: IUsageRecordOriginValidator[] = [
 ];
 
 export const buildOutOfRangeIpAddressScannerRule = (): IOutOfRangeIpAddressScannerRule => {
-    return new OutOfRangeIpAddressScannerRule(allowedIpRanges, false, usageRecordOriginValidators);
+    const scanRequest = <IpAddressScanRequest> { allowedIpRanges, includeInternalVstsServices: true };
+    return new OutOfRangeIpAddressScannerRule(scanRequest, usageRecordOriginValidators);
 };
 
 export const buildUsageServiceInstance = (): IVstsUsageService => {

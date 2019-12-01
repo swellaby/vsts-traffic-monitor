@@ -2,6 +2,7 @@
 
 import tl = require('vsts-task-lib/task');
 
+import AuthMechanism = require('./enums/auth-mechanism');
 import helpers = require('./helpers');
 import IpAddressScanReport = require('./models/ip-address-scan-report');
 import IpAddressScanRequest = require('./models/ip-address-scan-request');
@@ -20,6 +21,7 @@ let scanTimePeriod: vstsUsageScanTimePeriod;
 let userOrigin: vstsUserOrigin;
 let allowedIpRanges: string[];
 let includeInternalVstsServices: boolean;
+let targetAuthMechanism: AuthMechanism;
 
 /**
  * Initializes the task for execution.
@@ -32,6 +34,7 @@ const initialize = () => {
     userOrigin = +vstsUserOrigin[tl.getInput('userOrigin', true)];
     allowedIpRanges = tl.getDelimitedInput('ipRange', '\n', true);
     includeInternalVstsServices = tl.getBoolInput('scanInternalVstsServices', true);
+    targetAuthMechanism = +AuthMechanism[tl.getInput('targetAuthMechanism', true)];
 };
 
 /**
@@ -46,6 +49,7 @@ const buildScanRequest = () => {
     scanRequest.vstsUserOrigin = userOrigin;
     scanRequest.includeInternalVstsServices = includeInternalVstsServices;
     scanRequest.allowedIpRanges = allowedIpRanges;
+    scanRequest.targetAuthMechanism = targetAuthMechanism;
 
     return scanRequest;
 };

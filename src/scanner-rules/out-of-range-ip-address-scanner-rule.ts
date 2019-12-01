@@ -1,9 +1,11 @@
 'use strict';
 
+import IpAddressScanRequest = require('../models/ip-address-scan-request');
 import IOutOfRangeIpAddressScannerRule = require('./../interfaces/out-of-range-ip-address-scanner-rule');
 import IUsageRecordOriginValidator = require('./../interfaces/usage-record-origin-validator');
 import vstsHelpers = require('./../vsts-helpers');
 import VstsUsageRecord = require('./../models/vsts-usage-record');
+import AuthMechanism = require('../enums/auth-mechanism');
 
 // tslint:disable-next-line:no-var-requires
 const ipRangeHelper = require('range_check'); // There is not a typedefinition for this library yet.
@@ -16,8 +18,7 @@ const ipRangeHelper = require('range_check'); // There is not a typedefinition f
  * @implements {IOutOfRangeIpAddressScannerRule}
  */
 class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule {
-    private allowedIpRanges: string[];
-    private includeInternalVstsServices: boolean;
+    private scanRequest: IpAddressScanRequest;
     private usageRecordOriginValidators: IUsageRecordOriginValidator[];
 
     /**
@@ -28,15 +29,23 @@ class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule 
      *
      * @throws {Error} - Will throw an error on invalid input.
      */
-    constructor (allowedIpRanges: string[], includeInternalVstsServices: boolean, usageRecordOriginValidators?: IUsageRecordOriginValidator[]) {
-        if (!allowedIpRanges || allowedIpRanges.length === 0 || !usageRecordOriginValidators) {
-            throw new Error('Invalid constructor parameters. allowedIpRanges parameter must be a non-empty array of valid values and usageRecordValidators must be specified.');
+    constructor (
+        scanRequest: IpAddressScanRequest,
+        usageRecordOriginValidators?: IUsageRecordOriginValidator[]
+    ) {
+        if (!scanRequest || !usageRecordOriginValidators) {
+            throw new Error('Invalid constructor parameters. scanRequest and usageRecordOriginValidators must be specified');
+        }
+
+        const { allowedIpRanges } = scanRequest;
+
+        if (!allowedIpRanges || allowedIpRanges.length === 0) {
+            throw new Error('Invalid constructor parameters. allowedIpRanges parameter must be a non-empty array of valid values.');
         }
 
         this.validateIpRangeValues(allowedIpRanges);
 
-        this.allowedIpRanges = allowedIpRanges;
-        this.includeInternalVstsServices = includeInternalVstsServices;
+        this.scanRequest = scanRequest;
         this.usageRecordOriginValidators = usageRecordOriginValidators;
     }
 
@@ -58,13 +67,23 @@ class OutOfRangeIpAddressScannerRule implements IOutOfRangeIpAddressScannerRule 
         if (!usageRecord) {
             throw new Error('Invalid parameter. usageRecord cannot be null nor undefined');
         }
+        const { allowedIpRanges, includeInternalVstsServices, targetAuthMechanism } = this.scanRequest;
 
-        const ipAddress = usageRecord.ipAddress;
-        if (ipAddress && !ipRangeHelper.inRange(ipAddress, this.allowedIpRanges)) {
+        const { ipAddress, authenticationMechanism } = usageRecord;
+        if (ipAddress && !ipRangeHelper.inRange(ipAddress, allowedIpRanges)) {
             // This usageRecord came from an IP outside the expected range. Check to see if it was created by VSTS itself before flagging it.
+            switch (targetAuthMechanism) {
+                case AuthMechanism.any: break;
+                case AuthMechanism.pat:
+                    if (!authenticationMechanism.toLowerCase().startsWith('pat')) {
+                        return false;
+                    }
+
+            }
+
             if (vstsHelpers.isInternalVstsServiceToServiceCall(usageRecord, this.usageRecordOriginValidators)) {
             // if (usageRecord.userAgent.indexOf('VSServices') === 0) {
-                if (this.includeInternalVstsServices) {
+                if (includeInternalVstsServices) {
                     return true;
                 }
            } else {

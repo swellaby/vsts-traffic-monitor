@@ -14,6 +14,7 @@ import VstsIpAddressUsageRecordOriginValidator = require('./../../src/validators
 import VstsGraphApiUserService = require('./../../src/services/vsts-graph-api-user-service');
 import VstsUserAgentUsageRecordOriginValidator = require('./../../src/validators/vsts-user-agent-usage-record-origin-validator');
 import VstsUtilizationApiUsageService = require('./../../src/services/vsts-utilization-api-usage-service');
+import IpAddressScanRequest = require('../../src/models/ip-address-scan-request');
 
 const assert = Chai.assert;
 
@@ -32,7 +33,7 @@ suite('Factory Suite:', () => {
     });
 
     test('Should return the correct instance type of IOutOfRangeIpAddressScannerRule', () => {
-        const scannerRule = factory.getOutOfRangeIpAddressScannerRule(testHelpers.allowedIpRanges, false);
+        const scannerRule = factory.getOutOfRangeIpAddressScannerRule(<IpAddressScanRequest>{ allowedIpRanges: testHelpers.allowedIpRanges });
         assert.instanceOf<IOutOfRangeIpAddressScannerRule>(scannerRule, OutOfRangeIpAddressScannerRule);
     });
 

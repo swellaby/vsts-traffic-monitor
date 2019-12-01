@@ -7,6 +7,7 @@ import internal = require('vsts-task-lib/internal');
 Sinon.stub(internal, '_loadData').callsFake(() => null);
 import tl = require('vsts-task-lib/task');
 
+import AuthMechanism = require('../../src/enums/auth-mechanism');
 import helpers = require('./../../src/helpers');
 import IpAddressScanReport = require('./../../src/models/ip-address-scan-report');
 // import IpAddressScanRequest = require('./../../src/models/ip-address-scan-request');
@@ -44,6 +45,8 @@ suite('Task Suite:', () => {
     const sampleToken = 'abcdefghijklmnopqrstuvwxyz';
     const timePeriodKey = 'timePeriod';
     const userOriginKey = 'userOrigin';
+    const targetAuthMechanismKey = 'targetAuthMechanism';
+    const targetAuthMechanismStr = 'any';
     const includeInternalVstsServicesKey = 'scanInternalVstsServices';
     const buildErrorMessage = 'fail error crash';
     const buildErrorMessageBase = 'Unexpected fatal execution error: ';
@@ -78,6 +81,7 @@ suite('Task Suite:', () => {
         tlGetInputStub.withArgs(accessTokenKey, true).callsFake(() => sampleToken);
         tlGetInputStub.withArgs(timePeriodKey, true).callsFake(() => scanPeriodStr);
         tlGetInputStub.withArgs(userOriginKey, true).callsFake(() => userOriginStr);
+        tlGetInputStub.withArgs(targetAuthMechanismKey, true).callsFake(() => targetAuthMechanismStr);
         tlGetDelimitedInputStub = Sinon.stub(tl, 'getDelimitedInput').callsFake(() => {
             return allowedRanges;
         });
@@ -113,6 +117,7 @@ suite('Task Suite:', () => {
             assert.isTrue(tlGetInputStub.calledWith(accessTokenKey, true));
             assert.isTrue(tlGetInputStub.calledWith(timePeriodKey, true));
             assert.isTrue(tlGetInputStub.calledWith(userOriginKey, true));
+            assert.isTrue(tlGetInputStub.calledWith(targetAuthMechanismKey, true));
             assert.isTrue(tlGetDelimitedInputStub.calledWith('ipRange', '\n', true));
             assert.isTrue(tlGetBoolInput.calledWith(includeInternalVstsServicesKey, true));
             assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
@@ -215,7 +220,7 @@ suite('Task Suite:', () => {
     });
 
     suite('scanCompletedSuccessfully Suite:', () => {
-        const taskSuccededMessage = 'All activity originated from within the specified range(s) of IP Addresses.';
+        const taskSucceededMessage = 'All activity originated from within the specified range(s) of IP Addresses.';
         const flaggedUsersErrorMessageSuffix = ' user(s) accessed the VSTS account from an unallowed IP Address that was outside the specified range.';
         const flaggedUserRecordsErrorMessagePrefix = 'User: ';
         const flaggedUserRecordsErrorMessageMiddle = ' had: ';
@@ -334,7 +339,7 @@ suite('Task Suite:', () => {
             removeFlaggedUserRecordsFromScanReport();
             await task.run();
             assert.isTrue(taskLoggerLogStub.calledWith(scanStartedInfoMessage));
-            assert.isTrue(taskLoggerLogStub.calledWith(taskSuccededMessage));
+            assert.isTrue(taskLoggerLogStub.calledWith(taskSucceededMessage));
             assert.isTrue(tlSetResultStub.calledWith(tl.TaskResult.Succeeded, null));
         });
     });
