@@ -9,5 +9,8 @@
     ".nyc_output": true,
     "node_modules": true,
     ".taskkey": true
-  }
+  },
+  "files.associations": {
+    "**/.azure-pipelines/**": "azure-pipelines"
+  },
 }

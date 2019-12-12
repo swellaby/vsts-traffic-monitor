@@ -1,0 +1,13 @@
+parameters:
+  envName: ''
+  jobType: ' PR'
+
+steps:
+- template: templates/yml/node/combo/npm-coverage-validation-xunit-cobertura.yml@templates
+  parameters:
+    publishTestResults:
+      taskDisplayName: 'Publish unit test results'
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'xunit.xml'
+      searchFolder: '$(Build.SourcesDirectory)/.testresults/unit'
+      testRunTitle: 'vsts-traffic-monitor::Unit Tests::${{ parameters.envName }}${{ parameters.jobType }} - Build $(Build.BuildId)'
