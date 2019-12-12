@@ -10,8 +10,6 @@ variables:
 - group: swellbot-github
 - group: 'Build Tools Skip Tokens'
 - group: vsts-traffic-monitor
-- name: packageBumpType
-  value: patch
 
 resources:
   repositories:
@@ -21,7 +19,7 @@ resources:
     endpoint: swellaby
 
 steps:
-- template: '../steps/run-tests.yml'
+- template: 'steps/run-tests.yml'
   parameters:
     envName: 'CI'
     jobType: ''
@@ -34,13 +32,12 @@ steps:
     git checkout master
     git config user.name $(githubUser)
     git config user.email $(githubEmail)
-    npm -f version $(packageBumpType) -m "chore: Bumped to version %s from release pipeline $(succinctAllSkipTokens)"
-    export PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version);")
-    echo "##vso[task.setVariable variable=packageVersion]$PACKAGE_VERSION"
     npm run package-vsts-task-extension
-    git add package-lock.json vss-extension.json task.json
+    git add package.json package-lock.json vss-extension.json task.json
     git commit -n -m "chore: Bumped to version $PACKAGE_VERSION from release pipeline $(succinctAllSkipTokens)"
     git push https://$(githubPat)@github.com/swellaby/vsts-traffic-monitor.git
+    export PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version);")
+    echo "##vso[task.setVariable variable=packageVersion]$PACKAGE_VERSION"
   displayName: 'Package extension'
 
 - template: templates/yml/any/sonar/run-sonar-cloud-cli-analysis.yml@templates
