@@ -1,0 +1,28 @@
+trigger:
+- master
+
+pr:
+- master
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+resources:
+  repositories:
+  - repository: templates
+    type: github
+    name: swellaby/azure-pipelines-templates
+    endpoint: swellaby
+
+steps:
+- task: UseNode@1
+  displayName: 'Use Node 10.x'
+
+- script: |
+    npm install -g npm@6.9.0
+    npm run prepare - successful
+  displayName: 'Temp npm version set'
+
+- template: '../steps/run-tests.yml'
+  parameters:
+    envName: 'Windows'
