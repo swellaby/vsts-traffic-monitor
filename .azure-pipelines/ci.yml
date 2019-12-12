@@ -19,6 +19,11 @@ resources:
     endpoint: swellaby
 
 steps:
+- task: UseNode@1
+  displayName: 'Use Node 10.x'
+  inputs:
+    version: 10.x
+
 - template: 'steps/run-tests.yml'
   parameters:
     envName: 'CI'
