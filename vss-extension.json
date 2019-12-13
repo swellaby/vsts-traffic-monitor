@@ -1,93 +1,93 @@
 {
-    "manifestVersion": 1,
-    "id": "ip-address-scanner",
-    "version": "0.9.6",
-    "name": "IP Address Scanner",
-    "publisher": "Swellaby",
-    "public": true,
-    "description": "A build/release task for scanning the IP Addresses from the activity of your users on VSTS and comparing those addresses against a known/allowed range of addresses.",
-    "targets": [
-        {
-            "id":  "Microsoft.VisualStudio.Services.Cloud"
-        }
-    ],
-    "icons": {
-        "default": "images/icons/task-swell-green-128.png"
+  "manifestVersion": 1,
+  "id": "ip-address-scanner",
+  "version": "0.9.8",
+  "name": "IP Address Scanner",
+  "publisher": "Swellaby",
+  "public": true,
+  "description": "A build/release task for scanning the IP Addresses from the activity of your users on VSTS and comparing those addresses against a known/allowed range of addresses.",
+  "targets": [
+    {
+      "id":  "Microsoft.VisualStudio.Services.Cloud"
+    }
+  ],
+  "icons": {
+    "default": "images/icons/task-swell-green-128.png"
+  },
+  "scopes": [
+    "vso.extension",
+    "vso.profile"
+  ],
+  "tags": [
+    "security",
+    "ip address",
+    "scanner",
+    "traffic",
+    "activity"
+  ],
+  "categories": [
+    "Build and release"
+  ],
+  "gallery-flags": [
+    "Preview",
+    "Public"
+  ],
+  "branding": {
+    "color": "rgb(44, 62, 80)",
+    "theme": "dark"
+  },
+  "content": {
+    "details": {
+      "path": "VSTS-TASK.md"
     },
-    "scopes": [
-        "vso.extension",
-        "vso.profile"
-    ],
-    "tags": [
-        "security",
-        "ip address",
-        "scanner",
-        "traffic",
-        "activity"
-    ],
-    "categories": [
-        "Build and release"
-    ],
-    "gallery-flags": [
-        "Preview",
-        "Public"
-    ],
-    "branding": {
-        "color": "rgb(44, 62, 80)",
-        "theme": "dark"
+    "license": {
+      "path": "LICENSE"
+    }
+  },
+  "links": {
+    "home": {
+      "uri": "http://swellaby.com"
     },
-    "content": {
-        "details": {
-            "path": "VSTS-TASK.md"
-        },
-        "license": {
-            "path": "LICENSE"
-        }
+    "getstarted": {
+      "uri": "https://github.com/swellaby/vsts-traffic-monitor/blob/master/docs/VSTS-TASK.md"
     },
-    "links": {
-        "home": {
-            "uri": "http://swellaby.com"
-        },
-        "getstarted": {
-            "uri": "https://github.com/swellaby/vsts-traffic-monitor/blob/master/docs/VSTS-TASK.md"
-        },
-        "support": {
-            "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
-        },
-        "repository": {
-            "uri": "https://github.com/swellaby/vsts-traffic-monitor"
-        },
-        "issues": {
-            "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
-        },
-        "license": {
-            "uri": "https://github.com/swellaby/vsts-traffic-monitor/blob/master/LICENSE"
-        }
+    "support": {
+      "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
     },
     "repository": {
-        "type": "git",
-        "uri": "https://github.com/swellaby/vsts-traffic-monitor"
+      "uri": "https://github.com/swellaby/vsts-traffic-monitor"
     },
-    "contributions": [
-        {
-            "id": "ip-scanner-task",
-            "type": "ms.vss-distributed-task.task",
-            "description": "",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "task"
-            }
-        }
-    ],
-    "files": [
-        {
-            "path": "task"
-        },
-        {
-            "path": "images",
-            "addressable": true
-        }
-    ]
+    "issues": {
+      "uri": "https://github.com/swellaby/vsts-traffic-monitor/issues"
+    },
+    "license": {
+      "uri": "https://github.com/swellaby/vsts-traffic-monitor/blob/master/LICENSE"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "uri": "https://github.com/swellaby/vsts-traffic-monitor"
+  },
+  "contributions": [
+    {
+      "id": "ip-scanner-task",
+      "type": "ms.vss-distributed-task.task",
+      "description": "",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "task"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "task"
+    },
+    {
+      "path": "images",
+      "addressable": true
+    }
+  ]
 }

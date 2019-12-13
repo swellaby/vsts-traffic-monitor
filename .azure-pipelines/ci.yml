@@ -37,12 +37,13 @@ steps:
     git checkout master
     git config user.name $(githubUser)
     git config user.email $(githubEmail)
-    npm run package-vsts-task-extension
+    npm run
     git add package.json package-lock.json vss-extension.json task.json
     git commit -n -m "chore: Bumped to version $PACKAGE_VERSION from release pipeline $(succinctAllSkipTokens)"
     git push https://$(githubPat)@github.com/swellaby/vsts-traffic-monitor.git
     export PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version);")
     echo "##vso[task.setVariable variable=packageVersion]$PACKAGE_VERSION"
+  failOnStderr: true
   displayName: 'Package extension'
 
 - template: templates/yml/any/sonar/run-sonar-cloud-cli-analysis.yml@templates

@@ -20,5 +20,6 @@ coverage
 
 # Distribution/Publishing
 /vsts-publish
+.vsix/
 .vsts-publish
 .taskkey
