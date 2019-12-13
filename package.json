@@ -1,7 +1,7 @@
 {
   "name": "vsts-traffic-monitor",
   "description": "Monitors traffic on a VS Team Services account ",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/swellaby/vsts-traffic-monitor",
@@ -50,9 +50,11 @@
     "task:prep": "npm run transpile && gulp package-vsts-task-src package-vsts-task-files",
     "task:uploadstatic": "tfx build tasks upload --task-path .vsts-publish/task",
     "task:upload": "npm run task:prep && npm run task:uploadstatic",
-    "ext:prep": "npm run transpile && gulp package-vsts-task-extension-files",
-    "preext:package": "npm run clean:publish && npm run ext:prep",
-    "ext:package": "cd .vsts-publish && tfx extension create --output-path ../.vsix/"
+    "ext:prep": "npm run clean:publish && gulp package-vsts-task-extension-files",
+    "preext:package:local": "npm run transpile && npm run ext:prep",
+    "ext:package:local": "npm run ext:package",
+    "ext:package": "cd .vsts-publish && tfx extension create --output-path ../.vsix/",
+    "ext:package:ci": "npm run ext:prep && npm run ext:package"
   },
   "pre-commit": [
     "build"
