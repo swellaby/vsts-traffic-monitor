@@ -1,7 +1,7 @@
 {
   "name": "vsts-traffic-monitor",
   "description": "Monitors traffic on a VS Team Services account ",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/swellaby/vsts-traffic-monitor",
@@ -37,7 +37,7 @@
     "clean:tests": "rimraf .testresults/ .coverage/",
     "clean:js": "rimraf {src,test}/**/*.{js,map}",
     "clean:all": "npm run clean:tests && npm run clean:js && npm run clean:publish",
-    "clean:publish": "rimraf .vsts-publish/",
+    "clean:publish": "rimraf .vsts-publish/ .vsix/",
     "pretest": "npm run transpile && npm run clean:tests",
     "test": "mocha --config test/unit/.mocharc.yml",
     "posttest": "replace-in-file --isRegex true \"/(.js)/g\" .ts .testresults/unit/sonar.xml",
@@ -51,7 +51,8 @@
     "task:uploadstatic": "tfx build tasks upload --task-path .vsts-publish/task",
     "task:upload": "npm run task:prep && npm run task:uploadstatic",
     "ext:prep": "npm run transpile && gulp package-vsts-task-extension-files",
-    "ext:create": "cd .vsts-publish && tfx extension create"
+    "preext:package": "npm run clean:publish && npm run ext:prep",
+    "ext:package": "cd .vsts-publish && tfx extension create --output-path ../.vsix/"
   },
   "pre-commit": [
     "build"
