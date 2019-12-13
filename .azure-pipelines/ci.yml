@@ -37,7 +37,7 @@ steps:
     git checkout master
     git config user.name $(githubUser)
     git config user.email $(githubEmail)
-    npm run
+    npm run ext:package:ci
     git add package.json package-lock.json vss-extension.json task.json
     git commit -n -m "chore: Bumped to version $PACKAGE_VERSION from release pipeline $(succinctAllSkipTokens)"
     git push https://$(githubPat)@github.com/swellaby/vsts-traffic-monitor.git
