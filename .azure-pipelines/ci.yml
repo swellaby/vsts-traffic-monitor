@@ -43,7 +43,6 @@ steps:
     git push https://$(githubPat)@github.com/swellaby/vsts-traffic-monitor.git
     export PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version);")
     echo "##vso[task.setVariable variable=packageVersion]$PACKAGE_VERSION"
-  failOnStderr: true
   displayName: 'Package extension'
 
 - template: templates/yml/any/sonar/run-sonar-cloud-cli-analysis.yml@templates
