@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "id": "ip-address-scanner",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "name": "IP Address Scanner",
   "publisher": "Swellaby",
   "public": true,
