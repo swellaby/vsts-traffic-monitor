@@ -85,7 +85,7 @@
     "rimraf": "^3.0.0",
     "sinon": "^8.0.0",
     "tfx-cli": "^0.7.8",
-    "tslint": "^5.18.0",
+    "tslint": "^6.0.0",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.5.3"
   },
