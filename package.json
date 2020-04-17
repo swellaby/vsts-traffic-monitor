@@ -61,7 +61,7 @@
   ],
   "devDependencies": {
     "@swellaby/eslint-config": "^2.0.0",
-    "@swellaby/nyc-config": "^2.0.0",
+    "@swellaby/nyc-config": "^3.0.2",
     "@swellaby/tslint-config": "^3.0.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^7.0.0",
@@ -71,14 +71,14 @@
     "chai": "^4.2.0",
     "copy-node-modules": "^1.1.1",
     "eslint": "^6.0.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-bump": "^3.1.3",
     "gulp-vsts-bump": "^1.1.9",
     "husky": "^4.0.0",
     "mocha": "^7.0.0",
     "mocha-multi-reporters": "^1.1.7",
     "mocha-sonarqube-reporter": "^1.0.1",
-    "nyc": "^15.0.0",
+    "nyc": "^15.0.1",
     "opn-cli": "^4.1.0",
     "replace-in-file": "^5.0.0",
     "require-dir": "^1.2.0",
@@ -87,7 +87,7 @@
     "tfx-cli": "^0.7.8",
     "tslint": "^6.0.0",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "moment": "^2.24.0",
