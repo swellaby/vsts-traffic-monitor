@@ -30,7 +30,7 @@
     "pretranspile": "npm run clean:js",
     "transpile": "tsc",
     "tslint": "tslint -p tsconfig.json -c tslint.json -t stylish",
-    "eslint": "eslint **/*.js",
+    "eslint": "eslint \"**/*.js\"",
     "prelint": "npm run transpile",
     "lint": "npm run tslint && npm run eslint",
     "lint:build": "npm run tslint && npm run eslint",
