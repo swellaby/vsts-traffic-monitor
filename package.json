@@ -76,7 +76,7 @@
     "gulp-vsts-bump": "^1.1.9",
     "husky": "^6.0.0",
     "mocha": "^8.1.1",
-    "mocha-multi-reporters": "^1.1.7",
+    "mocha-multi-reporters": "^1.5.1",
     "mocha-sonarqube-reporter": "^1.0.1",
     "nyc": "^15.0.1",
     "opn-cli": "^4.1.0",
