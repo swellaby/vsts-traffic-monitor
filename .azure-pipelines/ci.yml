@@ -20,9 +20,9 @@ resources:
 
 steps:
 - task: UseNode@1
-  displayName: 'Use Node 16.x'
+  displayName: 'Use Node 10.x'
   inputs:
-    version: 16.x
+    version: 10.x
 
 - script: |
     git checkout master
