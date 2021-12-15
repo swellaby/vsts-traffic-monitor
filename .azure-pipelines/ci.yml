@@ -4,7 +4,7 @@ trigger:
 pr: none
 
 pool:
-  vmImage: 'Ubuntu-18.04'
+  vmImage: 'Ubuntu-latest'
 
 variables:
 - group: swellbot-github
@@ -20,23 +20,15 @@ resources:
 
 steps:
 - task: UseNode@1
-  displayName: 'Use Node 10.x'
+  displayName: 'Use Node 16.x'
   inputs:
-    version: 10.x
-
-- template: 'steps/run-tests.yml'
-  parameters:
-    envName: 'CI'
-    jobType: ''
-
-- script: |
-    bash <(curl -s https://codecov.io/bash) -t $(codecovToken)
-  displayName: 'Publish coverage to Codecov'
+    version: 16.x
 
 - script: |
     git checkout master
     git config user.name $(githubUser)
     git config user.email $(githubEmail)
+    npm i
     npm run ext:package:ci
     git add package.json package-lock.json vss-extension.json task.json
     git commit -n -m "chore: Bumped to version $PACKAGE_VERSION from release pipeline $(succinctAllSkipTokens)"
@@ -44,10 +36,6 @@ steps:
     export PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version);")
     echo "##vso[task.setVariable variable=packageVersion]$PACKAGE_VERSION"
   displayName: 'Package extension'
-
-- template: templates/yml/any/sonar/run-sonar-cloud-cli-analysis.yml@templates
-  parameters:
-    projectVersion: $(packageVersion)
 
 - task: PublishPipelineArtifact@0
   inputs:
